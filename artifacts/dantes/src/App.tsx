@@ -9,6 +9,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import LandingPage from "./pages/landing";
 import DashboardPage from "./pages/dashboard";
+import AccountsPage from "./pages/accounts";
+import TransactionsPage from "./pages/transactions";
+import BudgetsPage from "./pages/budgets";
+import CategoriesPage from "./pages/categories";
 
 const queryClient = new QueryClient();
 
@@ -109,11 +113,11 @@ function HomeRedirect() {
   );
 }
 
-function DashboardRoute() {
+function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
   return (
     <>
       <Show when="signed-in">
-        <DashboardPage />
+        <Component />
       </Show>
       <Show when="signed-out">
         <Redirect to="/" />
@@ -177,11 +181,11 @@ function ClerkProviderWithRoutes() {
           <Route path="/" component={HomeRedirect} />
           <Route path="/sign-in/*?" component={SignInPage} />
           <Route path="/sign-up/*?" component={SignUpPage} />
-          <Route path="/dashboard" component={DashboardRoute} />
-          <Route path="/accounts" component={DashboardRoute} />
-          <Route path="/transactions" component={DashboardRoute} />
-          <Route path="/budgets" component={DashboardRoute} />
-          <Route path="/categories" component={DashboardRoute} />
+          <Route path="/dashboard">{() => <ProtectedRoute component={DashboardPage} />}</Route>
+          <Route path="/accounts">{() => <ProtectedRoute component={AccountsPage} />}</Route>
+          <Route path="/transactions">{() => <ProtectedRoute component={TransactionsPage} />}</Route>
+          <Route path="/budgets">{() => <ProtectedRoute component={BudgetsPage} />}</Route>
+          <Route path="/categories">{() => <ProtectedRoute component={CategoriesPage} />}</Route>
         </Switch>
       </QueryClientProvider>
     </ClerkProvider>
