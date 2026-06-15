@@ -1,0 +1,2 @@
+- [Numeric columns pattern](numeric-columns.md) — Drizzle numeric(15,2) returns strings; always parseFloat before API response
+- [Clerk tailwind v4](clerk-tailwind-v4.md) — Must set tailwindcss({ optimize: false }) in vite.config.ts for Clerk themes in prod

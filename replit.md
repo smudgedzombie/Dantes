@@ -1,6 +1,6 @@
-# [Project name]
+# Dantès Finance
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A premium personal finance management system — a private wealth command center for people who treat their capital with institutional rigor.
 
 ## Run & Operate
 
@@ -14,23 +14,36 @@ _Replace the heading above with the project's name, and this line with one sente
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
+- API: Express 5 + Clerk Auth (`@clerk/express`)
 - DB: PostgreSQL + Drizzle ORM
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
+- Frontend: React + Vite + Tailwind v4 + Recharts + Clerk React
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `lib/api-spec/openapi.yaml` — OpenAPI contract (source of truth)
+- `lib/db/src/schema/` — Drizzle table definitions (accounts, categories, transactions, budgets)
+- `artifacts/api-server/src/routes/` — Express route handlers (accounts, categories, transactions, budgets, dashboard)
+- `artifacts/dantes/src/` — React frontend (pages, components, Clerk auth)
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- All API contracts defined in OpenAPI first; types/hooks generated via Orval codegen
+- Clerk Auth (Replit-managed) handles authentication; proxy middleware routes through `/api/__clerk`
+- Numeric DB columns (balance, amount) stored as `numeric(15,2)` strings and parsed to `number` in route handlers
+- Dashboard endpoints compute aggregates server-side (no client-side calculation)
+- Dark navy + gold palette; Recharts for charts; framer-motion for animations
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Landing page with brand identity for unauthenticated visitors
+- Dashboard with financial summary, monthly income/expense flow chart, spending by category, and recent transactions
+- Full account management (checking, savings, investment, credit, cash)
+- Transaction tracking with filtering by account/category/type
+- Budget management with per-category spend tracking vs. budget
+- Category management with color coding
 
 ## User preferences
 
@@ -38,7 +51,10 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Always run `pnpm --filter @workspace/api-spec run codegen` after changing `openapi.yaml`
+- Numeric columns from Drizzle come back as strings — always `parseFloat()` before sending to client
+- Clerk dev keys warning in console is expected and harmless in development
+- `tailwindcss({ optimize: false })` in vite.config.ts is required for Clerk themes to work in prod
 
 ## Pointers
 
