@@ -10,11 +10,18 @@ import { requireSuperAdmin, getUserEmail } from "./access";
 
 const router = Router();
 
-// Helper: get calling user's email and verify they have an active membership
+// Helper: get calling user's email and verify they are an ACTIVE Bloom Society member.
+// Only members with status="active" pass this gate — pending, rejected, reviewing,
+// quoted, and paid-but-not-yet-activated applicants are all rejected.
+// Data returned is always scoped to the authenticated user's email — no cross-client
+// access is possible through any portal route.
 async function getPortalUser(req: Parameters<typeof getAuth>[0]): Promise<{ email: string; member: typeof memberApplicationsTable.$inferSelect } | null> {
   const email = await getUserEmail(req);
   if (!email) return null;
-  const [member] = await db.select().from(memberApplicationsTable).where(eq(memberApplicationsTable.email, email));
+  const [member] = await db
+    .select()
+    .from(memberApplicationsTable)
+    .where(and(eq(memberApplicationsTable.email, email), eq(memberApplicationsTable.status, "active")));
   if (!member) return null;
   return { email, member };
 }
