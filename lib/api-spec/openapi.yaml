@@ -20,6 +20,14 @@ tags:
     description: Budget management
   - name: dashboard
     description: Dashboard summaries
+  - name: clients
+    description: Dantès client registry
+  - name: grahams
+    description: Graham AI agent management
+  - name: tasks
+    description: Agent task management
+  - name: operator
+    description: Bloom Society operator endpoints
 
 paths:
   /healthz:
@@ -728,3 +736,190 @@ components:
           type: number
         net:
           type: number
+
+    Client:
+      type: object
+      required: [id, name, industry, status, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        industry:
+          type: string
+        description:
+          type: ["string", "null"]
+        contactName:
+          type: ["string", "null"]
+        contactEmail:
+          type: ["string", "null"]
+        contactPhone:
+          type: ["string", "null"]
+        country:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [prospect, active, paused, completed]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    ClientInput:
+      type: object
+      required: [name, industry]
+      properties:
+        name:
+          type: string
+        industry:
+          type: string
+        description:
+          type: string
+        contactName:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
+          type: string
+        country:
+          type: string
+        status:
+          type: string
+          enum: [prospect, active, paused, completed]
+        notes:
+          type: string
+
+    GrahamAgent:
+      type: object
+      required: [id, code, name, status, modules, createdAt]
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+        clientId:
+          type: ["integer", "null"]
+        clientName:
+          type: ["string", "null"]
+        clientIndustry:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [configuring, standby, active, suspended]
+        modules:
+          type: array
+          items:
+            type: string
+        objective:
+          type: ["string", "null"]
+        deployedAt:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    GrahamAgentInput:
+      type: object
+      required: [code, name]
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        clientId:
+          type: integer
+        status:
+          type: string
+          enum: [configuring, standby, active, suspended]
+        modules:
+          type: array
+          items:
+            type: string
+        objective:
+          type: string
+        notes:
+          type: string
+
+    AgentTask:
+      type: object
+      required: [id, agentId, title, type, status, priority, createdAt]
+      properties:
+        id:
+          type: integer
+        agentId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        type:
+          type: string
+        status:
+          type: string
+          enum: [pending, in_progress, completed, cancelled]
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        dueDate:
+          type: ["string", "null"]
+        completedAt:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    AgentTaskInput:
+      type: object
+      required: [title, type]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+          enum: [pending, in_progress, completed, cancelled]
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+        dueDate:
+          type: string
+        notes:
+          type: string
+
+    OperatorSummary:
+      type: object
+      required: [totalClients, activeGrahams, totalGrahams, pendingTasks, completedTasks]
+      properties:
+        totalClients:
+          type: integer
+        activeClients:
+          type: integer
+        totalGrahams:
+          type: integer
+        activeGrahams:
+          type: integer
+        pendingTasks:
+          type: integer
+        completedTasks:
+          type: integer
+        recentActivity:
+          type: array
+          items:
+            type: object
+            required: [type, label, time]
+            properties:
+              type:
+                type: string
+              label:
+                type: string
+              time:
+                type: string

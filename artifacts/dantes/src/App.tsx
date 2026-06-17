@@ -13,6 +13,10 @@ import AccountsPage from "./pages/accounts";
 import TransactionsPage from "./pages/transactions";
 import BudgetsPage from "./pages/budgets";
 import CategoriesPage from "./pages/categories";
+import CommandPage from "./pages/command";
+import ClientsPage from "./pages/clients";
+import GrahamsPage from "./pages/grahams";
+import GrahamDetailPage from "./pages/graham-detail";
 
 const queryClient = new QueryClient();
 
@@ -104,7 +108,7 @@ function HomeRedirect() {
   return (
     <>
       <Show when="signed-in">
-        <Redirect to="/dashboard" />
+        <Redirect to="/command" />
       </Show>
       <Show when="signed-out">
         <LandingPage />
@@ -181,6 +185,10 @@ function ClerkProviderWithRoutes() {
           <Route path="/" component={HomeRedirect} />
           <Route path="/sign-in/*?" component={SignInPage} />
           <Route path="/sign-up/*?" component={SignUpPage} />
+          <Route path="/command">{() => <ProtectedRoute component={CommandPage} />}</Route>
+          <Route path="/clients">{() => <ProtectedRoute component={ClientsPage} />}</Route>
+          <Route path="/grahams/:id">{() => <ProtectedRoute component={GrahamDetailPage} />}</Route>
+          <Route path="/grahams">{() => <ProtectedRoute component={GrahamsPage} />}</Route>
           <Route path="/dashboard">{() => <ProtectedRoute component={DashboardPage} />}</Route>
           <Route path="/accounts">{() => <ProtectedRoute component={AccountsPage} />}</Route>
           <Route path="/transactions">{() => <ProtectedRoute component={TransactionsPage} />}</Route>
