@@ -467,7 +467,7 @@ function TasksTab({ tasks, onPatch, saving }:{tasks:ClientTask[];onPatch:(id:num
 function AuditTab({ logs, onLoad }:{logs:AuditLog[];onLoad:()=>void}) {
   useEffect(()=>{if(logs.length===0)onLoad();},[]);
   const ACTION_COLORS: Record<string,string>={vault_update:"#D4AF37",data_export:"#ef4444",member_activate:"#00ff88",staff_approve:"#06b6d4"};
-  if (logs.length===0) return <div className={`${panelCls} p-16 text-center`}><p className="text-[#2a4060] text-xs font-mono">No audit events recorded yet. All admin actions are logged here.</p></div>;
+  if (logs.length===0) return <div className={`${panelCls} p-16 text-center`}><p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-3">IMMUTABLE LOG</p><p className="text-[#2a4060] text-xs font-mono">No audit events recorded yet. All admin actions are logged here.</p></div>;
   return (
     <div className="space-y-2">
       <p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-3">{logs.length} AUDIT EVENTS · IMMUTABLE LOG</p>
