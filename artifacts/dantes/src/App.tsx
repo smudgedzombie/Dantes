@@ -20,6 +20,10 @@ import { useEffect, useRef } from "react";
   import JoinPage from "./pages/join";
   import AdminPage from "./pages/admin";
   import AccessPendingPage from "./pages/access-pending";
+  import PortalPage from "./pages/portal";
+  import PortalTasksPage from "./pages/portal-tasks";
+  import PortalDocumentsPage from "./pages/portal-documents";
+  import PortalBillingPage from "./pages/portal-billing";
   import { useAccess } from "./hooks/useAccess";
 
   const queryClient = new QueryClient();
@@ -141,6 +145,14 @@ import { useEffect, useRef } from "react";
     return <AdminPage />;
   }
 
+  // Portal: accessible to any authenticated user (portal itself validates membership)
+  function PortalRoute({ component: Component }: { component: React.ComponentType }) {
+    const { role, loading } = useAccess();
+    if (loading) return <LoadingScreen />;
+    if (role === "unauthenticated") return <Redirect to="/sign-in" />;
+    return <Component />;
+  }
+
   function LoadingScreen() {
     return (
       <div className="min-h-screen bg-[#030810] flex items-center justify-center">
@@ -211,6 +223,10 @@ import { useEffect, useRef } from "react";
             <Route path="/sign-in/*?" component={SignInPage} />
             <Route path="/sign-up/*?" component={SignUpPage} />
             <Route path="/admin">{() => <AdminRoute />}</Route>
+            <Route path="/portal/tasks">{() => <PortalRoute component={PortalTasksPage} />}</Route>
+            <Route path="/portal/documents">{() => <PortalRoute component={PortalDocumentsPage} />}</Route>
+            <Route path="/portal/billing">{() => <PortalRoute component={PortalBillingPage} />}</Route>
+            <Route path="/portal">{() => <PortalRoute component={PortalPage} />}</Route>
             <Route path="/command">{() => <ProtectedRoute component={CommandPage} />}</Route>
             <Route path="/clients">{() => <ProtectedRoute component={ClientsPage} />}</Route>
             <Route path="/grahams/:id">{() => <ProtectedRoute component={GrahamDetailPage} />}</Route>

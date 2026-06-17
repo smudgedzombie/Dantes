@@ -7,7 +7,7 @@ import { Router } from "express";
 
   export const SUPER_ADMINS = ["akshayprabhakar@gmail.com", "dragogateway@gmail.com"];
 
-  async function getUserEmail(req: Parameters<typeof getAuth>[0]): Promise<string | null> {
+  export async function getUserEmail(req: Parameters<typeof getAuth>[0]): Promise<string | null> {
     const { userId } = getAuth(req);
     if (!userId) return null;
     try {
@@ -19,7 +19,7 @@ import { Router } from "express";
     }
   }
 
-  async function requireSuperAdmin(req: any, res: any): Promise<string | null> {
+  export async function requireSuperAdmin(req: any, res: any): Promise<string | null> {
     const email = await getUserEmail(req);
     if (!email || !SUPER_ADMINS.includes(email)) {
       res.status(403).json({ error: "Forbidden — Bloom Society principals only" });
