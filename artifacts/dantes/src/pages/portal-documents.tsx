@@ -30,9 +30,7 @@ export default function PortalDocumentsPage() {
       <div className="fixed inset-0 pointer-events-none opacity-20" style={{ backgroundImage:"linear-gradient(rgba(212,175,55,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,0.04) 1px,transparent 1px)", backgroundSize:"60px 60px" }} />
 
       <header className="relative z-10 border-b border-[#0d1b35] px-6 py-4 flex items-center gap-4">
-        <Link href="/portal" className="w-8 h-8 bg-[#D4AF37] rounded-sm flex items-center justify-center">
-          <span className="text-[#030810] font-mono font-black text-sm">D</span>
-        </Link>
+        <Link href="/portal"><img src="/logo.jpg" alt="Dantès" className="w-9 h-9 object-contain rounded-sm" /></Link>
         <div>
           <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.3em]">BLOOM SOCIETY PORTAL</p>
           <p className="text-white font-serif font-bold text-sm">Documents & Reports</p>

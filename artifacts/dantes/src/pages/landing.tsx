@@ -90,9 +90,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-[#0d1b35]">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-[#D4AF37] rounded-sm flex items-center justify-center shrink-0">
-            <span className="text-[#030810] font-mono font-black text-sm">D</span>
-          </div>
+          <img src="/logo.jpg" alt="Dantès" className="w-10 h-10 object-contain rounded-sm shrink-0" />
           <div className="flex flex-col leading-none">
             <span className="font-serif font-black text-white tracking-[0.2em] text-lg">DANTÈS</span>
             <span className="text-[9px] font-mono text-[#D4AF37]/50 tracking-[0.35em]">THE BLOOM SOCIETY</span>

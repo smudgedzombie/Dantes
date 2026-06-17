@@ -53,7 +53,7 @@ import { useEffect, useRef } from "react";
     options: {
       logoPlacement: "inside" as const,
       logoLinkUrl: basePath || "/",
-      logoImageUrl: `${window.location.origin}${basePath}/logo.svg`,
+      logoImageUrl: `${window.location.origin}${basePath}/logo.jpg`,
     },
     variables: {
       colorPrimary: "hsl(46, 65%, 52%)",
