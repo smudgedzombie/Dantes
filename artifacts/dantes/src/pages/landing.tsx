@@ -208,7 +208,42 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA */}
+
+        {/* Join the Bloom Society CTA */}
+        <section className="relative z-10 max-w-5xl mx-auto px-8 py-16">
+          <div className="border border-[#D4AF37]/20 bg-gradient-to-br from-[#040c1a] to-[#060e1a] rounded-sm p-10 text-center overflow-hidden relative">
+            <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage:"radial-gradient(ellipse at top, rgba(212,175,55,0.08) 0%, transparent 65%)" }} />
+            <div className="relative z-10">
+              <div className="w-14 h-14 border border-[#D4AF37]/30 bg-[#D4AF37]/5 rounded-sm flex items-center justify-center mx-auto mb-6">
+                <span className="text-[#D4AF37] text-2xl font-serif font-bold">✦</span>
+              </div>
+              <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.4em] mb-3">RESTRICTED MEMBERSHIP</p>
+              <h2 className="text-3xl font-serif font-black text-white mb-4">Join the Bloom Society</h2>
+              <p className="text-[#3a5570] text-sm leading-relaxed max-w-xl mx-auto mb-8">
+                Every Bloom Society member receives a custom Graham agent — a precision AI built exclusively for their business. We accept a limited number of members each quarter. Applications are reviewed personally by Dr. Graham and Dr. Prabhakar.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 text-left max-w-2xl mx-auto">
+                {[
+                  { n:"01", t:"Apply", d:"Complete our confidential intake form. Tell us your business and what you need your Graham to achieve." },
+                  { n:"02", t:"Quotation", d:"We design your bespoke Graham configuration and send a personalised investment proposal." },
+                  { n:"03", t:"Deploy", d:"Upon onboarding, your Graham is activated 24/7 and your Bloom Society credentials are issued." },
+                ].map(s => (
+                  <div key={s.n} className="bg-[#030810]/60 border border-[#0d1b35] rounded-sm p-4">
+                    <span className="font-mono text-[#D4AF37] font-bold text-sm block mb-2">{s.n}</span>
+                    <p className="text-xs font-semibold text-white mb-1">{s.t}</p>
+                    <p className="text-[10px] text-[#2a4060] leading-relaxed">{s.d}</p>
+                  </div>
+                ))}
+              </div>
+              <Link href="/join" className="inline-block px-8 py-3.5 bg-[#D4AF37] text-[#030810] font-mono font-bold text-sm rounded-sm hover:bg-[#b8952b] transition-all tracking-widest shadow-[0_0_30px_rgba(212,175,55,0.25)]">
+                APPLY FOR MEMBERSHIP →
+              </Link>
+              <p className="text-[9px] font-mono text-[#2a4060] mt-4">Applications reviewed within 48–72 hours · Limited quarterly intake</p>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
       <section className="relative z-10 border-t border-[#0d1b35] py-20 px-8 text-center">
         <p className="text-[9px] font-mono text-[#D4AF37]/50 tracking-[0.4em] mb-4">RESTRICTED ACCESS — BLOOM SOCIETY OPERATORS ONLY</p>
         <h2 className="text-4xl font-serif font-bold text-white mb-4">Ready to deploy a Graham?</h2>
