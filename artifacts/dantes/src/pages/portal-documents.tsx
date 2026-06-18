@@ -108,7 +108,7 @@ export default function PortalDocumentsPage() {
 
       <header className="relative z-10 border-b border-[#0d1b35] px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/portal"><img src="/logo.jpg" alt="Dantès" className="w-9 h-9 object-contain rounded-sm" /></Link>
+          <Link href="/portal"><img src="/logo.png" alt="Dantès" className="w-9 h-9 object-contain" /></Link>
           <div>
             <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.3em]">BLOOM SOCIETY PORTAL</p>
             <p className="text-white font-serif font-bold text-sm">Documents & Reports</p>

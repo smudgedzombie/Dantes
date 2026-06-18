@@ -145,7 +145,7 @@ export default function PortalPage() {
   if (error || !overview) return (
     <div className="min-h-screen bg-[#030810] flex items-center justify-center px-6">
       <div className="text-center max-w-sm">
-        <img src="/logo.jpg" alt="Dantès" className="w-16 h-16 object-contain rounded-sm mx-auto mb-5" />
+        <img src="/logo.png" alt="Dantès" className="w-16 h-16 object-contain mx-auto mb-5" />
         <p className="text-white font-semibold mb-2">Portal Unavailable</p>
         <p className="text-[#3a5570] text-sm mb-6">{error || "Could not load your portal."}</p>
         <Link href="/" className="text-[10px] font-mono text-[#D4AF37] hover:text-white transition-colors">← HOME</Link>
@@ -162,7 +162,7 @@ export default function PortalPage() {
       {/* Header */}
       <header className="relative z-10 border-b border-[#0d1b35] px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <img src="/logo.jpg" alt="Dantès" className="w-9 h-9 object-contain rounded-sm" />
+          <img src="/logo.png" alt="Dantès" className="w-9 h-9 object-contain" />
           <div>
             <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.3em]">BLOOM SOCIETY PORTAL</p>
             <p className="text-white font-serif font-bold text-sm">{member.fullName}</p>

@@ -33,7 +33,7 @@ export default function PortalBillingPage() {
       <div className="fixed inset-0 pointer-events-none opacity-20" style={{ backgroundImage:"linear-gradient(rgba(212,175,55,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,0.04) 1px,transparent 1px)", backgroundSize:"60px 60px" }} />
 
       <header className="relative z-10 border-b border-[#0d1b35] px-6 py-4 flex items-center gap-4">
-        <Link href="/portal"><img src="/logo.jpg" alt="Dantès" className="w-9 h-9 object-contain rounded-sm" /></Link>
+        <Link href="/portal"><img src="/logo.png" alt="Dantès" className="w-9 h-9 object-contain" /></Link>
         <div>
           <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.3em]">BLOOM SOCIETY PORTAL</p>
           <p className="text-white font-serif font-bold text-sm">Billing & Invoices</p>

@@ -79,7 +79,7 @@ import { useState } from "react";
         <div className="fixed inset-0 pointer-events-none opacity-30" style={{ backgroundImage:"linear-gradient(rgba(212,175,55,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,0.04) 1px,transparent 1px)", backgroundSize:"60px 60px" }} />
         <nav className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-[#0d1b35]">
           <Link href="/" className="flex items-center gap-3">
-            <img src="/logo.jpg" alt="Dantès" className="w-8 h-8 object-contain rounded-sm" />
+            <img src="/logo.png" alt="Dantès" className="w-8 h-8 object-contain" />
             <span className="font-serif font-black text-white tracking-widest text-base">DANTÈS</span>
             <span className="text-[9px] font-mono text-[#D4AF37]/50 tracking-[0.3em] hidden sm:block">THE BLOOM SOCIETY</span>
           </Link>

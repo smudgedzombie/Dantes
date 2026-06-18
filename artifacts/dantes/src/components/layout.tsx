@@ -24,7 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col h-full bg-[#040c1a] border-r border-[#0d1b35]">
       {/* Logo */}
       <div className="h-14 flex items-center px-5 border-b border-[#0d1b35] shrink-0">
-        <img src="/logo.jpg" alt="Dantès" className="w-7 h-7 object-contain rounded-sm mr-3 shrink-0" />
+        <img src="/logo.png" alt="Dantès" className="w-7 h-7 object-contain mr-3 shrink-0" />
         <div className="flex flex-col leading-none">
           <span className="font-serif font-black text-white tracking-[0.15em] text-sm">DANTÈS</span>
           <span className="text-[8px] font-mono text-[#D4AF37]/40 tracking-[0.3em]">BLOOM SOCIETY</span>
@@ -87,7 +87,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Mobile top bar */}
       <div className="md:hidden flex items-center justify-between px-4 h-12 bg-[#040c1a] border-b border-[#0d1b35] shrink-0">
         <div className="flex items-center gap-2">
-          <img src="/logo.jpg" alt="Dantès" className="w-6 h-6 object-contain rounded-sm" />
+          <img src="/logo.png" alt="Dantès" className="w-6 h-6 object-contain" />
           <span className="font-serif font-bold text-white text-sm tracking-widest">DANTÈS</span>
         </div>
         <button onClick={() => setMobileOpen(o => !o)} className="text-[#3a5570] hover:text-white transition-colors">
