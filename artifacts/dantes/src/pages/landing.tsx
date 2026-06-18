@@ -118,7 +118,7 @@ export default function LandingPage() {
         <h1 className="text-6xl sm:text-8xl md:text-[10rem] font-serif font-black text-white tracking-tight mb-2 leading-none">
           DANTÈS
         </h1>
-        <div className="text-[#D4AF37] font-mono text-xs sm:text-sm tracking-[0.45em] mb-8">THE AI COMMAND OPERATING SYSTEM</div>
+        <div className="text-[#D4AF37] font-mono text-xs sm:text-sm tracking-[0.45em] mb-8">THE AI COMMAND FORENSIC ACCOUNTING - DATA - OPERATING SYSTEM</div>
         <p className="text-[#3a5570] max-w-2xl mx-auto text-base leading-relaxed mb-12">
           Dantès deploys precision AI agents — <span className="text-[#D4AF37] font-mono font-semibold">Grahams</span> — into client businesses. Each Graham is a fully customized intelligence that drives revenue, enforces compliance, and executes growth at machine speed.
         </p>
