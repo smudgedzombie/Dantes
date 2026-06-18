@@ -33,7 +33,7 @@ function AccountForm({ onClose }: { onClose: () => void }) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    createAccount.mutate({ name: form.name, type: form.type, balance: parseFloat(form.balance) || 0, currency: form.currency, color: form.color });
+    createAccount.mutate({ data: { name: form.name, type: form.type, balance: parseFloat(form.balance) || 0, currency: form.currency, color: form.color } });
   }
 
   return (

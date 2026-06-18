@@ -8,7 +8,7 @@ const STATUS_COLORS: Record<string, string> = {
   overdue: "bg-red-500/10 text-red-400 border-red-500/20",
 };
 
-type Invoice = { id:number; period:string; amountUsd:string; currency:string; status:string; paidAt:string|null; notes:string|null; createdAt:string };
+type Invoice = { id:number; period:string; amountUsd:string; currency:string; status:string; paidAt:string|null; notes:string|null; paymentLink:string|null; dueDate:string|null; createdAt:string };
 
 export default function PortalBillingPage() {
   const { getToken } = useAuth();
@@ -41,7 +41,7 @@ export default function PortalBillingPage() {
       </header>
 
       <nav className="relative z-10 border-b border-[#0d1b35] px-6 flex gap-0">
-        {[{href:"/portal",l:"OVERVIEW"},{href:"/portal/tasks",l:"TASKS"},{href:"/portal/documents",l:"DOCUMENTS"},{href:"/portal/billing",l:"BILLING"}].map(i=>(
+        {[{href:"/portal",l:"OVERVIEW"},{href:"/portal/tasks",l:"TASKS"},{href:"/portal/documents",l:"DOCUMENTS"},{href:"/portal/billing",l:`BILLING${totalDue>0?" (!)":""}`}].map(i=>(
           <Link key={i.href} href={i.href} className={`px-4 py-3 text-[10px] font-mono border-b-2 transition-all ${i.href==="/portal/billing"?"text-[#D4AF37] border-[#D4AF37]":"text-[#3a5570] border-transparent hover:text-white hover:border-[#D4AF37]/40"}`}>{i.l}</Link>
         ))}
       </nav>
@@ -72,18 +72,29 @@ export default function PortalBillingPage() {
           <div className="space-y-2">
             <p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-3">INVOICE HISTORY</p>
             {invoices.map(inv => (
-              <div key={inv.id} className={`${panelCls} p-4 flex items-center gap-4`}>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <p className="text-sm font-semibold text-white">{inv.period}</p>
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-[9px] font-mono font-bold uppercase border ${STATUS_COLORS[inv.status] ?? ""}`}>{inv.status}</span>
+              <div key={inv.id} className={`${panelCls} p-5`}>
+                <div className="flex items-start gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <p className="text-sm font-semibold text-white">{inv.period}</p>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-[9px] font-mono font-bold uppercase border ${STATUS_COLORS[inv.status] ?? ""}`}>{inv.status}</span>
+                    </div>
+                    {inv.dueDate && inv.status !== "paid" && (
+                      <p className="text-[9px] font-mono text-amber-400/70 mb-1">Due: {inv.dueDate}</p>
+                    )}
+                    {inv.notes && <p className="text-[10px] text-[#3a5570] mb-1">{inv.notes}</p>}
+                    <p className="text-[9px] font-mono text-[#2a4060]">Issued {new Date(inv.createdAt).toLocaleDateString()}{inv.paidAt ? ` · Paid ${new Date(inv.paidAt).toLocaleDateString()}` : ""}</p>
                   </div>
-                  {inv.notes && <p className="text-[10px] text-[#3a5570]">{inv.notes}</p>}
-                  <p className="text-[9px] font-mono text-[#2a4060] mt-0.5">Issued {new Date(inv.createdAt).toLocaleDateString()}{inv.paidAt ? ` · Paid ${new Date(inv.paidAt).toLocaleDateString()}` : ""}</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-mono font-bold text-lg text-white">${parseFloat(inv.amountUsd).toLocaleString()}</p>
-                  <p className="text-[9px] font-mono text-[#3a5570]">{inv.currency}</p>
+                  <div className="text-right shrink-0">
+                    <p className="font-mono font-bold text-xl text-white mb-1">${parseFloat(inv.amountUsd).toLocaleString()}</p>
+                    <p className="text-[9px] font-mono text-[#3a5570] mb-2">{inv.currency}</p>
+                    {inv.paymentLink && inv.status !== "paid" && (
+                      <a href={inv.paymentLink} target="_blank" rel="noreferrer"
+                        className="inline-block px-3 py-1.5 bg-[#D4AF37] text-[#030810] text-[9px] font-mono font-bold rounded-sm hover:bg-[#b8952b] transition-colors tracking-widest">
+                        PAY NOW →
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

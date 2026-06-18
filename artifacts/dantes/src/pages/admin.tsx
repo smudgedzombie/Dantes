@@ -8,6 +8,9 @@ type VaultClient = { member: MemberApp; vault: { id:number; healthScore:number; 
 type RevenueData = { summary:{ totalApplications:number; activeMembers:number; pipelineCount:number; mrr:number; arr:number; totalRevenue:number; pipelineValue:number; avgDealSize:number }; statusBreakdown:{status:string;count:number;value:number}[]; referrals:{source:string;count:number}[]; industries:{industry:string;count:number}[]; monthlyTrend:{label:string;applications:number;activations:number}[]; healthBands:{label:string;count:number}[] };
 type AuditLog = { id:number; adminEmail:string; action:string; targetType:string; targetId:string|null; details:unknown; createdAt:string };
 type ClientTask = { id:number; clientEmail:string; grahamCode:string|null; title:string; description:string|null; module:string; priority:string; status:string; adminNotes:string|null; completedAt:string|null; createdAt:string };
+type GrahamBoard = { memberId:number; memberName:string; memberEmail:string; company:string|null; bloomMemberId:string|null; grahamCode:string|null; agentStatus:string; agentModules:string[]; agentObjective:string|null; deployedAt:string|null };
+type GrahamSummary = { total:number; active:number; configuring:number; standby:number; unassigned:number };
+type Comment = { id:number; taskId:number; authorType:string; authorName:string; content:string; createdAt:string };
 
 const ALL_TABS = ["command","grahams","clients","dashboard","transactions","accounts"];
 const GOLD = "#D4AF37";
@@ -20,6 +23,9 @@ const STATUS_COLORS: Record<string,string> = {
   paid:"bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
   active:"bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   rejected:"bg-red-500/10 text-red-400 border-red-500/20",
+};
+const AGENT_STATUS_COLORS: Record<string,string> = {
+  active: "#00ff88", configuring: "#D4AF37", standby: "#06b6d4", inactive: "#3a5570", unassigned: "#2a4060",
 };
 const PIE_COLORS = ["#D4AF37","#06b6d4","#8b5cf6","#22c55e","#f97316","#ec4899","#64748b"];
 
@@ -38,18 +44,27 @@ function EmptyPanel({ text }: { text: string }) {
 
 export default function AdminPage() {
   const { getToken } = useAuth();
-  const [tab, setTab] = useState<"members"|"staff"|"revenue"|"vault"|"tasks"|"audit">("members");
+  const [tab, setTab] = useState<"members"|"staff"|"revenue"|"vault"|"tasks"|"audit"|"grahams">("members");
   const [staffReqs, setStaffReqs] = useState<StaffRequest[]>([]);
   const [memberApps, setMemberApps] = useState<MemberApp[]>([]);
   const [vaultClients, setVaultClients] = useState<VaultClient[]>([]);
   const [revenue, setRevenue] = useState<RevenueData|null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [adminTasks, setAdminTasks] = useState<ClientTask[]>([]);
+  const [grahamBoard, setGrahamBoard] = useState<GrahamBoard[]>([]);
+  const [grahamSummary, setGrahamSummary] = useState<GrahamSummary|null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedMember, setSelectedMember] = useState<MemberApp|null>(null);
   const [selectedStaff, setSelectedStaff] = useState<StaffRequest|null>(null);
   const [selectedVault, setSelectedVault] = useState<VaultClient|null>(null);
   const [saving, setSaving] = useState(false);
+  const [showExport, setShowExport] = useState(false);
+  const [exportType, setExportType] = useState("members");
+  const [exporting, setExporting] = useState(false);
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [invoiceForm, setInvoiceForm] = useState({ clientEmail:"", period:"", amountUsd:"", currency:"USD", notes:"", paymentLink:"", dueDate:"" });
+  const [invoiceSaving, setInvoiceSaving] = useState(false);
+  const [invoiceError, setInvoiceError] = useState("");
 
   async function apiFetch(path: string, opts?: RequestInit) {
     const token = await getToken();
@@ -72,6 +87,7 @@ export default function AdminPage() {
   async function loadVault() { const r = await apiFetch("/api/vault/clients"); if(r.ok) setVaultClients(await r.json()); }
   async function loadAudit() { const r = await apiFetch("/api/admin/audit?limit=200"); if(r.ok) setAuditLogs(await r.json()); }
   async function loadTasks() { const r = await apiFetch("/api/admin/tasks"); if(r.ok) setAdminTasks(await r.json()); }
+  async function loadGrahams() { const r = await apiFetch("/api/admin/grahams"); if(r.ok) { const d = await r.json(); setGrahamBoard(d.board); setGrahamSummary(d.summary); } }
 
   useEffect(() => { loadAll(); }, []);
   useEffect(() => {
@@ -79,6 +95,7 @@ export default function AdminPage() {
     if (tab==="vault" && vaultClients.length===0) loadVault();
     if (tab==="audit" && auditLogs.length===0) loadAudit();
     if (tab==="tasks" && adminTasks.length===0) loadTasks();
+    if (tab==="grahams" && grahamBoard.length===0) loadGrahams();
   }, [tab]);
 
   async function patchStaff(id:number, body:object) {
@@ -106,12 +123,27 @@ export default function AdminPage() {
     try { await apiFetch("/api/portal/activities",{method:"POST",body:JSON.stringify({clientEmail,grahamCode,...data})}); }
     finally { setSaving(false); }
   }
-  async function exportData() {
-    const token = await getToken();
-    const res = await fetch("/api/vault/export",{headers:{Authorization:`Bearer ${token}`}});
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a"); a.href=url; a.download=`bloom-export-${new Date().toISOString().slice(0,10)}.json`; a.click();
+
+  async function exportCSV() {
+    setExporting(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`/api/admin/export?type=${exportType}&format=csv`, { headers: { Authorization:`Bearer ${token}` } });
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `bloom-${exportType}-${new Date().toISOString().slice(0,10)}.csv`; a.click();
+    } finally { setExporting(false); setShowExport(false); }
+  }
+
+  async function createInvoice(e: React.FormEvent) {
+    e.preventDefault(); setInvoiceSaving(true); setInvoiceError("");
+    try {
+      const r = await apiFetch("/api/portal/invoices", { method:"POST", body:JSON.stringify(invoiceForm) });
+      if (!r.ok) { const d = await r.json(); setInvoiceError(d.error ?? "Failed"); return; }
+      setShowInvoiceModal(false);
+      setInvoiceForm({ clientEmail:"", period:"", amountUsd:"", currency:"USD", notes:"", paymentLink:"", dueDate:"" });
+    } finally { setInvoiceSaving(false); }
   }
 
   const TABS = [
@@ -120,6 +152,7 @@ export default function AdminPage() {
     {id:"revenue",label:"Revenue"},
     {id:"vault",label:"Vault"},
     {id:"tasks",label:`Tasks${adminTasks.length>0?` (${adminTasks.filter(t=>t.status==="pending").length} open)`:""}`},
+    {id:"grahams",label:"Grahams"},
     {id:"audit",label:"Audit"},
   ];
 
@@ -132,10 +165,69 @@ export default function AdminPage() {
           <h1 className="text-lg font-serif font-black text-white tracking-wide">Admin Command Hub</h1>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={exportData} className={btnSec}>⬇ EXPORT ALL</button>
+          <button onClick={()=>setShowInvoiceModal(true)} className={btnSec}>+ INVOICE</button>
+          <button onClick={()=>setShowExport(true)} className={btnSec}>⬇ EXPORT</button>
           <div className="flex items-center gap-2"><span className="w-2 h-2 bg-[#D4AF37] rounded-full" /><span className="text-[9px] font-mono text-[#D4AF37]">SUPER ADMIN</span></div>
         </div>
       </header>
+
+      {/* Export Modal */}
+      {showExport && (
+        <div className="fixed inset-0 bg-[#030810]/90 flex items-center justify-center z-50 px-6">
+          <div className={`${panelCls} p-7 w-full max-w-sm space-y-4`}>
+            <div className="flex items-center justify-between">
+              <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">EXPORT DATA</p>
+              <button onClick={()=>setShowExport(false)} className="text-[#3a5570] hover:text-white text-lg font-mono">×</button>
+            </div>
+            <div>
+              <p className={labelCls}>Dataset</p>
+              <div className="grid grid-cols-2 gap-2">
+                {[{v:"members",l:"Members"},{v:"tasks",l:"Tasks"},{v:"audit",l:"Audit Log"},{v:"invoices",l:"Invoices"}].map(o=>(
+                  <button key={o.v} onClick={()=>setExportType(o.v)} className={`py-2 text-[10px] font-mono border rounded-sm transition-colors ${exportType===o.v?"bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#D4AF37]":"bg-[#030810] border-[#0d1b35] text-[#3a5570] hover:text-white"}`}>{o.l}</button>
+                ))}
+              </div>
+            </div>
+            <button disabled={exporting} onClick={exportCSV} className={`w-full py-2.5 ${btnPrimary}`}>
+              {exporting ? "EXPORTING..." : `⬇ DOWNLOAD ${exportType.toUpperCase()} CSV`}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Invoice Modal */}
+      {showInvoiceModal && (
+        <div className="fixed inset-0 bg-[#030810]/90 flex items-center justify-center z-50 px-6">
+          <form onSubmit={createInvoice} className={`${panelCls} p-7 w-full max-w-lg space-y-4`}>
+            <div className="flex items-center justify-between">
+              <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">CREATE INVOICE</p>
+              <button type="button" onClick={()=>setShowInvoiceModal(false)} className="text-[#3a5570] hover:text-white text-lg font-mono">×</button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="col-span-2"><label className={labelCls}>Client Email *</label>
+                <select value={invoiceForm.clientEmail} onChange={e=>setInvoiceForm(f=>({...f,clientEmail:e.target.value}))} className={inputCls} required>
+                  <option value="">Select member…</option>
+                  {memberApps.filter(m=>m.status==="active").map(m=><option key={m.id} value={m.email}>{m.fullName} ({m.email})</option>)}
+                </select>
+              </div>
+              <div><label className={labelCls}>Period *</label><input required value={invoiceForm.period} onChange={e=>setInvoiceForm(f=>({...f,period:e.target.value}))} className={inputCls} placeholder="e.g. June 2026" /></div>
+              <div><label className={labelCls}>Amount (USD) *</label><input required value={invoiceForm.amountUsd} onChange={e=>setInvoiceForm(f=>({...f,amountUsd:e.target.value}))} className={inputCls} placeholder="e.g. 15000" /></div>
+              <div><label className={labelCls}>Due Date</label><input type="date" value={invoiceForm.dueDate} onChange={e=>setInvoiceForm(f=>({...f,dueDate:e.target.value}))} className={inputCls} /></div>
+              <div><label className={labelCls}>Currency</label>
+                <select value={invoiceForm.currency} onChange={e=>setInvoiceForm(f=>({...f,currency:e.target.value}))} className={inputCls}>
+                  {["USD","EUR","GBP","AED","SGD"].map(c=><option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="col-span-2"><label className={labelCls}>Payment Link</label><input value={invoiceForm.paymentLink} onChange={e=>setInvoiceForm(f=>({...f,paymentLink:e.target.value}))} className={inputCls} placeholder="https://pay.stripe.com/…" /></div>
+              <div className="col-span-2"><label className={labelCls}>Notes</label><input value={invoiceForm.notes} onChange={e=>setInvoiceForm(f=>({...f,notes:e.target.value}))} className={inputCls} placeholder="Optional invoice notes" /></div>
+            </div>
+            {invoiceError && <p className="text-red-400 text-xs font-mono">{invoiceError}</p>}
+            <p className="text-[9px] font-mono text-[#3a5570]">An email notification will be sent to the client automatically.</p>
+            <button type="submit" disabled={invoiceSaving} className={`w-full py-2.5 ${btnPrimary}`}>
+              {invoiceSaving ? "CREATING..." : "CREATE INVOICE & NOTIFY →"}
+            </button>
+          </form>
+        </div>
+      )}
 
       <div className="relative z-10 max-w-screen-xl mx-auto px-6 py-6">
         <div className="flex gap-1 mb-6 border-b border-[#0d1b35] overflow-x-auto">
@@ -186,7 +278,8 @@ export default function AdminPage() {
 
             {tab==="revenue" && <RevenueTab revenue={revenue} onLoad={loadRevenue} />}
             {tab==="vault" && <VaultTab clients={vaultClients} onPatch={patchVault} saving={saving} selected={selectedVault} setSelected={setSelectedVault} />}
-            {tab==="tasks" && <TasksTab tasks={adminTasks} onPatch={patchTask} saving={saving} />}
+            {tab==="tasks" && <TasksTab tasks={adminTasks} onPatch={patchTask} saving={saving} apiFetch={apiFetch} onReload={loadTasks} />}
+            {tab==="grahams" && <GrahamsTab board={grahamBoard} summary={grahamSummary} onReload={loadGrahams} />}
             {tab==="audit" && <AuditTab logs={auditLogs} onLoad={loadAudit} />}
           </>
         )}
@@ -297,7 +390,6 @@ function RevenueTab({ revenue, onLoad }:{revenue:RevenueData|null;onLoad:()=>voi
           {l:"TOTAL APPLICATIONS",v:summary.totalApplications,c:GOLD},
         ].map(s=><div key={s.l} className={`${panelCls} p-4`}><p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-2">{s.l}</p><p className="font-mono font-bold text-xl" style={{color:s.c}}>{s.v}</p></div>)}
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className={`${panelCls} p-5`}>
           <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">MONTHLY APPLICATION TREND</p>
@@ -353,7 +445,6 @@ function RevenueTab({ revenue, onLoad }:{revenue:RevenueData|null;onLoad:()=>voi
           )}
         </div>
       </div>
-
       <div className={`${panelCls} p-5`}>
         <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">CLIENT HEALTH DISTRIBUTION</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -431,9 +522,46 @@ function VaultDetail({ client, onPatch, saving }:{client:VaultClient;onPatch:(id
   );
 }
 
-function TasksTab({ tasks, onPatch, saving }:{tasks:ClientTask[];onPatch:(id:number,b:object)=>void;saving:boolean}) {
+function TasksTab({ tasks, onPatch, saving, apiFetch, onReload }:{tasks:ClientTask[];onPatch:(id:number,b:object)=>void;saving:boolean;apiFetch:(p:string,o?:RequestInit)=>Promise<Response>;onReload:()=>void}) {
   const STATUS_TC: Record<string,string> = {pending:"text-amber-400",in_progress:"text-blue-400",completed:"text-emerald-400",cancelled:"text-red-400"};
+  const [expanded, setExpanded] = useState<number|null>(null);
+  const [comments, setComments] = useState<Record<number, Comment[]>>({});
+  const [adminNoteEditing, setAdminNoteEditing] = useState<Record<number,string>>({});
+  const [reply, setReply] = useState<Record<number,string>>({});
+  const [sendingReply, setSendingReply] = useState<Record<number,boolean>>({});
+
+  async function loadComments(taskId: number) {
+    const r = await apiFetch(`/api/portal/tasks/${taskId}/comments`);
+    if (r.ok) { const data = await r.json(); setComments(c => ({ ...c, [taskId]: data })); }
+  }
+
+  async function toggleExpand(taskId: number) {
+    if (expanded === taskId) { setExpanded(null); return; }
+    setExpanded(taskId);
+    if (!comments[taskId]) await loadComments(taskId);
+  }
+
+  async function sendReply(taskId: number) {
+    const content = reply[taskId]?.trim();
+    if (!content) return;
+    setSendingReply(s => ({ ...s, [taskId]: true }));
+    try {
+      const r = await apiFetch(`/api/portal/tasks/${taskId}/comments`, { method:"POST", body:JSON.stringify({ content }) });
+      if (r.ok) {
+        const c = await r.json();
+        setComments(cs => ({ ...cs, [taskId]: [...(cs[taskId] ?? []), c] }));
+        setReply(rs => ({ ...rs, [taskId]: "" }));
+      }
+    } finally { setSendingReply(s => ({ ...s, [taskId]: false })); }
+  }
+
+  async function saveNote(task: ClientTask) {
+    const note = adminNoteEditing[task.id] ?? task.adminNotes ?? "";
+    onPatch(task.id, { adminNotes: note });
+  }
+
   if (tasks.length===0) return <div className={`${panelCls} p-16 text-center`}><p className="text-[#2a4060] text-xs font-mono">No client tasks yet. Tasks submitted via the client portal will appear here.</p></div>;
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between mb-2">
@@ -456,10 +584,122 @@ function TasksTab({ tasks, onPatch, saving }:{tasks:ClientTask[];onPatch:(id:num
             <div className="flex flex-col gap-1.5 shrink-0">
               {t.status==="pending"&&<button disabled={saving} onClick={()=>onPatch(t.id,{status:"in_progress"})} className="px-3 py-1.5 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[9px] font-mono rounded-sm hover:bg-blue-500/20 transition-colors">IN PROGRESS</button>}
               {t.status!=="completed"&&<button disabled={saving} onClick={()=>onPatch(t.id,{status:"completed"})} className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-mono rounded-sm hover:bg-emerald-500/20 transition-colors">COMPLETE</button>}
+              <button onClick={()=>toggleExpand(t.id)} className="px-3 py-1.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[9px] font-mono rounded-sm hover:bg-[#D4AF37]/20 transition-colors">
+                {expanded===t.id ? "▲ CLOSE" : "▼ THREAD"}
+              </button>
             </div>
           </div>
+
+          {expanded===t.id && (
+            <div className="mt-3 pt-3 border-t border-[#0d1b35] space-y-3">
+              <div>
+                <label className={labelCls}>Admin Note for Client</label>
+                <div className="flex gap-2">
+                  <input
+                    value={adminNoteEditing[t.id] ?? t.adminNotes ?? ""}
+                    onChange={e=>setAdminNoteEditing(n=>({...n,[t.id]:e.target.value}))}
+                    className={inputCls+" flex-1"}
+                    placeholder="Leave a note visible to the client..."
+                  />
+                  <button onClick={()=>saveNote(t)} disabled={saving} className="px-3 py-1 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[9px] font-mono rounded-sm">SAVE</button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <p className={labelCls}>Comment Thread ({(comments[t.id]??[]).length})</p>
+                {(comments[t.id]??[]).map(c=>(
+                  <div key={c.id} className={`${c.authorType==="admin"?"bg-[#D4AF37]/5 border border-[#D4AF37]/15":"bg-[#030810] border border-[#0d1b35]"} rounded-sm p-2.5`}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={`text-[9px] font-mono font-bold ${c.authorType==="admin"?"text-[#D4AF37]":"text-[#06b6d4]"}`}>{c.authorName}</span>
+                      <span className="text-[8px] font-mono text-[#2a4060] ml-auto">{new Date(c.createdAt).toLocaleString()}</span>
+                    </div>
+                    <p className="text-[10px] text-[#8aa0b8] leading-relaxed">{c.content}</p>
+                  </div>
+                ))}
+                <div className="flex gap-2">
+                  <input
+                    value={reply[t.id]??""}
+                    onChange={e=>setReply(r=>({...r,[t.id]:e.target.value}))}
+                    className={inputCls+" flex-1"}
+                    placeholder="Reply to client..."
+                    onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendReply(t.id);}}}
+                  />
+                  <button onClick={()=>sendReply(t.id)} disabled={sendingReply[t.id]||!reply[t.id]?.trim()} className="px-3 py-1 bg-[#D4AF37] text-[#030810] text-[9px] font-mono font-bold rounded-sm hover:bg-[#b8952b] transition-colors disabled:opacity-50">SEND</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       ))}
+    </div>
+  );
+}
+
+function GrahamsTab({ board, summary, onReload }:{board:GrahamBoard[];summary:GrahamSummary|null;onReload:()=>void}) {
+  const [filter, setFilter] = useState("all");
+  useEffect(()=>{if(board.length===0)onReload();},[]);
+
+  if (board.length===0 && !summary) return <div className="flex items-center justify-center py-20"><span className="text-[#D4AF37] font-mono text-xs animate-pulse">LOADING GRAHAM STATUS BOARD...</span></div>;
+
+  const filtered = filter==="all" ? board : board.filter(b=>b.agentStatus===filter);
+
+  return (
+    <div className="space-y-5">
+      {summary && (
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          {[
+            {l:"TOTAL",v:summary.total,c:"#D4AF37"},
+            {l:"ACTIVE",v:summary.active,c:"#00ff88"},
+            {l:"CONFIGURING",v:summary.configuring,c:"#D4AF37"},
+            {l:"STANDBY",v:summary.standby,c:"#06b6d4"},
+            {l:"UNASSIGNED",v:summary.unassigned,c:"#2a4060"},
+          ].map(s=>(
+            <div key={s.l} className={`${panelCls} p-4`}>
+              <p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-2">{s.l}</p>
+              <p className="font-mono font-bold text-2xl" style={{color:s.c}}>{s.v}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center gap-2">
+        {["all","active","configuring","standby","unassigned"].map(f=>(
+          <button key={f} onClick={()=>setFilter(f)} className={`px-3 py-1.5 text-[9px] font-mono border rounded-sm transition-colors capitalize ${filter===f?"bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#D4AF37]":"bg-[#040c1a] border-[#0d1b35] text-[#3a5570] hover:text-white"}`}>{f}</button>
+        ))}
+      </div>
+
+      <div className="space-y-2">
+        {filtered.length===0 && <div className={`${panelCls} p-10 text-center`}><p className="text-[#2a4060] text-xs font-mono">No Grahams in this state</p></div>}
+        {filtered.map(b=>(
+          <div key={b.memberId} className={`${panelCls} p-4`}>
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-sm flex items-center justify-center shrink-0">
+                <span className="text-[#D4AF37] font-mono font-bold text-xs">{b.grahamCode ?? "—"}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 mb-1">
+                  <p className="text-sm font-semibold text-white">{b.memberName}</p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full" style={{background:AGENT_STATUS_COLORS[b.agentStatus]??"#2a4060"}} />
+                    <span className="text-[9px] font-mono font-bold uppercase" style={{color:AGENT_STATUS_COLORS[b.agentStatus]??"#2a4060"}}>{b.agentStatus}</span>
+                  </div>
+                </div>
+                <p className="text-[10px] font-mono text-[#3a5570] mb-1">{b.memberEmail}{b.company?` · ${b.company}`:""}</p>
+                {b.agentObjective && <p className="text-[10px] text-[#8aa0b8] leading-relaxed line-clamp-1">{b.agentObjective}</p>}
+                {b.agentModules.length>0 && (
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    {b.agentModules.map(m=><span key={m} className="px-1.5 py-0.5 bg-[#D4AF37]/10 border border-[#D4AF37]/20 text-[8px] font-mono text-[#D4AF37] rounded-sm capitalize">{m}</span>)}
+                  </div>
+                )}
+              </div>
+              <div className="text-right shrink-0">
+                {b.bloomMemberId && <p className="text-[9px] font-mono text-[#D4AF37]">{b.bloomMemberId}</p>}
+                {b.deployedAt && <p className="text-[8px] font-mono text-[#2a4060] mt-0.5">Deployed {new Date(b.deployedAt).toLocaleDateString()}</p>}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

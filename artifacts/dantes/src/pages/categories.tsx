@@ -20,7 +20,7 @@ function CategoryForm({ onClose }: { onClose: () => void }) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    create.mutate({ name: form.name, type: form.type, color: form.color, icon: form.icon || undefined });
+    create.mutate({ data: { name: form.name, type: form.type, color: form.color, icon: form.icon || undefined } });
   }
 
   return (

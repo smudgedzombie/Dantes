@@ -14,6 +14,7 @@ import auditRouter from "./audit";
 import vaultRouter from "./vault";
 import revenueRouter from "./revenue";
 import portalRouter from "./portal";
+import storageRouter from "./storage";
 
 const router: IRouter = Router();
 
@@ -32,5 +33,6 @@ router.use(auditRouter);
 router.use(vaultRouter);
 router.use(revenueRouter);
 router.use(portalRouter);
+router.use(storageRouter);
 
 export default router;

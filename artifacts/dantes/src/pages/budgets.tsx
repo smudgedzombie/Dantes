@@ -15,7 +15,7 @@ function BudgetForm({ onClose }: { onClose: () => void }) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    create.mutate({ categoryId: parseInt(form.categoryId), amount: parseFloat(form.amount), period: form.period, startDate: form.startDate });
+    create.mutate({ data: { categoryId: parseInt(form.categoryId), amount: parseFloat(form.amount), period: form.period, startDate: form.startDate } });
   }
 
   return (

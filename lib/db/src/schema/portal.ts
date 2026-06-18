@@ -28,6 +28,15 @@ export const clientTasksTable = pgTable("client_tasks", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+export const taskCommentsTable = pgTable("task_comments", {
+  id: serial("id").primaryKey(),
+  taskId: integer("task_id").notNull().references(() => clientTasksTable.id, { onDelete: "cascade" }),
+  authorType: text("author_type").notNull().default("client"),
+  authorName: text("author_name").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const clientDocumentsTable = pgTable("client_documents", {
   id: serial("id").primaryKey(),
   clientEmail: text("client_email").notNull(),
@@ -36,6 +45,9 @@ export const clientDocumentsTable = pgTable("client_documents", {
   type: text("type").notNull().default("report"),
   description: text("description"),
   fileContent: text("file_content"),
+  fileUrl: text("file_url"),
+  mimeType: text("mime_type"),
+  fileSize: text("file_size"),
   uploadedBy: text("uploaded_by").notNull().default("system"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -48,6 +60,8 @@ export const clientInvoicesTable = pgTable("client_invoices", {
   amountUsd: text("amount_usd").notNull(),
   currency: text("currency").notNull().default("USD"),
   status: text("status").notNull().default("pending"),
+  paymentLink: text("payment_link"),
+  dueDate: text("due_date"),
   paidAt: timestamp("paid_at"),
   notes: text("notes"),
   createdAt: timestamp("created_at").notNull().defaultNow(),

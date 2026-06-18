@@ -18,7 +18,7 @@ function TransactionForm({ onClose }: { onClose: () => void }) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    create.mutate({
+    create.mutate({ data: {
       description: form.description,
       amount: parseFloat(form.amount),
       type: form.type,
@@ -26,7 +26,7 @@ function TransactionForm({ onClose }: { onClose: () => void }) {
       categoryId: form.categoryId ? parseInt(form.categoryId) : undefined,
       date: form.date,
       notes: form.notes || undefined,
-    });
+    } });
   }
 
   return (

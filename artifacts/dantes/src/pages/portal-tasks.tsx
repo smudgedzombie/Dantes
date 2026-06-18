@@ -18,6 +18,78 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 type Task = { id:number; title:string; description:string|null; module:string; priority:string; status:string; adminNotes:string|null; completedAt:string|null; createdAt:string };
+type Comment = { id:number; taskId:number; authorType:string; authorName:string; content:string; createdAt:string };
+
+function TaskThread({ task, token }: { task: Task; token: string }) {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [reply, setReply] = useState("");
+  const [sending, setSending] = useState(false);
+
+  async function loadComments() {
+    const res = await fetch(`/api/portal/tasks/${task.id}/comments`, { headers: { Authorization: `Bearer ${token}` } });
+    if (res.ok) setComments(await res.json());
+    setLoaded(true);
+  }
+
+  function toggle() {
+    setOpen(o => !o);
+    if (!loaded) loadComments();
+  }
+
+  async function send(e: React.FormEvent) {
+    e.preventDefault();
+    if (!reply.trim()) return;
+    setSending(true);
+    try {
+      const res = await fetch(`/api/portal/tasks/${task.id}/comments`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ content: reply }),
+      });
+      if (res.ok) {
+        const c = await res.json();
+        setComments(cs => [...cs, c]);
+        setReply("");
+      }
+    } finally { setSending(false); }
+  }
+
+  const panelCls = "bg-[#040c1a] border border-[#0d1b35] rounded-sm";
+  const inputCls = "w-full bg-[#030810] border border-[#0d1b35] rounded-sm px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]/50 font-mono placeholder:text-[#2a4060] transition-colors";
+
+  return (
+    <div>
+      <button onClick={toggle} className="text-[9px] font-mono text-[#3a5570] hover:text-[#D4AF37] transition-colors mt-2 flex items-center gap-1">
+        <span>{open ? "▼" : "▶"}</span>
+        {comments.length > 0 ? `${comments.length} COMMENT${comments.length > 1 ? "S" : ""}` : "THREAD"} {!loaded && open ? "..." : ""}
+      </button>
+
+      {open && (
+        <div className="mt-3 space-y-2 pl-3 border-l border-[#0d1b35]">
+          {loaded && comments.length === 0 && (
+            <p className="text-[9px] font-mono text-[#2a4060]">No replies yet — start the conversation.</p>
+          )}
+          {comments.map(c => (
+            <div key={c.id} className={`${c.authorType === "admin" ? "bg-[#D4AF37]/5 border border-[#D4AF37]/15" : "bg-[#030810] border border-[#0d1b35]"} rounded-sm p-3`}>
+              <div className="flex items-center gap-2 mb-1">
+                <span className={`text-[9px] font-mono font-bold ${c.authorType === "admin" ? "text-[#D4AF37]" : "text-[#06b6d4]"}`}>{c.authorName}</span>
+                {c.authorType === "admin" && <span className="text-[8px] font-mono text-[#D4AF37]/50 tracking-widest">BLOOM SOCIETY</span>}
+                <span className="text-[8px] font-mono text-[#2a4060] ml-auto">{new Date(c.createdAt).toLocaleString()}</span>
+              </div>
+              <p className="text-[11px] text-[#8aa0b8] leading-relaxed">{c.content}</p>
+            </div>
+          ))}
+          <form onSubmit={send} className="flex gap-2 pt-1">
+            <input value={reply} onChange={e => setReply(e.target.value)} className={inputCls + " flex-1"} placeholder="Write a reply..." />
+            <button type="submit" disabled={sending || !reply.trim()} className="px-3 py-1.5 bg-[#D4AF37] text-[#030810] text-[9px] font-mono font-bold rounded-sm hover:bg-[#b8952b] transition-colors disabled:opacity-50">SEND</button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function PortalTasksPage() {
   const { getToken } = useAuth();
@@ -27,10 +99,13 @@ export default function PortalTasksPage() {
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ title:"", description:"", module:"operations", priority:"medium" });
   const [error, setError] = useState("");
+  const [token, setToken] = useState("");
+  const [filter, setFilter] = useState("all");
 
   async function load() {
-    const token = await getToken();
-    const res = await fetch("/api/portal/tasks", { headers: { Authorization: `Bearer ${token}` } });
+    const tok = await getToken();
+    setToken(tok ?? "");
+    const res = await fetch("/api/portal/tasks", { headers: { Authorization: `Bearer ${tok}` } });
     if (res.ok) setTasks(await res.json());
     setLoading(false);
   }
@@ -39,9 +114,9 @@ export default function PortalTasksPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setSubmitting(true); setError("");
     try {
-      const token = await getToken();
+      const tok = await getToken();
       const res = await fetch("/api/portal/tasks", {
-        method:"POST", headers: { Authorization:`Bearer ${token}`, "Content-Type":"application/json" },
+        method:"POST", headers: { Authorization:`Bearer ${tok}`, "Content-Type":"application/json" },
         body: JSON.stringify(form),
       });
       if (!res.ok) { const d = await res.json(); setError(d.error ?? "Failed"); return; }
@@ -56,6 +131,8 @@ export default function PortalTasksPage() {
   const inputCls = "w-full bg-[#030810] border border-[#0d1b35] rounded-sm px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#D4AF37]/50 font-mono placeholder:text-[#2a4060] transition-colors";
   const labelCls = "block text-[9px] font-mono text-[#3a5570] mb-1.5 uppercase tracking-widest";
   const panelCls = "bg-[#040c1a] border border-[#0d1b35] rounded-sm";
+
+  const filtered = filter === "all" ? tasks : tasks.filter(t => t.status === filter);
 
   return (
     <div className="min-h-screen bg-[#030810] text-white">
@@ -75,7 +152,7 @@ export default function PortalTasksPage() {
       </header>
 
       <nav className="relative z-10 border-b border-[#0d1b35] px-6 flex gap-0">
-        {[{href:"/portal",l:"OVERVIEW"},{href:"/portal/tasks",l:"TASKS"},{href:"/portal/documents",l:"DOCUMENTS"},{href:"/portal/billing",l:"BILLING"}].map(i=>(
+        {[{href:"/portal",l:"OVERVIEW"},{href:"/portal/tasks",l:`TASKS (${tasks.filter(t=>t.status==="pending").length})`},{href:"/portal/documents",l:"DOCUMENTS"},{href:"/portal/billing",l:"BILLING"}].map(i=>(
           <Link key={i.href} href={i.href} className={`px-4 py-3 text-[10px] font-mono border-b-2 transition-all ${i.href==="/portal/tasks"?"text-[#D4AF37] border-[#D4AF37]":"text-[#3a5570] border-transparent hover:text-white hover:border-[#D4AF37]/40"}`}>{i.l}</Link>
         ))}
       </nav>
@@ -121,15 +198,15 @@ export default function PortalTasksPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-4">
               <p className="text-[9px] font-mono text-[#3a5570]">{tasks.length} TASKS</p>
-              <div className="flex gap-2">
+              <div className="flex gap-1.5">
                 {["all","pending","in_progress","completed"].map(f=>(
-                  <span key={f} className="text-[9px] font-mono text-[#2a4060] capitalize cursor-pointer hover:text-white transition-colors">{f.replace("_"," ")}</span>
+                  <button key={f} onClick={()=>setFilter(f)} className={`px-2.5 py-1 text-[9px] font-mono rounded-sm border transition-colors capitalize ${filter===f?"bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#D4AF37]":"bg-[#040c1a] border-[#0d1b35] text-[#2a4060] hover:text-white"}`}>{f.replace("_"," ")}</button>
                 ))}
               </div>
             </div>
-            {tasks.map(t => (
+            {filtered.map(t => (
               <div key={t.id} className={`${panelCls} p-4 hover:border-[#D4AF37]/15 transition-colors`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
@@ -145,10 +222,12 @@ export default function PortalTasksPage() {
                         <p className="text-[10px] text-[#8aa0b8]">{t.adminNotes}</p>
                       </div>
                     )}
+                    <TaskThread task={t} token={token} />
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-[9px] font-mono text-[#2a4060]">{new Date(t.createdAt).toLocaleDateString()}</p>
                     <p className="text-[9px] font-mono text-[#D4AF37] capitalize mt-0.5">{MODULE_LABELS[t.module] ?? t.module}</p>
+                    {t.completedAt && <p className="text-[8px] font-mono text-[#00ff88] mt-0.5">✓ Done</p>}
                   </div>
                 </div>
               </div>

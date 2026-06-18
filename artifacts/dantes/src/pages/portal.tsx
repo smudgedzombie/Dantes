@@ -24,6 +24,7 @@ type Overview = {
   unpaidInvoicesCount: number;
 };
 type Activity = { id: number; type: string; module: string; title: string; description: string | null; status: string; createdAt: string };
+type Metrics = { tasksTotal: number; tasksCompleted: number; activitiesLogged: number; modulesActive: number; estimatedHoursSaved: number; totalPaidUsd: number; grahamCode: string | null };
 
 function HealthRing({ score }: { score: number }) {
   const r = 28; const c = 2 * Math.PI * r;
@@ -44,9 +45,76 @@ function HealthRing({ score }: { score: number }) {
   );
 }
 
+const ONBOARDING_STAGES: { key: string; label: string; desc: string }[] = [
+  { key: "pending", label: "Application", desc: "Received & under review" },
+  { key: "reviewing", label: "Vetting", desc: "Profile assessment" },
+  { key: "quoted", label: "Proposal", desc: "Custom Graham designed" },
+  { key: "active", label: "Live", desc: "Graham deployed 24/7" },
+];
+
+function OnboardingTracker({ status }: { status: string }) {
+  const stageOrder = ["pending", "reviewing", "quoted", "paid", "active"];
+  const currentIdx = stageOrder.indexOf(status);
+  const displayIdx = Math.min(currentIdx, 3);
+
+  if (status === "active") return null;
+
+  return (
+    <div className="bg-[#040c1a] border border-[#0d1b35] rounded-sm p-5">
+      <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">ONBOARDING PROGRESS</p>
+      <div className="flex items-start gap-2">
+        {ONBOARDING_STAGES.map((s, i) => {
+          const done = i < displayIdx;
+          const active = i === displayIdx;
+          return (
+            <div key={s.key} className="flex-1 flex flex-col items-center">
+              <div className="flex items-center w-full mb-2">
+                <div className={`w-6 h-6 rounded-sm flex items-center justify-center shrink-0 text-[9px] font-mono font-bold transition-all ${done ? "bg-[#00ff88]/20 border border-[#00ff88]/40 text-[#00ff88]" : active ? "bg-[#D4AF37] text-[#030810]" : "bg-[#0a1628] border border-[#0d1b35] text-[#2a4060]"}`}>
+                  {done ? "✓" : `0${i + 1}`}
+                </div>
+                {i < 3 && <div className={`flex-1 h-px mx-1 ${done ? "bg-[#00ff88]/30" : "bg-[#0d1b35]"}`} />}
+              </div>
+              <div className="text-center w-full">
+                <p className={`text-[8px] font-mono font-bold leading-tight ${active ? "text-[#D4AF37]" : done ? "text-[#00ff88]" : "text-[#2a4060]"}`}>{s.label}</p>
+                <p className="text-[7px] font-mono text-[#2a4060] leading-tight mt-0.5 hidden sm:block">{s.desc}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ROIMetrics({ metrics }: { metrics: Metrics }) {
+  return (
+    <div className="bg-[#040c1a] border border-[#0d1b35] rounded-sm p-5">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">GRAHAM IMPACT METRICS</p>
+        {metrics.grahamCode && <span className="text-[9px] font-mono text-[#3a5570]">{metrics.grahamCode}</span>}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: "TASKS COMPLETED", value: `${metrics.tasksCompleted}/${metrics.tasksTotal}`, color: "#00ff88", sub: "of submitted tasks" },
+          { label: "ACTIVITIES LOGGED", value: metrics.activitiesLogged, color: "#06b6d4", sub: "Graham executions" },
+          { label: "EST. HOURS SAVED", value: `~${metrics.estimatedHoursSaved}h`, color: "#D4AF37", sub: "this engagement" },
+          { label: "MODULES ACTIVE", value: metrics.modulesActive, color: "#8b5cf6", sub: "capability modules" },
+        ].map(s => (
+          <div key={s.label}>
+            <p className="text-[8px] font-mono text-[#3a5570] tracking-widest mb-1">{s.label}</p>
+            <p className="font-mono font-bold text-xl" style={{ color: s.color }}>{s.value}</p>
+            <p className="text-[8px] font-mono text-[#2a4060] mt-0.5">{s.sub}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function PortalPage() {
   const { getToken } = useAuth();
   const [overview, setOverview] = useState<Overview | null>(null);
+  const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -54,9 +122,13 @@ export default function PortalPage() {
     (async () => {
       try {
         const token = await getToken();
-        const res = await fetch("/api/portal/overview", { headers: { Authorization: `Bearer ${token}` } });
-        if (!res.ok) { setError("Unable to load portal. Your membership may not be active yet."); return; }
-        setOverview(await res.json());
+        const [ovRes, meRes] = await Promise.all([
+          fetch("/api/portal/overview", { headers: { Authorization: `Bearer ${token}` } }),
+          fetch("/api/portal/metrics", { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+        if (!ovRes.ok) { setError("Unable to load portal. Your membership may not be active yet."); return; }
+        setOverview(await ovRes.json());
+        if (meRes.ok) setMetrics(await meRes.json());
       } catch { setError("Network error."); }
       finally { setLoading(false); }
     })();
@@ -73,9 +145,7 @@ export default function PortalPage() {
   if (error || !overview) return (
     <div className="min-h-screen bg-[#030810] flex items-center justify-center px-6">
       <div className="text-center max-w-sm">
-        <div className="w-12 h-12 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-sm flex items-center justify-center mx-auto mb-5">
-          <span className="text-[#D4AF37] font-mono font-bold text-lg">D</span>
-        </div>
+        <img src="/logo.jpg" alt="Dantès" className="w-16 h-16 object-contain rounded-sm mx-auto mb-5" />
         <p className="text-white font-semibold mb-2">Portal Unavailable</p>
         <p className="text-[#3a5570] text-sm mb-6">{error || "Could not load your portal."}</p>
         <Link href="/" className="text-[10px] font-mono text-[#D4AF37] hover:text-white transition-colors">← HOME</Link>
@@ -124,11 +194,14 @@ export default function PortalPage() {
         ))}
       </nav>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-8 space-y-6">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-8 space-y-5">
+        {/* Onboarding tracker - only shown for non-active members */}
+        {member.status !== "active" && <OnboardingTracker status={member.status} />}
+
         {/* Graham Status Banner */}
         <div className={`${panelCls} p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5`}>
           <div className="w-14 h-14 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-sm flex items-center justify-center shrink-0">
-            <span className="text-[#D4AF37] font-mono font-black text-base">{member.assignedGrahamId ?? "GRM"}</span>
+            <span className="text-[#D4AF37] font-mono font-black text-sm">{member.assignedGrahamId ?? "GRM"}</span>
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-1">
@@ -159,6 +232,9 @@ export default function PortalPage() {
           ))}
         </div>
 
+        {/* ROI Metrics */}
+        {metrics && <ROIMetrics metrics={metrics} />}
+
         {/* Activity Feed */}
         <div>
           <div className="flex items-center justify-between mb-4">
@@ -171,7 +247,7 @@ export default function PortalPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              {recentActivities.map((a, i) => (
+              {recentActivities.map(a => (
                 <div key={a.id} className={`${panelCls} p-4 flex items-start gap-4 hover:border-[#D4AF37]/15 transition-colors`}>
                   <div className="w-8 h-8 rounded-sm bg-[#030810] border border-[#0d1b35] flex items-center justify-center shrink-0 text-sm"
                     style={{ color: MODULE_COLORS[a.module] ?? "#D4AF37" }}>
@@ -197,9 +273,9 @@ export default function PortalPage() {
         {/* Quick links */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { href: "/portal/tasks", icon: "◎", label: "Submit a Task", desc: "Send a brief directly to your Graham" },
-            { href: "/portal/documents", icon: "◈", label: "View Documents", desc: "Reports, contracts, and files from your Graham" },
-            { href: "/portal/billing", icon: "◆", label: "Billing & Invoices", desc: "Review payments and engagement history" },
+            { href: "/portal/tasks", icon: "◎", label: "Submit a Task", desc: "Send a brief directly to your Graham — includes reply threads" },
+            { href: "/portal/documents", icon: "◈", label: "View Documents", desc: "Reports, contracts, files — upload your own too" },
+            { href: "/portal/billing", icon: "◆", label: "Billing & Invoices", desc: "Review payments and pay invoices online" },
           ].map(item => (
             <Link key={item.href} href={item.href}
               className={`${panelCls} p-5 hover:border-[#D4AF37]/25 transition-all group cursor-pointer block`}>
