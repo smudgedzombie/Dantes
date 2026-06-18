@@ -234,7 +234,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <Link href="/join" className="inline-block px-8 py-3.5 bg-[#D4AF37] text-[#030810] font-mono font-bold text-sm rounded-sm hover:bg-[#b8952b] transition-all tracking-widest shadow-[0_0_30px_rgba(212,175,55,0.25)]">
-                APPLY FOR MEMBERSHIP →
+                WANT TO BUILD YOUR EMPIRE? APPLY HERE →
               </Link>
               <p className="text-[9px] font-mono text-[#2a4060] mt-4">Applications reviewed within 48–72 hours · Limited quarterly intake</p>
             </div>
