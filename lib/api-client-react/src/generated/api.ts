@@ -23,6 +23,7 @@ import type {
   Account,
   AccountInput,
   AccountUpdate,
+  AlertsSummary,
   Budget,
   BudgetInput,
   BudgetUpdate,
@@ -30,14 +31,21 @@ import type {
   CategoryInput,
   CategoryUpdate,
   DashboardSummary,
+  Deal,
   GetSpendingByCategoryParams,
   HealthStatus,
+  ListDealsParams,
   ListTransactionsParams,
+  MatchedDeal,
   MonthlyFlow,
+  PriceAlert,
   SpendingByCategory,
   Transaction,
   TransactionInput,
-  TransactionUpdate
+  TransactionUpdate,
+  WishlistItem,
+  WishlistItemInput,
+  WishlistItemUpdate
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -1754,6 +1762,688 @@ export function useGetRecentTransactions<TData = Awaited<ReturnType<typeof getRe
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getGetRecentTransactionsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getListWishlistItemsUrl = () => {
+
+
+
+
+  return `/api/mkp/wishlist`
+}
+
+/**
+ * @summary List all wishlist items for the current user
+ */
+export const listWishlistItems = async ( options?: RequestInit): Promise<WishlistItem[]> => {
+
+  return customFetch<WishlistItem[]>(getListWishlistItemsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListWishlistItemsQueryKey = () => {
+    return [
+    `/api/mkp/wishlist`
+    ] as const;
+    }
+
+
+export const getListWishlistItemsQueryOptions = <TData = Awaited<ReturnType<typeof listWishlistItems>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listWishlistItems>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListWishlistItemsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listWishlistItems>>> = ({ signal }) => listWishlistItems({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listWishlistItems>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListWishlistItemsQueryResult = NonNullable<Awaited<ReturnType<typeof listWishlistItems>>>
+export type ListWishlistItemsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all wishlist items for the current user
+ */
+
+export function useListWishlistItems<TData = Awaited<ReturnType<typeof listWishlistItems>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listWishlistItems>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListWishlistItemsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getCreateWishlistItemUrl = () => {
+
+
+
+
+  return `/api/mkp/wishlist`
+}
+
+/**
+ * @summary Add item to wishlist
+ */
+export const createWishlistItem = async (wishlistItemInput: WishlistItemInput, options?: RequestInit): Promise<WishlistItem> => {
+
+  return customFetch<WishlistItem>(getCreateWishlistItemUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      wishlistItemInput,)
+  }
+);}
+
+
+
+
+export const getCreateWishlistItemMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createWishlistItem>>, TError,{data: BodyType<WishlistItemInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createWishlistItem>>, TError,{data: BodyType<WishlistItemInput>}, TContext> => {
+
+const mutationKey = ['createWishlistItem'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createWishlistItem>>, {data: BodyType<WishlistItemInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createWishlistItem(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateWishlistItemMutationResult = NonNullable<Awaited<ReturnType<typeof createWishlistItem>>>
+    export type CreateWishlistItemMutationBody = BodyType<WishlistItemInput>
+    export type CreateWishlistItemMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Add item to wishlist
+ */
+export const useCreateWishlistItem = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createWishlistItem>>, TError,{data: BodyType<WishlistItemInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createWishlistItem>>,
+        TError,
+        {data: BodyType<WishlistItemInput>},
+        TContext
+      > => {
+      return useMutation(getCreateWishlistItemMutationOptions(options));
+    }
+
+export const getUpdateWishlistItemUrl = (id: number,) => {
+
+
+
+
+  return `/api/mkp/wishlist/${id}`
+}
+
+/**
+ * @summary Update a wishlist item
+ */
+export const updateWishlistItem = async (id: number,
+    wishlistItemUpdate: WishlistItemUpdate, options?: RequestInit): Promise<WishlistItem> => {
+
+  return customFetch<WishlistItem>(getUpdateWishlistItemUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      wishlistItemUpdate,)
+  }
+);}
+
+
+
+
+export const getUpdateWishlistItemMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateWishlistItem>>, TError,{id: number;data: BodyType<WishlistItemUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateWishlistItem>>, TError,{id: number;data: BodyType<WishlistItemUpdate>}, TContext> => {
+
+const mutationKey = ['updateWishlistItem'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateWishlistItem>>, {id: number;data: BodyType<WishlistItemUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateWishlistItem(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateWishlistItemMutationResult = NonNullable<Awaited<ReturnType<typeof updateWishlistItem>>>
+    export type UpdateWishlistItemMutationBody = BodyType<WishlistItemUpdate>
+    export type UpdateWishlistItemMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Update a wishlist item
+ */
+export const useUpdateWishlistItem = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateWishlistItem>>, TError,{id: number;data: BodyType<WishlistItemUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateWishlistItem>>,
+        TError,
+        {id: number;data: BodyType<WishlistItemUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateWishlistItemMutationOptions(options));
+    }
+
+export const getDeleteWishlistItemUrl = (id: number,) => {
+
+
+
+
+  return `/api/mkp/wishlist/${id}`
+}
+
+/**
+ * @summary Remove item from wishlist
+ */
+export const deleteWishlistItem = async (id: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getDeleteWishlistItemUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteWishlistItemMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteWishlistItem>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteWishlistItem>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteWishlistItem'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteWishlistItem>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteWishlistItem(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteWishlistItemMutationResult = NonNullable<Awaited<ReturnType<typeof deleteWishlistItem>>>
+
+    export type DeleteWishlistItemMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Remove item from wishlist
+ */
+export const useDeleteWishlistItem = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteWishlistItem>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteWishlistItem>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteWishlistItemMutationOptions(options));
+    }
+
+export const getListDealsUrl = (params?: ListDealsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/mkp/deals?${stringifiedParams}` : `/api/mkp/deals`
+}
+
+/**
+ * @summary List curated deals feed
+ */
+export const listDeals = async (params?: ListDealsParams, options?: RequestInit): Promise<Deal[]> => {
+
+  return customFetch<Deal[]>(getListDealsUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListDealsQueryKey = (params?: ListDealsParams,) => {
+    return [
+    `/api/mkp/deals`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListDealsQueryOptions = <TData = Awaited<ReturnType<typeof listDeals>>, TError = ErrorType<unknown>>(params?: ListDealsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listDeals>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListDealsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listDeals>>> = ({ signal }) => listDeals(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listDeals>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListDealsQueryResult = NonNullable<Awaited<ReturnType<typeof listDeals>>>
+export type ListDealsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List curated deals feed
+ */
+
+export function useListDeals<TData = Awaited<ReturnType<typeof listDeals>>, TError = ErrorType<unknown>>(
+ params?: ListDealsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listDeals>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListDealsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getGetTrendingDealsUrl = () => {
+
+
+
+
+  return `/api/mkp/deals/trending`
+}
+
+/**
+ * @summary Get top trending deals right now
+ */
+export const getTrendingDeals = async ( options?: RequestInit): Promise<Deal[]> => {
+
+  return customFetch<Deal[]>(getGetTrendingDealsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetTrendingDealsQueryKey = () => {
+    return [
+    `/api/mkp/deals/trending`
+    ] as const;
+    }
+
+
+export const getGetTrendingDealsQueryOptions = <TData = Awaited<ReturnType<typeof getTrendingDeals>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTrendingDeals>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTrendingDealsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTrendingDeals>>> = ({ signal }) => getTrendingDeals({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTrendingDeals>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetTrendingDealsQueryResult = NonNullable<Awaited<ReturnType<typeof getTrendingDeals>>>
+export type GetTrendingDealsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get top trending deals right now
+ */
+
+export function useGetTrendingDeals<TData = Awaited<ReturnType<typeof getTrendingDeals>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getTrendingDeals>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetTrendingDealsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getGetMatchedDealsUrl = () => {
+
+
+
+
+  return `/api/mkp/deals/matched`
+}
+
+/**
+ * @summary Get deals matching wishlist items
+ */
+export const getMatchedDeals = async ( options?: RequestInit): Promise<MatchedDeal[]> => {
+
+  return customFetch<MatchedDeal[]>(getGetMatchedDealsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMatchedDealsQueryKey = () => {
+    return [
+    `/api/mkp/deals/matched`
+    ] as const;
+    }
+
+
+export const getGetMatchedDealsQueryOptions = <TData = Awaited<ReturnType<typeof getMatchedDeals>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMatchedDeals>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMatchedDealsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMatchedDeals>>> = ({ signal }) => getMatchedDeals({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMatchedDeals>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMatchedDealsQueryResult = NonNullable<Awaited<ReturnType<typeof getMatchedDeals>>>
+export type GetMatchedDealsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get deals matching wishlist items
+ */
+
+export function useGetMatchedDeals<TData = Awaited<ReturnType<typeof getMatchedDeals>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMatchedDeals>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMatchedDealsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getListAlertsUrl = () => {
+
+
+
+
+  return `/api/mkp/alerts`
+}
+
+/**
+ * @summary List all price drop alerts
+ */
+export const listAlerts = async ( options?: RequestInit): Promise<PriceAlert[]> => {
+
+  return customFetch<PriceAlert[]>(getListAlertsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListAlertsQueryKey = () => {
+    return [
+    `/api/mkp/alerts`
+    ] as const;
+    }
+
+
+export const getListAlertsQueryOptions = <TData = Awaited<ReturnType<typeof listAlerts>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAlerts>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListAlertsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listAlerts>>> = ({ signal }) => listAlerts({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listAlerts>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListAlertsQueryResult = NonNullable<Awaited<ReturnType<typeof listAlerts>>>
+export type ListAlertsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all price drop alerts
+ */
+
+export function useListAlerts<TData = Awaited<ReturnType<typeof listAlerts>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listAlerts>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListAlertsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getGetAlertsSummaryUrl = () => {
+
+
+
+
+  return `/api/mkp/alerts/summary`
+}
+
+/**
+ * @summary Get summary of alerts and savings
+ */
+export const getAlertsSummary = async ( options?: RequestInit): Promise<AlertsSummary> => {
+
+  return customFetch<AlertsSummary>(getGetAlertsSummaryUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAlertsSummaryQueryKey = () => {
+    return [
+    `/api/mkp/alerts/summary`
+    ] as const;
+    }
+
+
+export const getGetAlertsSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getAlertsSummary>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAlertsSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAlertsSummaryQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlertsSummary>>> = ({ signal }) => getAlertsSummary({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAlertsSummary>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAlertsSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof getAlertsSummary>>>
+export type GetAlertsSummaryQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get summary of alerts and savings
+ */
+
+export function useGetAlertsSummary<TData = Awaited<ReturnType<typeof getAlertsSummary>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAlertsSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAlertsSummaryQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

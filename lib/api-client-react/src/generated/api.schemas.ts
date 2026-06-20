@@ -287,6 +287,341 @@ export interface MonthlyFlow {
   net?: number;
 }
 
+export type ClientStatus = typeof ClientStatus[keyof typeof ClientStatus];
+
+
+export const ClientStatus = {
+  prospect: 'prospect',
+  active: 'active',
+  paused: 'paused',
+  completed: 'completed',
+} as const;
+
+export interface Client {
+  id: number;
+  name: string;
+  industry: string;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  contactName?: string | null;
+  /** @nullable */
+  contactEmail?: string | null;
+  /** @nullable */
+  contactPhone?: string | null;
+  /** @nullable */
+  country?: string | null;
+  status: ClientStatus;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export type ClientInputStatus = typeof ClientInputStatus[keyof typeof ClientInputStatus];
+
+
+export const ClientInputStatus = {
+  prospect: 'prospect',
+  active: 'active',
+  paused: 'paused',
+  completed: 'completed',
+} as const;
+
+export interface ClientInput {
+  name: string;
+  industry: string;
+  description?: string;
+  contactName?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  country?: string;
+  status?: ClientInputStatus;
+  notes?: string;
+}
+
+export type GrahamAgentStatus = typeof GrahamAgentStatus[keyof typeof GrahamAgentStatus];
+
+
+export const GrahamAgentStatus = {
+  configuring: 'configuring',
+  standby: 'standby',
+  active: 'active',
+  suspended: 'suspended',
+} as const;
+
+export interface GrahamAgent {
+  id: number;
+  code: string;
+  name: string;
+  /** @nullable */
+  clientId?: number | null;
+  /** @nullable */
+  clientName?: string | null;
+  /** @nullable */
+  clientIndustry?: string | null;
+  status: GrahamAgentStatus;
+  modules: string[];
+  /** @nullable */
+  objective?: string | null;
+  /** @nullable */
+  deployedAt?: string | null;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+}
+
+export type GrahamAgentInputStatus = typeof GrahamAgentInputStatus[keyof typeof GrahamAgentInputStatus];
+
+
+export const GrahamAgentInputStatus = {
+  configuring: 'configuring',
+  standby: 'standby',
+  active: 'active',
+  suspended: 'suspended',
+} as const;
+
+export interface GrahamAgentInput {
+  code: string;
+  name: string;
+  clientId?: number;
+  status?: GrahamAgentInputStatus;
+  modules?: string[];
+  objective?: string;
+  notes?: string;
+}
+
+export type AgentTaskStatus = typeof AgentTaskStatus[keyof typeof AgentTaskStatus];
+
+
+export const AgentTaskStatus = {
+  pending: 'pending',
+  in_progress: 'in_progress',
+  completed: 'completed',
+  cancelled: 'cancelled',
+} as const;
+
+export type AgentTaskPriority = typeof AgentTaskPriority[keyof typeof AgentTaskPriority];
+
+
+export const AgentTaskPriority = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high',
+  critical: 'critical',
+} as const;
+
+export interface AgentTask {
+  id: number;
+  agentId: number;
+  title: string;
+  /** @nullable */
+  description?: string | null;
+  type: string;
+  status: AgentTaskStatus;
+  priority: AgentTaskPriority;
+  /** @nullable */
+  dueDate?: string | null;
+  /** @nullable */
+  completedAt?: string | null;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+}
+
+export type AgentTaskInputStatus = typeof AgentTaskInputStatus[keyof typeof AgentTaskInputStatus];
+
+
+export const AgentTaskInputStatus = {
+  pending: 'pending',
+  in_progress: 'in_progress',
+  completed: 'completed',
+  cancelled: 'cancelled',
+} as const;
+
+export type AgentTaskInputPriority = typeof AgentTaskInputPriority[keyof typeof AgentTaskInputPriority];
+
+
+export const AgentTaskInputPriority = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high',
+  critical: 'critical',
+} as const;
+
+export interface AgentTaskInput {
+  title: string;
+  description?: string;
+  type: string;
+  status?: AgentTaskInputStatus;
+  priority?: AgentTaskInputPriority;
+  dueDate?: string;
+  notes?: string;
+}
+
+export type OperatorSummaryRecentActivityItem = {
+  type: string;
+  label: string;
+  time: string;
+};
+
+export interface OperatorSummary {
+  totalClients: number;
+  activeClients?: number;
+  totalGrahams: number;
+  activeGrahams: number;
+  pendingTasks: number;
+  completedTasks: number;
+  recentActivity?: OperatorSummaryRecentActivityItem[];
+}
+
+export type WishlistItemPlatform = typeof WishlistItemPlatform[keyof typeof WishlistItemPlatform];
+
+
+export const WishlistItemPlatform = {
+  shopee: 'shopee',
+  lazada: 'lazada',
+  tiktok: 'tiktok',
+  any: 'any',
+} as const;
+
+export type WishlistItemStatus = typeof WishlistItemStatus[keyof typeof WishlistItemStatus];
+
+
+export const WishlistItemStatus = {
+  watching: 'watching',
+  matched: 'matched',
+  purchased: 'purchased',
+} as const;
+
+export interface WishlistItem {
+  id: number;
+  name: string;
+  /** @nullable */
+  description?: string | null;
+  category: string;
+  budgetMin: number;
+  budgetMax: number;
+  platform: WishlistItemPlatform;
+  status: WishlistItemStatus;
+  /** @nullable */
+  imageUrl?: string | null;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+}
+
+export type WishlistItemInputPlatform = typeof WishlistItemInputPlatform[keyof typeof WishlistItemInputPlatform];
+
+
+export const WishlistItemInputPlatform = {
+  shopee: 'shopee',
+  lazada: 'lazada',
+  tiktok: 'tiktok',
+  any: 'any',
+} as const;
+
+export interface WishlistItemInput {
+  /** @minLength 1 */
+  name: string;
+  description?: string;
+  category: string;
+  budgetMin: number;
+  budgetMax: number;
+  platform: WishlistItemInputPlatform;
+  imageUrl?: string;
+  notes?: string;
+}
+
+export type WishlistItemUpdatePlatform = typeof WishlistItemUpdatePlatform[keyof typeof WishlistItemUpdatePlatform];
+
+
+export const WishlistItemUpdatePlatform = {
+  shopee: 'shopee',
+  lazada: 'lazada',
+  tiktok: 'tiktok',
+  any: 'any',
+} as const;
+
+export type WishlistItemUpdateStatus = typeof WishlistItemUpdateStatus[keyof typeof WishlistItemUpdateStatus];
+
+
+export const WishlistItemUpdateStatus = {
+  watching: 'watching',
+  matched: 'matched',
+  purchased: 'purchased',
+} as const;
+
+export interface WishlistItemUpdate {
+  name?: string;
+  description?: string;
+  category?: string;
+  budgetMin?: number;
+  budgetMax?: number;
+  platform?: WishlistItemUpdatePlatform;
+  status?: WishlistItemUpdateStatus;
+  imageUrl?: string;
+  notes?: string;
+}
+
+export type DealPlatform = typeof DealPlatform[keyof typeof DealPlatform];
+
+
+export const DealPlatform = {
+  shopee: 'shopee',
+  lazada: 'lazada',
+  tiktok: 'tiktok',
+} as const;
+
+export interface Deal {
+  id: number;
+  title: string;
+  /** @nullable */
+  description?: string | null;
+  platform: DealPlatform;
+  originalPrice: number;
+  salePrice: number;
+  discountPercent: number;
+  category: string;
+  /** @nullable */
+  imageUrl?: string | null;
+  url: string;
+  isTrending?: boolean;
+  isVerified?: boolean;
+  /** @nullable */
+  endsAt?: string | null;
+  createdAt: string;
+}
+
+export interface MatchedDeal {
+  deal: Deal;
+  wishlistItem: WishlistItem;
+  savingsAmount: number;
+  withinBudget: boolean;
+}
+
+export interface PriceAlert {
+  id: number;
+  wishlistItemId: number;
+  wishlistItemName: string;
+  platform: string;
+  originalPrice: number;
+  alertPrice: number;
+  currentPrice: number;
+  triggered: boolean;
+  /** @nullable */
+  triggeredAt?: string | null;
+  createdAt: string;
+}
+
+export interface AlertsSummary {
+  totalAlerts: number;
+  triggeredToday: number;
+  totalSavings: number;
+  watchingCount: number;
+  matchedCount: number;
+}
+
 export type ListTransactionsParams = {
 accountId?: number;
 categoryId?: number;
@@ -316,5 +651,21 @@ export const GetSpendingByCategoryPeriod = {
   month: 'month',
   quarter: 'quarter',
   year: 'year',
+} as const;
+
+export type ListDealsParams = {
+platform?: ListDealsPlatform;
+category?: string;
+limit?: number;
+};
+
+export type ListDealsPlatform = typeof ListDealsPlatform[keyof typeof ListDealsPlatform];
+
+
+export const ListDealsPlatform = {
+  shopee: 'shopee',
+  lazada: 'lazada',
+  tiktok: 'tiktok',
+  all: 'all',
 } as const;
 

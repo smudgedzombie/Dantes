@@ -8,3 +8,4 @@ export * from "./access";
 export * from "./vault";
 export * from "./portal";
 export * from "./analytics";
+export * from "./mkp";

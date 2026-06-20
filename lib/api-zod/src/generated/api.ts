@@ -410,3 +410,201 @@ export const GetRecentTransactionsResponseItem = zod.object({
 export const GetRecentTransactionsResponse = zod.array(GetRecentTransactionsResponseItem)
 
 
+/**
+ * @summary List all wishlist items for the current user
+ */
+export const ListWishlistItemsResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "description": zod.string().nullish(),
+  "category": zod.string(),
+  "budgetMin": zod.number(),
+  "budgetMax": zod.number(),
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok', 'any']),
+  "status": zod.enum(['watching', 'matched', 'purchased']),
+  "imageUrl": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const ListWishlistItemsResponse = zod.array(ListWishlistItemsResponseItem)
+
+
+/**
+ * @summary Add item to wishlist
+ */
+
+
+
+export const CreateWishlistItemBody = zod.object({
+  "name": zod.string().min(1),
+  "description": zod.string().optional(),
+  "category": zod.string(),
+  "budgetMin": zod.number(),
+  "budgetMax": zod.number(),
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok', 'any']),
+  "imageUrl": zod.string().optional(),
+  "notes": zod.string().optional()
+})
+
+
+/**
+ * @summary Update a wishlist item
+ */
+export const UpdateWishlistItemParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateWishlistItemBody = zod.object({
+  "name": zod.string().optional(),
+  "description": zod.string().optional(),
+  "category": zod.string().optional(),
+  "budgetMin": zod.number().optional(),
+  "budgetMax": zod.number().optional(),
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok', 'any']).optional(),
+  "status": zod.enum(['watching', 'matched', 'purchased']).optional(),
+  "imageUrl": zod.string().optional(),
+  "notes": zod.string().optional()
+})
+
+export const UpdateWishlistItemResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "description": zod.string().nullish(),
+  "category": zod.string(),
+  "budgetMin": zod.number(),
+  "budgetMax": zod.number(),
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok', 'any']),
+  "status": zod.enum(['watching', 'matched', 'purchased']),
+  "imageUrl": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary Remove item from wishlist
+ */
+export const DeleteWishlistItemParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+/**
+ * @summary List curated deals feed
+ */
+export const ListDealsQueryParams = zod.object({
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok', 'all']).optional(),
+  "category": zod.coerce.string().optional(),
+  "limit": zod.coerce.number().optional()
+})
+
+export const ListDealsResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "description": zod.string().nullish(),
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok']),
+  "originalPrice": zod.number(),
+  "salePrice": zod.number(),
+  "discountPercent": zod.number(),
+  "category": zod.string(),
+  "imageUrl": zod.string().nullish(),
+  "url": zod.string(),
+  "isTrending": zod.boolean().optional(),
+  "isVerified": zod.boolean().optional(),
+  "endsAt": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const ListDealsResponse = zod.array(ListDealsResponseItem)
+
+
+/**
+ * @summary Get top trending deals right now
+ */
+export const GetTrendingDealsResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "description": zod.string().nullish(),
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok']),
+  "originalPrice": zod.number(),
+  "salePrice": zod.number(),
+  "discountPercent": zod.number(),
+  "category": zod.string(),
+  "imageUrl": zod.string().nullish(),
+  "url": zod.string(),
+  "isTrending": zod.boolean().optional(),
+  "isVerified": zod.boolean().optional(),
+  "endsAt": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const GetTrendingDealsResponse = zod.array(GetTrendingDealsResponseItem)
+
+
+/**
+ * @summary Get deals matching wishlist items
+ */
+export const GetMatchedDealsResponseItem = zod.object({
+  "deal": zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "description": zod.string().nullish(),
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok']),
+  "originalPrice": zod.number(),
+  "salePrice": zod.number(),
+  "discountPercent": zod.number(),
+  "category": zod.string(),
+  "imageUrl": zod.string().nullish(),
+  "url": zod.string(),
+  "isTrending": zod.boolean().optional(),
+  "isVerified": zod.boolean().optional(),
+  "endsAt": zod.string().nullish(),
+  "createdAt": zod.string()
+}),
+  "wishlistItem": zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "description": zod.string().nullish(),
+  "category": zod.string(),
+  "budgetMin": zod.number(),
+  "budgetMax": zod.number(),
+  "platform": zod.enum(['shopee', 'lazada', 'tiktok', 'any']),
+  "status": zod.enum(['watching', 'matched', 'purchased']),
+  "imageUrl": zod.string().nullish(),
+  "notes": zod.string().nullish(),
+  "createdAt": zod.string()
+}),
+  "savingsAmount": zod.number(),
+  "withinBudget": zod.boolean()
+})
+export const GetMatchedDealsResponse = zod.array(GetMatchedDealsResponseItem)
+
+
+/**
+ * @summary List all price drop alerts
+ */
+export const ListAlertsResponseItem = zod.object({
+  "id": zod.number(),
+  "wishlistItemId": zod.number(),
+  "wishlistItemName": zod.string(),
+  "platform": zod.string(),
+  "originalPrice": zod.number(),
+  "alertPrice": zod.number(),
+  "currentPrice": zod.number(),
+  "triggered": zod.boolean(),
+  "triggeredAt": zod.string().nullish(),
+  "createdAt": zod.string()
+})
+export const ListAlertsResponse = zod.array(ListAlertsResponseItem)
+
+
+/**
+ * @summary Get summary of alerts and savings
+ */
+export const GetAlertsSummaryResponse = zod.object({
+  "totalAlerts": zod.number(),
+  "triggeredToday": zod.number(),
+  "totalSavings": zod.number(),
+  "watchingCount": zod.number(),
+  "matchedCount": zod.number()
+})
+
+
