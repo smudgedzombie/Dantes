@@ -1,6 +1,7 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 import { seedMkpIfEmpty } from "./mkp-seed";
+import { seedDantesIfEmpty } from "./dantes-seed";
 
 const rawPort = process.env["PORT"];
 
@@ -25,4 +26,5 @@ app.listen(port, (err) => {
   logger.info({ port }, "Server listening");
 
   seedMkpIfEmpty((msg) => logger.info(msg));
+  seedDantesIfEmpty((msg) => logger.info(msg));
 });

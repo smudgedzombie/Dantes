@@ -5,7 +5,6 @@ import {
   Tag, 
   BellRing,
   ShoppingBag,
-  LogOut,
   Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,8 +22,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen w-full bg-background flex-col md:flex-row">
       {/* Mobile Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border px-4 py-3 flex justify-between items-center pb-safe">
-        {NAV_ITEMS.map((item) => {
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border px-2 py-3 flex justify-between items-center pb-safe">
+        {[...NAV_ITEMS, { href: "/settings", label: "Settings", icon: Settings }].map((item) => {
           const isActive = location === item.href;
           return (
             <Link key={item.href} href={item.href} className="flex-1 flex flex-col items-center gap-1 group">
@@ -74,15 +73,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-border space-y-1">
-          <button className="flex items-center gap-3 px-4 py-2 w-full rounded-lg text-sm font-medium text-muted-foreground hover:bg-accent/10 hover:text-foreground transition-colors">
+        <div className="p-4 border-t border-border">
+          <Link href="/settings" className={cn(
+            "flex items-center gap-3 px-4 py-2 w-full rounded-lg text-sm font-medium transition-colors",
+            location === "/settings"
+              ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+              : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+          )}>
             <Settings className="w-4 h-4" />
             Settings
-          </button>
-          <button className="flex items-center gap-3 px-4 py-2 w-full rounded-lg text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors">
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </button>
+          </Link>
         </div>
       </aside>
 

@@ -9,8 +9,16 @@ import Home from "@/pages/home";
 import Deals from "@/pages/deals";
 import Wishlist from "@/pages/wishlist";
 import Alerts from "@/pages/alerts";
+import SettingsPage from "@/pages/settings";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: 60_000,
+      staleTime: 30_000,
+    },
+  },
+});
 
 function Router() {
   return (
@@ -20,6 +28,7 @@ function Router() {
         <Route path="/deals" component={Deals} />
         <Route path="/wishlist" component={Wishlist} />
         <Route path="/alerts" component={Alerts} />
+        <Route path="/settings" component={SettingsPage} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

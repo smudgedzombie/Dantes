@@ -288,6 +288,69 @@ export default function AdminPage() {
   );
 }
 
+function ActivationBriefModal({ member, grahamId, onClose }:{ member:MemberApp; grahamId:string; onClose:()=>void }) {
+  const deadline = new Date(Date.now() + 72*3600000);
+  const deadlineStr = deadline.toLocaleString("en-GB",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+  const steps = [
+    { n:"01", title:"Customise Graham Agent", desc:`Configure AI modules for ${member.company??member.fullName} — align with their Graham Goals, industry context, and reporting cadence.`, hrs:"0–24h", color:"#D4AF37" },
+    { n:"02", title:"Test Run", desc:"Execute end-to-end agent simulation. Validate data inputs, output accuracy, and alert thresholds before going live.", hrs:"24–48h", color:"#06b6d4" },
+    { n:"03", title:"Deploy & Monitor", desc:"Push agent to production. Begin 24-hour performance report cycle — one report for the client portal, one for Super Admins.", hrs:"48–72h", color:"#00ff88" },
+  ];
+  return (
+    <div className="fixed inset-0 bg-[#030810]/95 flex items-center justify-center z-50 px-4">
+      <div className="bg-[#040c1a] border border-[#D4AF37]/30 rounded-sm w-full max-w-2xl shadow-2xl shadow-[#D4AF37]/10 overflow-hidden">
+        <div className="border-b border-[#0d1b35] px-6 py-4 flex items-start justify-between">
+          <div>
+            <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.4em] mb-1">⚡ ACTIVATION PROTOCOL INITIATED</p>
+            <h2 className="text-base font-serif font-bold text-white">{member.fullName} — {member.company??""}</h2>
+            <p className="text-xs font-mono text-[#3a5570] mt-0.5">Graham Agent: <span className="text-[#D4AF37]">{grahamId||"TBD"}</span> · Bloom ID: <span className="text-[#D4AF37]">{member.bloomMemberId||"TBD"}</span></p>
+          </div>
+          <button onClick={onClose} className="text-[#3a5570] hover:text-white text-xl font-mono mt-1">×</button>
+        </div>
+        <div className="px-6 py-5 space-y-5">
+          <div className="flex items-center gap-3 bg-[#D4AF37]/5 border border-[#D4AF37]/20 rounded-sm px-4 py-3">
+            <div className="w-8 h-8 rounded-full border-2 border-[#D4AF37] flex items-center justify-center shrink-0">
+              <span className="text-[#D4AF37] text-sm font-black">72</span>
+            </div>
+            <div>
+              <p className="text-xs font-mono text-[#D4AF37] font-bold">72-HOUR DEPLOYMENT DEADLINE</p>
+              <p className="text-[10px] font-mono text-[#8aa0b8]">All steps must be complete by <span className="text-white font-bold">{deadlineStr}</span>. Both Steven and Akshay to sign off before client goes live.</p>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {steps.map((s)=>(
+              <div key={s.n} className="flex gap-4 bg-[#030810] border border-[#0d1b35] rounded-sm p-4">
+                <div className="shrink-0 w-8 h-8 rounded-sm flex items-center justify-center border" style={{borderColor:s.color+"40",background:s.color+"10"}}>
+                  <span className="text-[10px] font-mono font-bold" style={{color:s.color}}>{s.n}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="text-xs font-mono font-bold text-white">{s.title}</p>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-sm border" style={{color:s.color,borderColor:s.color+"40",background:s.color+"10"}}>{s.hrs}</span>
+                  </div>
+                  <p className="text-[10px] font-mono text-[#8aa0b8] mt-1 leading-relaxed">{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="bg-[#06b6d4]/5 border border-[#06b6d4]/20 rounded-sm px-4 py-3 space-y-1">
+            <p className="text-[9px] font-mono text-[#06b6d4] tracking-widest font-bold">📊 24-HOUR ANALYSIS REPORT SCHEDULE (POST-DEPLOY)</p>
+            <p className="text-[10px] font-mono text-[#8aa0b8] leading-relaxed">After deployment, two automated reports are generated every 24 hours:<br/>
+              <span className="text-white">→ Client Report:</span> Delivered to <span className="text-[#D4AF37]">{member.email}</span> via the client portal — shows Graham agent results, key actions taken, and performance vs. goals.<br/>
+              <span className="text-white">→ Admin Report:</span> Posted to Super Admin audit feed — shows data quality, error rate, and any manual intervention flags.
+            </p>
+          </div>
+          <div className="flex gap-3 pt-1">
+            <button onClick={onClose} className="flex-1 py-2.5 bg-[#D4AF37] text-[#030810] text-[10px] font-mono font-bold rounded-sm hover:bg-[#b8952b] transition-colors tracking-widest">
+              ACKNOWLEDGED — BEGIN DEPLOYMENT
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MemberDetail({ member, onPatch, saving, onPostActivity }:{member:MemberApp;onPatch:(id:number,b:object)=>void;saving:boolean;onPostActivity:(e:string,g:string,d:object)=>void}) {
   const [notes,setNotes]=useState(member.adminNotes??"");
   const [quoteAmt,setQuoteAmt]=useState(member.quotationAmount??"");
@@ -296,6 +359,7 @@ function MemberDetail({ member, onPatch, saving, onPostActivity }:{member:Member
   const [secret,setSecret]=useState(member.bloomSecretPassword??"");
   const [grahamId,setGrahamId]=useState(member.assignedGrahamId??"");
   const [actTitle,setActTitle]=useState(""); const [actDesc,setActDesc]=useState(""); const [actModule,setActModule]=useState("operations");
+  const [showBrief,setShowBrief]=useState(false);
   useEffect(()=>{setNotes(member.adminNotes??"");setQuoteAmt(member.quotationAmount??"");setQuoteNotes(member.quotationNotes??"");setBloomId(member.bloomMemberId??"");setSecret(member.bloomSecretPassword??"");setGrahamId(member.assignedGrahamId??"");},[member.id]);
 
   return (
@@ -324,8 +388,9 @@ function MemberDetail({ member, onPatch, saving, onPostActivity }:{member:Member
         </div>
         <div className="flex gap-2">
           <button disabled={saving} onClick={()=>onPatch(member.id,{status:"paid",adminNotes:notes})} className={btnSec}>MARK PAID</button>
-          <button disabled={saving} onClick={()=>onPatch(member.id,{status:"active",bloomMemberId:bloomId,bloomSecretPassword:secret,assignedGrahamId:grahamId,adminNotes:notes})} className={btnPrimary}>ACTIVATE MEMBER →</button>
+          <button disabled={saving} onClick={()=>{onPatch(member.id,{status:"active",bloomMemberId:bloomId,bloomSecretPassword:secret,assignedGrahamId:grahamId,adminNotes:notes});setShowBrief(true);}} className={btnPrimary}>ACTIVATE MEMBER →</button>
         </div>
+        {showBrief && <ActivationBriefModal member={{...member,bloomMemberId:bloomId,assignedGrahamId:grahamId}} grahamId={grahamId} onClose={()=>setShowBrief(false)} />}
       </div>
 
       <div className="border border-[#0d1b35] rounded-sm p-4 space-y-3">
