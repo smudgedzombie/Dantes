@@ -152,7 +152,7 @@ export default function PortalTasksPage() {
       </header>
 
       <nav className="relative z-10 border-b border-[#0d1b35] px-6 flex gap-0">
-        {[{href:"/portal",l:"OVERVIEW"},{href:"/portal/tasks",l:`TASKS (${tasks.filter(t=>t.status==="pending").length})`},{href:"/portal/documents",l:"DOCUMENTS"},{href:"/portal/billing",l:"BILLING"}].map(i=>(
+        {[{href:"/portal",l:"OVERVIEW"},{href:"/portal/tasks",l:`TASKS (${tasks.filter(t=>t.status==="pending").length})`},{href:"/portal/documents",l:"DOCUMENTS"},{href:"/portal/billing",l:"BILLING"},{href:"/portal/club",l:"✦ CLUB ROOM"}].map(i=>(
           <Link key={i.href} href={i.href} className={`px-4 py-3 text-[10px] font-mono border-b-2 transition-all ${i.href==="/portal/tasks"?"text-[#D4AF37] border-[#D4AF37]":"text-[#3a5570] border-transparent hover:text-white hover:border-[#D4AF37]/40"}`}>{i.l}</Link>
         ))}
       </nav>

@@ -186,6 +186,7 @@ export default function PortalPage() {
           { href: "/portal/tasks", label: `TASKS${pendingTasksCount > 0 ? ` (${pendingTasksCount})` : ""}` },
           { href: "/portal/documents", label: "DOCUMENTS" },
           { href: "/portal/billing", label: `BILLING${unpaidInvoicesCount > 0 ? ` (${unpaidInvoicesCount})` : ""}` },
+          { href: "/portal/club", label: "✦ CLUB ROOM" },
         ].map(item => (
           <Link key={item.href} href={item.href}
             className="px-4 py-3 text-[10px] font-mono text-[#3a5570] hover:text-white border-b-2 border-transparent hover:border-[#D4AF37]/40 transition-all">

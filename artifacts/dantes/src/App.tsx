@@ -24,6 +24,7 @@ import { useEffect, useRef } from "react";
   import PortalTasksPage from "./pages/portal-tasks";
   import PortalDocumentsPage from "./pages/portal-documents";
   import PortalBillingPage from "./pages/portal-billing";
+import PortalClubPage from "./pages/portal-club";
   import { useAccess } from "./hooks/useAccess";
 
   const queryClient = new QueryClient();
@@ -226,6 +227,7 @@ import { useEffect, useRef } from "react";
             <Route path="/portal/tasks">{() => <PortalRoute component={PortalTasksPage} />}</Route>
             <Route path="/portal/documents">{() => <PortalRoute component={PortalDocumentsPage} />}</Route>
             <Route path="/portal/billing">{() => <PortalRoute component={PortalBillingPage} />}</Route>
+            <Route path="/portal/club">{() => <PortalRoute component={PortalClubPage} />}</Route>
             <Route path="/portal">{() => <PortalRoute component={PortalPage} />}</Route>
             <Route path="/command">{() => <ProtectedRoute component={CommandPage} />}</Route>
             <Route path="/clients">{() => <ProtectedRoute component={ClientsPage} />}</Route>
