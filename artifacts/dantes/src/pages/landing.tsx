@@ -535,19 +535,23 @@ export default function LandingPage() {
               </div>
               <div className="p-4 grid grid-cols-3 gap-3">
                 {[
-                  { id: "#001", label: "Genesis", rarity: "Legendary", color: "#FFB300" },
-                  { id: "#002", label: "Principal", rarity: "Rare", color: "#FF6B00" },
-                  { id: "#003", label: "Operator", rarity: "Uncommon", color: "#8b5cf6" },
+                  { id: "#001", label: "Genesis", rarity: "Legendary", color: "#FFB300", filter: "sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1)" },
+                  { id: "#002", label: "Principal", rarity: "Rare", color: "#FF6B00", filter: "sepia(1) saturate(4) hue-rotate(340deg) brightness(0.95)" },
+                  { id: "#003", label: "Operator", rarity: "Uncommon", color: "#8b5cf6", filter: "hue-rotate(200deg) saturate(2) brightness(0.9)" },
                 ].map((nft) => (
                   <a key={nft.id} href="https://opensea.io/Thebloomsociety" target="_blank" rel="noopener noreferrer"
                     className="group block border border-[#FFB300]/12 hover:border-[#FFB300]/35 rounded-sm overflow-hidden transition-all">
                     <div className="aspect-square relative overflow-hidden"
-                      style={{ background: `radial-gradient(ellipse at center, ${nft.color}18 0%, #080808 70%)` }}>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-10 h-10 rounded-sm border flex items-center justify-center"
-                          style={{ borderColor: nft.color + "40", background: nft.color + "10" }}>
-                          <span className="font-serif font-black text-lg" style={{ color: nft.color }}>✦</span>
-                        </div>
+                      style={{ background: `radial-gradient(ellipse at center, ${nft.color}22 0%, #080808 75%)` }}>
+                      <img
+                        src="/logo.png"
+                        alt={`Dantès NFT ${nft.id}`}
+                        className="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
+                        style={{ filter: nft.filter }}
+                      />
+                      <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-sm text-[7px] font-mono font-bold"
+                        style={{ background: nft.color + "22", color: nft.color, border: `1px solid ${nft.color}40` }}>
+                        {nft.rarity.toUpperCase()}
                       </div>
                     </div>
                     <div className="p-2 border-t border-[#FFB300]/10">
