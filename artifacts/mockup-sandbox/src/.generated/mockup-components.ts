@@ -6,6 +6,7 @@ export const modules: ModuleMap = {
   "./components/mockups/bloom-directions/CyberArctic.tsx": () => import("../components/mockups/bloom-directions/CyberArctic.tsx"),
   "./components/mockups/bloom-directions/CyberCrimson.tsx": () => import("../components/mockups/bloom-directions/CyberCrimson.tsx"),
   "./components/mockups/bloom-directions/CyberGold.tsx": () => import("../components/mockups/bloom-directions/CyberGold.tsx"),
+  "./components/mockups/bloom-directions/CyberGoldHero.tsx": () => import("../components/mockups/bloom-directions/CyberGoldHero.tsx"),
   "./components/mockups/bloom-directions/CyberPhosphor.tsx": () => import("../components/mockups/bloom-directions/CyberPhosphor.tsx"),
   "./components/mockups/bloom-directions/CyberViolet.tsx": () => import("../components/mockups/bloom-directions/CyberViolet.tsx"),
   "./components/mockups/bloom-directions/Glass.tsx": () => import("../components/mockups/bloom-directions/Glass.tsx")
