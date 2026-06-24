@@ -25,6 +25,7 @@ import { useEffect, useRef } from "react";
   import PortalDocumentsPage from "./pages/portal-documents";
   import PortalBillingPage from "./pages/portal-billing";
 import PortalClubPage from "./pages/portal-club";
+import StashProPage from "./pages/stash-pro";
   import { useAccess } from "./hooks/useAccess";
 
   const queryClient = new QueryClient();
@@ -238,6 +239,7 @@ import PortalClubPage from "./pages/portal-club";
             <Route path="/transactions">{() => <ProtectedRoute component={TransactionsPage} />}</Route>
             <Route path="/budgets">{() => <ProtectedRoute component={BudgetsPage} />}</Route>
             <Route path="/categories">{() => <ProtectedRoute component={CategoriesPage} />}</Route>
+            <Route path="/stash-pro" component={StashProPage} />
           </Switch>
         </QueryClientProvider>
       </ClerkProvider>

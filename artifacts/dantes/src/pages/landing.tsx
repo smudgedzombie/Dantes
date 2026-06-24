@@ -677,6 +677,61 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Client Showcase — STASH-PRO */}
+      <section className="relative z-10 max-w-6xl mx-auto px-8 py-16">
+        <div className="flex items-center gap-4 mb-10">
+          <div className="h-px flex-1 bg-[#FFB300]/10" />
+          <span className="text-[9px] font-mono text-[#FFB300] tracking-[0.4em]">PORTFOLIO CLIENT</span>
+          <div className="h-px flex-1 bg-[#FFB300]/10" />
+        </div>
+        <div className="border border-[#FFB300]/12 bg-gradient-to-br from-[#0a0804] to-[#080804] rounded-sm p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 group hover:border-[#FFB300]/25 transition-all">
+          {/* Logo block */}
+          <div className="shrink-0">
+            <Link href="/stash-pro">
+              <div className="relative cursor-pointer group/logo">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-sm flex flex-col items-center justify-center gap-1"
+                  style={{ background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.25)", boxShadow: "0 0 40px rgba(52,211,153,0.08)" }}>
+                  <span className="font-mono font-black text-2xl md:text-3xl tracking-widest" style={{ color: "#34d399" }}>STASH</span>
+                  <div className="w-10 h-px" style={{ background: "rgba(52,211,153,0.4)" }} />
+                  <span className="font-mono font-black text-2xl md:text-3xl tracking-widest text-white">PRO</span>
+                </div>
+                <div className="absolute inset-0 rounded-sm opacity-0 group-hover/logo:opacity-100 transition-opacity"
+                  style={{ background: "rgba(52,211,153,0.04)", boxShadow: "0 0 60px rgba(52,211,153,0.15)" }} />
+                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap opacity-0 group-hover/logo:opacity-100 transition-opacity">
+                  <span className="text-[9px] font-mono tracking-widest" style={{ color: "#34d399" }}>VIEW COLLECTION →</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+          {/* Content */}
+          <div className="flex-1 text-center md:text-left">
+            <div className="flex items-center gap-2 justify-center md:justify-start mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[9px] font-mono tracking-[0.35em]" style={{ color: "#34d399" }}>ACTIVE CLIENT · DIGITAL OPERATIONS</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4 leading-tight">
+              Stash Pro — <span style={{ color: "#34d399" }}>Premium Smoking Accessories</span>
+            </h2>
+            <p className="text-sm leading-relaxed mb-6 max-w-xl" style={{ color: "#6b5a30" }}>
+              Stash Pro is one of India's leading smoking accessories brands — spanning lighters, grinders, ashtrays, rolling trays, sheesha and more. Dantès manages their digital intelligence layer, including brand strategy, export pipeline and B2B expansion. Their full product catalogue is showcased here.
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-8">
+              {["Lighters", "Grinders", "Ashtrays", "Rolling Trays", "Sheesha", "Pre-Rolled Cones", "Storage Jars"].map(tag => (
+                <span key={tag} className="px-3 py-1 text-[9px] font-mono tracking-wider rounded-sm"
+                  style={{ background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.15)", color: "#34d399" }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <Link href="/stash-pro"
+              className="inline-flex items-center gap-2 px-6 py-3 font-mono font-bold text-xs rounded-sm transition-all"
+              style={{ background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.35)", color: "#34d399", boxShadow: "0 0 30px rgba(52,211,153,0.08)" }}>
+              EXPLORE THE FULL COLLECTION →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Footer CTA */}
       <section className="relative z-10 border-t border-[#FFB300]/10 py-20 px-8 text-center">
         <p className="text-[9px] font-mono text-[#FFB300]/45 tracking-[0.4em] mb-4">RESTRICTED ACCESS — BLOOM SOCIETY OPERATORS ONLY</p>
