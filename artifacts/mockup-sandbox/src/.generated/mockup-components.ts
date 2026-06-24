@@ -20,4 +20,10 @@ export const modules: ModuleMap = {
   "./components/mockups/bg-options/Bg4.tsx": () => import("../components/mockups/bg-options/Bg4.tsx"),
   "./components/mockups/bg-options/Bg5.tsx": () => import("../components/mockups/bg-options/Bg5.tsx"),
   "./components/mockups/bg-options/Bg6.tsx": () => import("../components/mockups/bg-options/Bg6.tsx"),
+  "./components/mockups/stash-bg/Sp1.tsx": () => import("../components/mockups/stash-bg/Sp1.tsx"),
+  "./components/mockups/stash-bg/Sp2.tsx": () => import("../components/mockups/stash-bg/Sp2.tsx"),
+  "./components/mockups/stash-bg/Sp3.tsx": () => import("../components/mockups/stash-bg/Sp3.tsx"),
+  "./components/mockups/stash-bg/Sp4.tsx": () => import("../components/mockups/stash-bg/Sp4.tsx"),
+  "./components/mockups/stash-bg/Sp5.tsx": () => import("../components/mockups/stash-bg/Sp5.tsx"),
+  "./components/mockups/stash-bg/Sp6.tsx": () => import("../components/mockups/stash-bg/Sp6.tsx"),
 };
