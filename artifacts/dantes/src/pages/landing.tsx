@@ -288,7 +288,7 @@ export default function LandingPage() {
           </div>
 
           <div className="mb-3">
-            <span className="text-[9px] font-mono text-[#FFB300]/55 tracking-[0.4em]">BANGKOK · DUBAI · GLOBAL OPERATORS</span>
+            <span className="text-[9px] font-mono text-[#FFB300]/55 tracking-[0.4em]">THAILAND-BORN · GLOBALLY DEPLOYED</span>
           </div>
 
           <h1 className="text-6xl sm:text-8xl md:text-[10rem] font-serif font-black text-white tracking-tight mb-2 leading-none"
@@ -313,8 +313,6 @@ export default function LandingPage() {
             <span className="flex items-center gap-2"><span className="text-[#FFB300]">◆</span> Bangkok HQ</span>
             <span className="text-[#FFB300]/15">|</span>
             <span className="flex items-center gap-2"><span className="text-[#FFB300]">◆</span> Thai Enterprise Clients</span>
-            <span className="text-[#FFB300]/15">|</span>
-            <span className="flex items-center gap-2"><span className="text-[#FFB300]">◆</span> LINE OA · WhatsApp Alerts</span>
             <span className="text-[#FFB300]/15">|</span>
             <span className="flex items-center gap-2"><span className="text-[#FFB300]">◆</span> THB · USD · Multi-currency</span>
           </div>
@@ -617,46 +615,6 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="space-y-4">
-            {/* LINE OA */}
-            <div className="border border-[#06c755]/25 bg-[#06c755]/5 rounded-sm p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#06c755" }}>
-                  <svg width="20" height="20" viewBox="0 0 36 36" fill="white"><path d="M18 .9C8.51.9.9 6.95.9 14.43c0 6.75 5.98 12.41 14.08 13.6.55.12 1.29.36 1.48.82.17.42.11 1.07.05 1.49l-.24 1.43c-.07.43-.34 1.68 1.47.92s9.73-5.73 13.27-9.8c2.45-2.68 3.81-5.52 3.81-8.46C34.82 6.95 27.49.9 18 .9z"/></svg>
-                </div>
-                <div>
-                  <p className="text-[9px] font-mono text-[#06c755] tracking-widest mb-0.5">INSTANT ALERTS</p>
-                  <h4 className="text-white font-bold text-sm">Connect on LINE OA</h4>
-                </div>
-              </div>
-              <p className="text-[#8a7040] text-xs leading-relaxed mb-5">
-                Your Graham sends real-time alerts, deal notifications, and financial summaries direct to LINE — the way Bangkok operates. No app switching. Just intelligence, delivered where you already live.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a href="https://line.me/ti/p/thebloomsociety" target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-sm font-mono font-bold text-xs text-white transition-all hover:opacity-90"
-                  style={{ background: "#06c755" }}>
-                  ADD LINE OA →
-                </a>
-                <div className="flex items-center gap-2 px-4 py-2.5 border border-[#FFB300]/12 rounded-sm">
-                  <span className="text-[9px] font-mono text-[#5a4a20]">ID:</span>
-                  <span className="text-[10px] font-mono text-white">@thebloomsociety</span>
-                </div>
-              </div>
-            </div>
-            {/* WhatsApp */}
-            <div className="border border-[#25d366]/18 bg-[#25d366]/5 rounded-sm p-5 flex items-center gap-4">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: "#25d366" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              </div>
-              <div className="flex-1">
-                <p className="text-white text-xs font-semibold mb-0.5">WhatsApp Direct</p>
-                <p className="text-[#5a4a20] text-[10px]">For international members — same Graham intelligence, global reach</p>
-              </div>
-              <a href="https://wa.me/thebloomsociety" target="_blank" rel="noopener noreferrer"
-                className="px-4 py-2 border border-[#25d366]/28 text-[#25d366] font-mono text-[10px] font-bold rounded-sm hover:bg-[#25d366]/8 transition-colors shrink-0">
-                CHAT →
-              </a>
-            </div>
             {/* Club Room */}
             <Link href={isSignedIn ? "/portal/club" : "/sign-in"}
               className="block border border-[#FFB300]/22 bg-gradient-to-br from-[#0a0804] to-[#0c0a04] rounded-sm p-5 hover:border-[#FFB300]/45 transition-all group">
