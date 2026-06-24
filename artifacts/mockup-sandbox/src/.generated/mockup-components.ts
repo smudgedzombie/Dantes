@@ -13,5 +13,11 @@ export const modules: ModuleMap = {
   "./components/mockups/landing-variants/VariantA.tsx": () => import("../components/mockups/landing-variants/VariantA.tsx"),
   "./components/mockups/landing-variants/VariantB.tsx": () => import("../components/mockups/landing-variants/VariantB.tsx"),
   "./components/mockups/landing-variants/VariantC.tsx": () => import("../components/mockups/landing-variants/VariantC.tsx"),
-  "./components/mockups/landing-variants/VariantD.tsx": () => import("../components/mockups/landing-variants/VariantD.tsx")
+  "./components/mockups/landing-variants/VariantD.tsx": () => import("../components/mockups/landing-variants/VariantD.tsx"),
+  "./components/mockups/bg-options/Bg1.tsx": () => import("../components/mockups/bg-options/Bg1.tsx"),
+  "./components/mockups/bg-options/Bg2.tsx": () => import("../components/mockups/bg-options/Bg2.tsx"),
+  "./components/mockups/bg-options/Bg3.tsx": () => import("../components/mockups/bg-options/Bg3.tsx"),
+  "./components/mockups/bg-options/Bg4.tsx": () => import("../components/mockups/bg-options/Bg4.tsx"),
+  "./components/mockups/bg-options/Bg5.tsx": () => import("../components/mockups/bg-options/Bg5.tsx"),
+  "./components/mockups/bg-options/Bg6.tsx": () => import("../components/mockups/bg-options/Bg6.tsx"),
 };
