@@ -531,31 +531,86 @@ export default function LandingPage() {
                 <a href="https://opensea.io/Thebloomsociety" target="_blank" rel="noopener noreferrer"
                   className="text-[9px] font-mono text-[#5a4a20] hover:text-[#FFB300] transition-colors">opensea.io ↗</a>
               </div>
-              <div className="p-4 grid grid-cols-3 gap-3">
+              <div className="p-4 grid grid-cols-2 gap-3">
                 {[
-                  { id: "#001", label: "Genesis", rarity: "Legendary", color: "#FFB300", filter: "sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1)" },
-                  { id: "#002", label: "Principal", rarity: "Rare", color: "#FF6B00", filter: "sepia(1) saturate(4) hue-rotate(340deg) brightness(0.95)" },
-                  { id: "#003", label: "Operator", rarity: "Uncommon", color: "#8b5cf6", filter: "hue-rotate(200deg) saturate(2) brightness(0.9)" },
+                  {
+                    id: "#001",
+                    name: "Roman Fortuna Opulenta",
+                    rarity: "Legendary",
+                    color: "#FFB300",
+                    img: "/nft-roman.png",
+                    traits: [
+                      { k: "Setting", v: "Roman Treasury Hall" },
+                      { k: "Script", v: "Classical Latin" },
+                      { k: "Material", v: "Marble & Stone" },
+                      { k: "Aura", v: "Imperial Gold" },
+                    ],
+                  },
+                  {
+                    id: "#002",
+                    name: "Kubera Vedic Abundance",
+                    rarity: "Legendary",
+                    color: "#c084fc",
+                    img: "/nft-kubera.png",
+                    traits: [
+                      { k: "Setting", v: "Vedic Temple Sanctuary" },
+                      { k: "Script", v: "Sacred Sanskrit" },
+                      { k: "Material", v: "Dark Carved Stone" },
+                      { k: "Aura", v: "Cosmic Blue" },
+                    ],
+                  },
+                  {
+                    id: "#003",
+                    name: "Odinic Fehu Auja",
+                    rarity: "Epic",
+                    color: "#60a5fa",
+                    img: "/nft-odinic.png",
+                    traits: [
+                      { k: "Setting", v: "Glacial Halls of Valhalla" },
+                      { k: "Script", v: "Elder Futhark Runes" },
+                      { k: "Material", v: "Ice & Forged Silver" },
+                      { k: "Aura", v: "Arctic Storm" },
+                    ],
+                  },
+                  {
+                    id: "#004",
+                    name: "Caishen Gold Mountain",
+                    rarity: "Epic",
+                    color: "#34d399",
+                    img: "/nft-caishen.png",
+                    traits: [
+                      { k: "Setting", v: "Ancient Pillared Hall" },
+                      { k: "Script", v: "Traditional Chinese" },
+                      { k: "Material", v: "Blue Lightning Crystal" },
+                      { k: "Aura", v: "Thunder Wealth" },
+                    ],
+                  },
                 ].map((nft) => (
                   <a key={nft.id} href="https://opensea.io/Thebloomsociety" target="_blank" rel="noopener noreferrer"
                     className="group block border border-[#FFB300]/12 hover:border-[#FFB300]/35 rounded-sm overflow-hidden transition-all">
                     <div className="aspect-square relative overflow-hidden"
-                      style={{ background: `radial-gradient(ellipse at center, ${nft.color}22 0%, #080808 75%)` }}>
+                      style={{ background: "#060402" }}>
                       <img
-                        src="/logo.png"
-                        alt={`Dantès NFT ${nft.id}`}
-                        className="absolute inset-0 w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
-                        style={{ filter: nft.filter }}
+                        src={nft.img}
+                        alt={nft.name}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-sm text-[7px] font-mono font-bold"
-                        style={{ background: nft.color + "22", color: nft.color, border: `1px solid ${nft.color}40` }}>
+                        style={{ background: nft.color + "33", color: nft.color, border: `1px solid ${nft.color}55` }}>
                         {nft.rarity.toUpperCase()}
                       </div>
                     </div>
                     <div className="p-2 border-t border-[#FFB300]/10">
-                      <p className="text-[10px] font-mono text-white font-bold">{nft.id}</p>
-                      <p className="text-[9px] font-mono" style={{ color: nft.color }}>{nft.rarity}</p>
-                      <p className="text-[9px] font-mono text-[#5a4a20]">{nft.label}</p>
+                      <p className="text-[9px] font-mono text-white font-bold leading-snug mb-1">{nft.name}</p>
+                      <p className="text-[8px] font-mono mb-1.5" style={{ color: nft.color }}>{nft.id} · {nft.rarity}</p>
+                      <div className="space-y-0.5">
+                        {nft.traits.map(t => (
+                          <div key={t.k} className="flex items-center justify-between gap-1">
+                            <span className="text-[7px] font-mono text-[#5a4a20] uppercase tracking-wide">{t.k}</span>
+                            <span className="text-[7px] font-mono text-[#8a7040]">{t.v}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </a>
                 ))}
