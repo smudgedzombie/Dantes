@@ -119,7 +119,7 @@ function HeroParticles() {
         if (p.y < -5) { p.y = H + 5; p.x = Math.random() * W; }
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(52,211,153,${p.alpha})`;
+        ctx.fillStyle = `rgba(26,140,80,${p.alpha})`;
         ctx.fill();
       }
       raf = requestAnimationFrame(draw);
@@ -133,8 +133,8 @@ function HeroParticles() {
 function ProductCard({ product }: { product: Product }) {
   const [imgError, setImgError] = useState(false);
   return (
-    <div className="group relative bg-[#0a120a] border border-emerald-900/30 rounded-lg overflow-hidden hover:border-emerald-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_40px_rgba(52,211,153,0.12)]">
-      <div className="relative h-56 bg-[#060e06] overflow-hidden">
+    <div className="group relative rounded-lg overflow-hidden hover:-translate-y-1 transition-all duration-300" style={{ background: "#ffffff", border: "1px solid rgba(30,100,60,0.14)", boxShadow: "0 1px 4px rgba(30,100,60,0.06)" }}>
+      <div className="relative h-56 overflow-hidden" style={{ background: "#eef8f1" }}>
         {!imgError ? (
           <img
             src={product.img}
@@ -147,16 +147,16 @@ function ProductCard({ product }: { product: Product }) {
             <span className="text-4xl opacity-30">📦</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a120a] via-transparent to-transparent opacity-60" />
+        <div className="absolute inset-0 opacity-40" style={{ background: "linear-gradient(to top, #eef8f1, transparent)" }} />
       </div>
       <div className="p-5">
-        <h3 className="text-white font-semibold text-sm mb-2 leading-snug group-hover:text-emerald-300 transition-colors">{product.title}</h3>
-        <p className="text-emerald-900/80 text-[11px] leading-relaxed mb-4 line-clamp-3" style={{ color: "#5a8a6a" }}>{product.desc}</p>
+        <h3 className="font-semibold text-sm mb-2 leading-snug transition-colors" style={{ color: "#0a1a10" }}>{product.title}</h3>
+        <p className="text-[11px] leading-relaxed mb-4 line-clamp-3" style={{ color: "#2a5a38" }}>{product.desc}</p>
         {product.bullets.length > 0 && (
           <ul className="space-y-1">
             {product.bullets.slice(0, 4).map((b, i) => (
-              <li key={i} className="flex items-start gap-2 text-[10px]" style={{ color: "#3d7a55" }}>
-                <span className="text-emerald-500 mt-0.5 shrink-0">◆</span>
+              <li key={i} className="flex items-start gap-2 text-[10px]" style={{ color: "#1a6040" }}>
+                <span style={{ color: "#34d399" }} className="mt-0.5 shrink-0">◆</span>
                 <span>{b.trim()}</span>
               </li>
             ))}
@@ -186,12 +186,12 @@ export default function StashProPage() {
   const totalProducts = Object.values(CATALOG).reduce((sum, prods) => sum + prods.length, 0);
 
   return (
-    <div className="min-h-screen" style={{ background: "#040c04", fontFamily: "'Inter', sans-serif" }}>
+    <div className="min-h-screen" style={{ background: "#f8fcf9", fontFamily: "'Inter', sans-serif" }}>
 
       {/* Hero */}
       <div className="relative overflow-hidden" style={{ minHeight: "520px" }}>
         <HeroParticles />
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(52,211,153,0.07) 0%, transparent 70%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(52,211,153,0.12) 0%, transparent 70%)" }} />
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-24">
           <div className="flex items-center gap-3 mb-8">
             <div className="h-px w-16 bg-emerald-500/30" />
@@ -202,18 +202,18 @@ export default function StashProPage() {
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-sm mb-4" style={{ border: "1px solid rgba(52,211,153,0.3)", background: "rgba(52,211,153,0.05)" }}>
               <span className="text-emerald-400 font-mono font-black text-3xl tracking-widest">STASH</span>
               <div className="w-px h-8" style={{ background: "rgba(52,211,153,0.3)" }} />
-              <span className="text-white font-mono font-black text-3xl tracking-widest">PRO</span>
+              <span className="font-mono font-black text-3xl tracking-widest" style={{ color: "#0a1a10" }}>PRO</span>
             </div>
             <p className="text-[10px] font-mono tracking-[0.35em]" style={{ color: "#34d399", opacity: 0.6 }}>PREMIUM SMOKING ACCESSORIES</p>
           </div>
-          <h1 className="text-4xl sm:text-6xl font-black text-white mb-6 leading-tight max-w-3xl">
+          <h1 className="text-4xl sm:text-6xl font-black mb-6 leading-tight max-w-3xl" style={{ color: "#0a1a10" }}>
             Crafted for Every<br />
             <span style={{ color: "#34d399" }}>Session.</span>
           </h1>
-          <p className="max-w-xl text-base leading-relaxed mb-10" style={{ color: "#4a7a5a" }}>
+          <p className="max-w-xl text-base leading-relaxed mb-10" style={{ color: "#2a5038" }}>
             From windproof lighters and precision grinders to glass ashtrays, rolling trays, pre-rolled cones, and sheesha essentials — the complete Stash Pro range.
           </p>
-          <div className="flex items-center gap-6 text-[10px] font-mono" style={{ color: "#2d5a3d" }}>
+          <div className="flex items-center gap-6 text-[10px] font-mono" style={{ color: "#3a6a48" }}>
             <span><span style={{ color: "#34d399" }}>{totalProducts}+</span> Products</span>
             <span style={{ color: "rgba(52,211,153,0.2)" }}>|</span>
             <span><span style={{ color: "#34d399" }}>{ALL_CATEGORIES.length}</span> Categories</span>
@@ -224,7 +224,7 @@ export default function StashProPage() {
       </div>
 
       {/* Sticky Nav */}
-      <div className="sticky top-0 z-40 border-b" style={{ background: "rgba(4,12,4,0.95)", backdropFilter: "blur(12px)", borderColor: "rgba(52,211,153,0.08)" }}>
+      <div className="sticky top-0 z-40 border-b" style={{ background: "rgba(248,252,249,0.96)", backdropFilter: "blur(12px)", borderColor: "rgba(30,100,60,0.12)" }}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-col gap-4">
             {/* Search */}
@@ -237,8 +237,8 @@ export default function StashProPage() {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 text-xs font-mono text-white rounded-sm outline-none focus:ring-1 focus:ring-emerald-500/50"
-                style={{ background: "rgba(52,211,153,0.05)", border: "1px solid rgba(52,211,153,0.15)", color: "white" }}
+                className="w-full pl-9 pr-4 py-2 text-xs font-mono rounded-sm outline-none focus:ring-1 focus:ring-emerald-500/50"
+                style={{ background: "rgba(52,211,153,0.06)", border: "1px solid rgba(30,100,60,0.18)", color: "#0a1a10" }}
               />
             </div>
             {/* Category tabs */}
@@ -248,8 +248,8 @@ export default function StashProPage() {
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm font-mono text-[10px] tracking-wider whitespace-nowrap transition-all"
                 style={{
                   background: activeCategory === "All" ? "rgba(52,211,153,0.15)" : "transparent",
-                  border: `1px solid ${activeCategory === "All" ? "rgba(52,211,153,0.4)" : "rgba(52,211,153,0.1)"}`,
-                  color: activeCategory === "All" ? "#34d399" : "#2d5a3d",
+                  border: `1px solid ${activeCategory === "All" ? "rgba(30,100,60,0.45)" : "rgba(30,100,60,0.14)"}`,
+                  color: activeCategory === "All" ? "#1a8050" : "#3a6a48",
                 }}
               >
                 ALL
@@ -261,8 +261,8 @@ export default function StashProPage() {
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm font-mono text-[10px] tracking-wider whitespace-nowrap transition-all"
                   style={{
                     background: activeCategory === cat ? "rgba(52,211,153,0.15)" : "transparent",
-                    border: `1px solid ${activeCategory === cat ? "rgba(52,211,153,0.4)" : "rgba(52,211,153,0.1)"}`,
-                    color: activeCategory === cat ? "#34d399" : "#2d5a3d",
+                    border: `1px solid ${activeCategory === cat ? "rgba(30,100,60,0.45)" : "rgba(30,100,60,0.14)"}`,
+                    color: activeCategory === cat ? "#1a8050" : "#3a6a48",
                   }}
                 >
                   <span>{CATEGORY_ICONS[cat] || "◈"}</span>
@@ -279,16 +279,16 @@ export default function StashProPage() {
         {Object.entries(filteredCatalog).map(([cat, products]) => (
           <section key={cat}>
             <div className="flex items-center gap-4 mb-10">
-              <div className="h-px flex-1" style={{ background: "rgba(52,211,153,0.08)" }} />
+              <div className="h-px flex-1" style={{ background: "rgba(30,100,60,0.12)" }} />
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{CATEGORY_ICONS[cat] || "◈"}</span>
                 <div>
-                  <p className="text-[9px] font-mono tracking-[0.4em]" style={{ color: "rgba(52,211,153,0.4)" }}>STASH PRO</p>
-                  <h2 className="text-white font-black text-xl tracking-tight">{cat}</h2>
+                  <p className="text-[9px] font-mono tracking-[0.4em]" style={{ color: "#1a8050" }}>STASH PRO</p>
+                  <h2 className="font-black text-xl tracking-tight" style={{ color: "#0a1a10" }}>{cat}</h2>
                 </div>
               </div>
-              <div className="h-px flex-1" style={{ background: "rgba(52,211,153,0.08)" }} />
-              <span className="text-[9px] font-mono" style={{ color: "rgba(52,211,153,0.3)" }}>{products.length} products</span>
+              <div className="h-px flex-1" style={{ background: "rgba(30,100,60,0.12)" }} />
+              <span className="text-[9px] font-mono" style={{ color: "#5a8a68" }}>{products.length} products</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {products.map(product => (
@@ -301,31 +301,31 @@ export default function StashProPage() {
         {Object.keys(filteredCatalog).length === 0 && (
           <div className="text-center py-24">
             <p className="text-4xl mb-4">🔍</p>
-            <p className="font-mono text-sm" style={{ color: "#2d5a3d" }}>No products match "{searchQuery}"</p>
+            <p className="font-mono text-sm" style={{ color: "#2a5038" }}>No products match "{searchQuery}"</p>
             <button onClick={() => setSearchQuery("")} className="mt-4 text-xs font-mono" style={{ color: "#34d399" }}>Clear search</button>
           </div>
         )}
       </div>
 
       {/* Disclaimer */}
-      <div className="border-t" style={{ borderColor: "rgba(52,211,153,0.06)" }}>
+      <div className="border-t" style={{ borderColor: "rgba(30,100,60,0.12)" }}>
         <div className="max-w-7xl mx-auto px-6 py-10">
-          <div className="rounded-sm p-6" style={{ background: "rgba(52,211,153,0.03)", border: "1px solid rgba(52,211,153,0.08)" }}>
-            <p className="text-[9px] font-mono tracking-[0.3em] mb-3" style={{ color: "rgba(52,211,153,0.4)" }}>DISCLAIMER</p>
-            <p className="text-[11px] leading-relaxed" style={{ color: "#2d5a3d" }}>
+          <div className="rounded-sm p-6" style={{ background: "rgba(52,211,153,0.05)", border: "1px solid rgba(30,100,60,0.12)" }}>
+            <p className="text-[9px] font-mono tracking-[0.3em] mb-3" style={{ color: "#1a8050" }}>DISCLAIMER</p>
+            <p className="text-[11px] leading-relaxed" style={{ color: "#2a5038" }}>
               All Stash Pro products are intended for legal adult use only. Products are designed for tobacco, herbal, and personal lifestyle use in accordance with applicable local laws. Users are responsible for complying with the laws of their jurisdiction. Stash Pro does not promote or endorse illegal activities. Product availability, specifications, and colours may vary. Images are for reference purposes only.
             </p>
           </div>
           <div className="mt-8 flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <div className="px-3 py-1.5 rounded-sm" style={{ border: "1px solid rgba(52,211,153,0.2)", background: "rgba(52,211,153,0.05)" }}>
-                <span className="text-emerald-400 font-mono font-black text-sm tracking-widest">STASH</span>
-                <span className="text-white font-mono font-black text-sm tracking-widest"> PRO</span>
+              <div className="px-3 py-1.5 rounded-sm" style={{ border: "1px solid rgba(30,100,60,0.22)", background: "rgba(52,211,153,0.07)" }}>
+                <span className="text-emerald-500 font-mono font-black text-sm tracking-widest">STASH</span>
+                <span className="font-mono font-black text-sm tracking-widest" style={{ color: "#0a1a10" }}> PRO</span>
               </div>
-              <span className="text-[9px] font-mono" style={{ color: "#1a3a26" }}>Premium Smoking Accessories</span>
+              <span className="text-[9px] font-mono" style={{ color: "#4a7a58" }}>Premium Smoking Accessories</span>
             </div>
-            <p className="text-[9px] font-mono" style={{ color: "#1a3a26" }}>
-              Showcase presented by <span style={{ color: "rgba(52,211,153,0.4)" }}>Dantès · The Bloom Society</span>
+            <p className="text-[9px] font-mono" style={{ color: "#4a7a58" }}>
+              Showcase presented by <span style={{ color: "#1a8050" }}>Dantès · The Bloom Society</span>
             </p>
           </div>
         </div>
