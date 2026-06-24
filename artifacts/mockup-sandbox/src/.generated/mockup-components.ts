@@ -9,5 +9,9 @@ export const modules: ModuleMap = {
   "./components/mockups/bloom-directions/CyberGoldHero.tsx": () => import("../components/mockups/bloom-directions/CyberGoldHero.tsx"),
   "./components/mockups/bloom-directions/CyberPhosphor.tsx": () => import("../components/mockups/bloom-directions/CyberPhosphor.tsx"),
   "./components/mockups/bloom-directions/CyberViolet.tsx": () => import("../components/mockups/bloom-directions/CyberViolet.tsx"),
-  "./components/mockups/bloom-directions/Glass.tsx": () => import("../components/mockups/bloom-directions/Glass.tsx")
+  "./components/mockups/bloom-directions/Glass.tsx": () => import("../components/mockups/bloom-directions/Glass.tsx"),
+  "./components/mockups/landing-variants/VariantA.tsx": () => import("../components/mockups/landing-variants/VariantA.tsx"),
+  "./components/mockups/landing-variants/VariantB.tsx": () => import("../components/mockups/landing-variants/VariantB.tsx"),
+  "./components/mockups/landing-variants/VariantC.tsx": () => import("../components/mockups/landing-variants/VariantC.tsx"),
+  "./components/mockups/landing-variants/VariantD.tsx": () => import("../components/mockups/landing-variants/VariantD.tsx")
 };
