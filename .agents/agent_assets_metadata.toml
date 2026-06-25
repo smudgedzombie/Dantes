@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "VZoBYZwKo4Dpcy5OJsZiS"
+uri = "file://nft-minting-guide.md"
+type = "text"
+title = "Bloom Society NFT — Minting Guide"
