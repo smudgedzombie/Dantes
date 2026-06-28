@@ -13,7 +13,7 @@ type GrahamSummary = { total:number; active:number; configuring:number; standby:
 type Comment = { id:number; taskId:number; authorType:string; authorName:string; content:string; createdAt:string };
 
 const ALL_TABS = ["command","grahams","clients","dashboard","transactions","accounts"];
-const GOLD = "#D4AF37";
+const GOLD = "#a855f7";
 const STATUS_COLORS: Record<string,string> = {
   pending:"bg-amber-500/10 text-amber-400 border-amber-500/20",
   approved:"bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -29,17 +29,17 @@ const AGENT_STATUS_COLORS: Record<string,string> = {
 };
 const PIE_COLORS = ["#D4AF37","#06b6d4","#8b5cf6","#22c55e","#f97316","#ec4899","#64748b"];
 
-const panelCls = "bg-[#040c1a] border border-[#0d1b35] rounded-sm";
-const inputCls = "w-full bg-[#030810] border border-[#0d1b35] rounded-sm px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]/50 font-mono placeholder:text-[#2a4060] transition-colors";
-const labelCls = "block text-[9px] font-mono text-[#3a5570] mb-1 uppercase tracking-widest";
-const btnPrimary = "px-4 py-2 bg-[#D4AF37] text-[#030810] text-[10px] font-mono font-bold rounded-sm hover:bg-[#b8952b] transition-colors disabled:opacity-50 tracking-widest";
-const btnSec = "px-4 py-2 bg-[#0a1628] border border-[#0d1b35] text-[#3a5570] text-[10px] font-mono rounded-sm hover:text-white transition-colors";
+const panelCls = "bg-white/70 border border-purple-200/40 backdrop-blur-sm rounded-xl";
+const inputCls = "w-full rounded-xl px-3 py-2 text-xs focus:outline-none font-mono transition-colors bg-white/85 border border-purple-300/40 text-[#1e1b4b] placeholder:text-[#9898b8]";
+const labelCls = "block text-[9px] font-mono text-[#9898b8] mb-1 uppercase tracking-widest";
+const btnPrimary = "px-4 py-2 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 text-[#1e1b4b] text-[10px] font-mono font-bold rounded-xl hover:opacity-90 transition-all disabled:opacity-50 tracking-widest";
+const btnSec = "px-4 py-2 bg-purple-50 border border-purple-200/60 text-[#5a587a] text-[10px] font-mono rounded-xl hover:text-[#1e1b4b] transition-colors";
 
 function Badge({ status }: { status: string }) {
   return <span className={`inline-flex px-2 py-0.5 rounded-sm text-[9px] font-mono font-bold uppercase border ${STATUS_COLORS[status]??""}`}>{status}</span>;
 }
 function EmptyPanel({ text }: { text: string }) {
-  return <div className={`${panelCls} p-12 text-center`}><p className="text-[#2a4060] text-xs font-mono">{text}</p></div>;
+  return <div className={`${panelCls} p-12 text-center`}><p className="text-[#9898b8] text-xs font-mono">{text}</p></div>;
 }
 
 export default function AdminPage() {
@@ -157,33 +157,33 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030810] text-white">
-      <div className="fixed inset-0 pointer-events-none opacity-20" style={{backgroundImage:"linear-gradient(rgba(212,175,55,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,0.05) 1px,transparent 1px)",backgroundSize:"60px 60px"}} />
-      <header className="relative z-10 border-b border-[#0d1b35] px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen" style={{ background: "#f5f0ff" }}>
+      <div className="fixed inset-0 pointer-events-none" style={{background:"radial-gradient(ellipse 80% 50% at 20% 0%,rgba(168,85,247,0.07),transparent),radial-gradient(ellipse 60% 60% at 80% 100%,rgba(34,211,238,0.05),transparent)"}} />
+      <header className="relative z-10 border-b px-6 py-4 flex items-center justify-between" style={{ background:"rgba(255,255,255,0.85)", backdropFilter:"blur(12px)", borderColor:"rgba(168,85,247,0.15)" }}>
         <div>
-          <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.4em] mb-0.5">THE BLOOM SOCIETY</p>
-          <h1 className="text-lg font-serif font-black text-white tracking-wide">Admin Command Hub</h1>
+          <p className="text-[9px] font-mono tracking-[0.4em] mb-0.5" style={{ color:"#a855f7" }}>THE BLOOM SOCIETY</p>
+          <h1 className="text-lg font-serif font-black tracking-wide" style={{ color:"#1e1b4b" }}>Admin Command Hub</h1>
         </div>
         <div className="flex items-center gap-3">
           <button onClick={()=>setShowInvoiceModal(true)} className={btnSec}>+ INVOICE</button>
           <button onClick={()=>setShowExport(true)} className={btnSec}>⬇ EXPORT</button>
-          <div className="flex items-center gap-2"><span className="w-2 h-2 bg-[#D4AF37] rounded-full" /><span className="text-[9px] font-mono text-[#D4AF37]">SUPER ADMIN</span></div>
+          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-purple-500" /><span className="text-[9px] font-mono" style={{ color:"#a855f7" }}>SUPER ADMIN</span></div>
         </div>
       </header>
 
       {/* Export Modal */}
       {showExport && (
-        <div className="fixed inset-0 bg-[#030810]/90 flex items-center justify-center z-50 px-6">
+        <div className="fixed inset-0 bg-purple-900/40 backdrop-blur-sm flex items-center justify-center z-50 px-6">
           <div className={`${panelCls} p-7 w-full max-w-sm space-y-4`}>
             <div className="flex items-center justify-between">
-              <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">EXPORT DATA</p>
-              <button onClick={()=>setShowExport(false)} className="text-[#3a5570] hover:text-white text-lg font-mono">×</button>
+              <p className="text-[9px] font-mono text-[#a855f7] tracking-widest">EXPORT DATA</p>
+              <button onClick={()=>setShowExport(false)} className="text-[#5a587a] hover:text-[#1e1b4b] text-lg font-mono">×</button>
             </div>
             <div>
               <p className={labelCls}>Dataset</p>
               <div className="grid grid-cols-2 gap-2">
                 {[{v:"members",l:"Members"},{v:"tasks",l:"Tasks"},{v:"audit",l:"Audit Log"},{v:"invoices",l:"Invoices"}].map(o=>(
-                  <button key={o.v} onClick={()=>setExportType(o.v)} className={`py-2 text-[10px] font-mono border rounded-sm transition-colors ${exportType===o.v?"bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#D4AF37]":"bg-[#030810] border-[#0d1b35] text-[#3a5570] hover:text-white"}`}>{o.l}</button>
+                  <button key={o.v} onClick={()=>setExportType(o.v)} className={`py-2 text-[10px] font-mono border rounded-sm transition-colors ${exportType===o.v?"bg-purple-50 border-purple-400/50 text-[#a855f7]":"bg-white/60 border-purple-200/40 text-[#5a587a] hover:text-[#1e1b4b]"}`}>{o.l}</button>
                 ))}
               </div>
             </div>
@@ -196,11 +196,11 @@ export default function AdminPage() {
 
       {/* Invoice Modal */}
       {showInvoiceModal && (
-        <div className="fixed inset-0 bg-[#030810]/90 flex items-center justify-center z-50 px-6">
+        <div className="fixed inset-0 bg-purple-900/40 backdrop-blur-sm flex items-center justify-center z-50 px-6">
           <form onSubmit={createInvoice} className={`${panelCls} p-7 w-full max-w-lg space-y-4`}>
             <div className="flex items-center justify-between">
-              <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">CREATE INVOICE</p>
-              <button type="button" onClick={()=>setShowInvoiceModal(false)} className="text-[#3a5570] hover:text-white text-lg font-mono">×</button>
+              <p className="text-[9px] font-mono text-[#a855f7] tracking-widest">CREATE INVOICE</p>
+              <button type="button" onClick={()=>setShowInvoiceModal(false)} className="text-[#5a587a] hover:text-[#1e1b4b] text-lg font-mono">×</button>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="col-span-2"><label className={labelCls}>Client Email *</label>
@@ -221,7 +221,7 @@ export default function AdminPage() {
               <div className="col-span-2"><label className={labelCls}>Notes</label><input value={invoiceForm.notes} onChange={e=>setInvoiceForm(f=>({...f,notes:e.target.value}))} className={inputCls} placeholder="Optional invoice notes" /></div>
             </div>
             {invoiceError && <p className="text-red-400 text-xs font-mono">{invoiceError}</p>}
-            <p className="text-[9px] font-mono text-[#3a5570]">An email notification will be sent to the client automatically.</p>
+            <p className="text-[9px] font-mono text-[#5a587a]">An email notification will be sent to the client automatically.</p>
             <button type="submit" disabled={invoiceSaving} className={`w-full py-2.5 ${btnPrimary}`}>
               {invoiceSaving ? "CREATING..." : "CREATE INVOICE & NOTIFY →"}
             </button>
@@ -230,27 +230,27 @@ export default function AdminPage() {
       )}
 
       <div className="relative z-10 max-w-screen-xl mx-auto px-6 py-6">
-        <div className="flex gap-1 mb-6 border-b border-[#0d1b35] overflow-x-auto">
+        <div className="flex gap-1 mb-6 border-b border-purple-200/40 overflow-x-auto">
           {TABS.map(t=>(
-            <button key={t.id} onClick={()=>setTab(t.id as typeof tab)} className={`px-5 py-2.5 text-[10px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all ${tab===t.id?"border-b-2 border-[#D4AF37] text-[#D4AF37]":"text-[#3a5570] hover:text-white"}`}>{t.label}</button>
+            <button key={t.id} onClick={()=>setTab(t.id as typeof tab)} className={`px-5 py-2.5 text-[10px] font-mono font-bold uppercase tracking-widest whitespace-nowrap transition-all ${tab===t.id?"border-b-2 border-[#D4AF37] text-[#a855f7]":"text-[#5a587a] hover:text-[#1e1b4b]"}`}>{t.label}</button>
           ))}
         </div>
 
         {loading && (tab==="members"||tab==="staff") ? (
-          <div className="flex items-center justify-center py-20"><span className="text-[#D4AF37] font-mono text-xs animate-pulse">LOADING...</span></div>
+          <div className="flex items-center justify-center py-20"><span className="text-[#a855f7] font-mono text-xs animate-pulse">LOADING...</span></div>
         ) : (
           <>
             {tab==="members" && (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-3">{memberApps.length} APPLICATIONS</p>
+                  <p className="text-[9px] font-mono text-[#5a587a] tracking-widest mb-3">{memberApps.length} APPLICATIONS</p>
                   {memberApps.map(m=>(
-                    <div key={m.id} onClick={()=>setSelectedMember(m)} className={`${panelCls} p-4 cursor-pointer hover:border-[#D4AF37]/20 transition-colors ${selectedMember?.id===m.id?"border-[#D4AF37]/30 bg-[#D4AF37]/5":""}`}>
-                      <div className="flex items-start justify-between mb-1"><div><p className="text-xs font-semibold text-white">{m.fullName}</p><p className="text-[10px] font-mono text-[#3a5570]">{m.email}</p></div><Badge status={m.status} /></div>
-                      <p className="text-[10px] text-[#2a4060]">{m.company||m.industry||"—"} · {m.country||"—"}</p>
+                    <div key={m.id} onClick={()=>setSelectedMember(m)} className={`${panelCls} p-4 cursor-pointer hover:border-[#D4AF37]/20 transition-colors ${selectedMember?.id===m.id?"border-purple-300/40 bg-[#D4AF37]/5":""}`}>
+                      <div className="flex items-start justify-between mb-1"><div><p className="text-xs font-semibold text-[#1e1b4b]">{m.fullName}</p><p className="text-[10px] font-mono text-[#5a587a]">{m.email}</p></div><Badge status={m.status} /></div>
+                      <p className="text-[10px] text-[#9898b8]">{m.company||m.industry||"—"} · {m.country||"—"}</p>
                     </div>
                   ))}
-                  {memberApps.length===0&&<p className="text-[#2a4060] text-xs font-mono py-8 text-center">No applications yet</p>}
+                  {memberApps.length===0&&<p className="text-[#9898b8] text-xs font-mono py-8 text-center">No applications yet</p>}
                 </div>
                 <div className="lg:col-span-2">
                   {selectedMember ? <MemberDetail member={selectedMember} onPatch={patchMember} saving={saving} onPostActivity={postActivity} /> : <EmptyPanel text="SELECT A MEMBER TO REVIEW" />}
@@ -261,14 +261,14 @@ export default function AdminPage() {
             {tab==="staff" && (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-3">{staffReqs.length} REQUESTS</p>
+                  <p className="text-[9px] font-mono text-[#5a587a] tracking-widest mb-3">{staffReqs.length} REQUESTS</p>
                   {staffReqs.map(r=>(
-                    <div key={r.id} onClick={()=>setSelectedStaff(r)} className={`${panelCls} p-4 cursor-pointer hover:border-[#D4AF37]/20 transition-colors ${selectedStaff?.id===r.id?"border-[#D4AF37]/30 bg-[#D4AF37]/5":""}`}>
-                      <div className="flex items-start justify-between mb-1"><div><p className="text-xs font-semibold text-white">{r.fullName}</p><p className="text-[10px] font-mono text-[#3a5570]">{r.email}</p></div><Badge status={r.status} /></div>
-                      <p className="text-[10px] text-[#2a4060]">{r.role}</p>
+                    <div key={r.id} onClick={()=>setSelectedStaff(r)} className={`${panelCls} p-4 cursor-pointer hover:border-[#D4AF37]/20 transition-colors ${selectedStaff?.id===r.id?"border-purple-300/40 bg-[#D4AF37]/5":""}`}>
+                      <div className="flex items-start justify-between mb-1"><div><p className="text-xs font-semibold text-[#1e1b4b]">{r.fullName}</p><p className="text-[10px] font-mono text-[#5a587a]">{r.email}</p></div><Badge status={r.status} /></div>
+                      <p className="text-[10px] text-[#9898b8]">{r.role}</p>
                     </div>
                   ))}
-                  {staffReqs.length===0&&<p className="text-[#2a4060] text-xs font-mono py-8 text-center">No requests yet</p>}
+                  {staffReqs.length===0&&<p className="text-[#9898b8] text-xs font-mono py-8 text-center">No requests yet</p>}
                 </div>
                 <div className="lg:col-span-2">
                   {selectedStaff ? <StaffDetail req={selectedStaff} onPatch={patchStaff} saving={saving} /> : <EmptyPanel text="SELECT A REQUEST TO REVIEW" />}
@@ -297,47 +297,47 @@ function ActivationBriefModal({ member, grahamId, onClose }:{ member:MemberApp; 
     { n:"03", title:"Deploy & Monitor", desc:"Push agent to production. Begin 24-hour performance report cycle — one report for the client portal, one for Super Admins.", hrs:"48–72h", color:"#00ff88" },
   ];
   return (
-    <div className="fixed inset-0 bg-[#030810]/95 flex items-center justify-center z-50 px-4">
-      <div className="bg-[#040c1a] border border-[#D4AF37]/30 rounded-sm w-full max-w-2xl shadow-2xl shadow-[#D4AF37]/10 overflow-hidden">
-        <div className="border-b border-[#0d1b35] px-6 py-4 flex items-start justify-between">
+    <div className="fixed inset-0 bg-purple-900/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+      <div className="bg-white/70 border border-purple-300/40 rounded-sm w-full max-w-2xl shadow-2xl shadow-[#D4AF37]/10 overflow-hidden">
+        <div className="border-b border-purple-200/40 px-6 py-4 flex items-start justify-between">
           <div>
-            <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.4em] mb-1">⚡ ACTIVATION PROTOCOL INITIATED</p>
-            <h2 className="text-base font-serif font-bold text-white">{member.fullName} — {member.company??""}</h2>
-            <p className="text-xs font-mono text-[#3a5570] mt-0.5">Graham Agent: <span className="text-[#D4AF37]">{grahamId||"TBD"}</span> · Bloom ID: <span className="text-[#D4AF37]">{member.bloomMemberId||"TBD"}</span></p>
+            <p className="text-[9px] font-mono text-[#a855f7] tracking-[0.4em] mb-1">⚡ ACTIVATION PROTOCOL INITIATED</p>
+            <h2 className="text-base font-serif font-bold text-[#1e1b4b]">{member.fullName} — {member.company??""}</h2>
+            <p className="text-xs font-mono text-[#5a587a] mt-0.5">Graham Agent: <span className="text-[#a855f7]">{grahamId||"TBD"}</span> · Bloom ID: <span className="text-[#a855f7]">{member.bloomMemberId||"TBD"}</span></p>
           </div>
-          <button onClick={onClose} className="text-[#3a5570] hover:text-white text-xl font-mono mt-1">×</button>
+          <button onClick={onClose} className="text-[#5a587a] hover:text-[#1e1b4b] text-xl font-mono mt-1">×</button>
         </div>
         <div className="px-6 py-5 space-y-5">
           <div className="flex items-center gap-3 bg-[#D4AF37]/5 border border-[#D4AF37]/20 rounded-sm px-4 py-3">
             <div className="w-8 h-8 rounded-full border-2 border-[#D4AF37] flex items-center justify-center shrink-0">
-              <span className="text-[#D4AF37] text-sm font-black">72</span>
+              <span className="text-[#a855f7] text-sm font-black">72</span>
             </div>
             <div>
-              <p className="text-xs font-mono text-[#D4AF37] font-bold">72-HOUR DEPLOYMENT DEADLINE</p>
-              <p className="text-[10px] font-mono text-[#8aa0b8]">All steps must be complete by <span className="text-white font-bold">{deadlineStr}</span>. Both Steven and Akshay to sign off before client goes live.</p>
+              <p className="text-xs font-mono text-[#a855f7] font-bold">72-HOUR DEPLOYMENT DEADLINE</p>
+              <p className="text-[10px] font-mono text-[#5a587a]">All steps must be complete by <span className="text-[#1e1b4b] font-bold">{deadlineStr}</span>. Both Steven and Akshay to sign off before client goes live.</p>
             </div>
           </div>
           <div className="space-y-3">
             {steps.map((s)=>(
-              <div key={s.n} className="flex gap-4 bg-[#030810] border border-[#0d1b35] rounded-sm p-4">
+              <div key={s.n} className="flex gap-4 bg-white/60 border border-purple-200/40 rounded-sm p-4">
                 <div className="shrink-0 w-8 h-8 rounded-sm flex items-center justify-center border" style={{borderColor:s.color+"40",background:s.color+"10"}}>
                   <span className="text-[10px] font-mono font-bold" style={{color:s.color}}>{s.n}</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-xs font-mono font-bold text-white">{s.title}</p>
+                    <p className="text-xs font-mono font-bold text-[#1e1b4b]">{s.title}</p>
                     <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-sm border" style={{color:s.color,borderColor:s.color+"40",background:s.color+"10"}}>{s.hrs}</span>
                   </div>
-                  <p className="text-[10px] font-mono text-[#8aa0b8] mt-1 leading-relaxed">{s.desc}</p>
+                  <p className="text-[10px] font-mono text-[#5a587a] mt-1 leading-relaxed">{s.desc}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className="bg-[#06b6d4]/5 border border-[#06b6d4]/20 rounded-sm px-4 py-3 space-y-1">
             <p className="text-[9px] font-mono text-[#06b6d4] tracking-widest font-bold">📊 24-HOUR ANALYSIS REPORT SCHEDULE (POST-DEPLOY)</p>
-            <p className="text-[10px] font-mono text-[#8aa0b8] leading-relaxed">After deployment, two automated reports are generated every 24 hours:<br/>
-              <span className="text-white">→ Client Report:</span> Delivered to <span className="text-[#D4AF37]">{member.email}</span> via the client portal — shows Graham agent results, key actions taken, and performance vs. goals.<br/>
-              <span className="text-white">→ Admin Report:</span> Posted to Super Admin audit feed — shows data quality, error rate, and any manual intervention flags.
+            <p className="text-[10px] font-mono text-[#5a587a] leading-relaxed">After deployment, two automated reports are generated every 24 hours:<br/>
+              <span className="text-[#1e1b4b]">→ Client Report:</span> Delivered to <span className="text-[#a855f7]">{member.email}</span> via the client portal — shows Graham agent results, key actions taken, and performance vs. goals.<br/>
+              <span className="text-[#1e1b4b]">→ Admin Report:</span> Posted to Super Admin audit feed — shows data quality, error rate, and any manual intervention flags.
             </p>
           </div>
           <div className="flex gap-3 pt-1">
@@ -364,14 +364,14 @@ function MemberDetail({ member, onPatch, saving, onPostActivity }:{member:Member
 
   return (
     <div className={`${panelCls} p-6 space-y-5 overflow-y-auto max-h-[80vh]`}>
-      <div className="flex items-start justify-between"><div><h3 className="text-base font-serif font-bold text-white mb-0.5">{member.fullName}</h3><p className="text-xs font-mono text-[#3a5570]">{member.email} · {member.phone??"-"}</p></div><Badge status={member.status}/></div>
-      <div className="grid grid-cols-2 gap-2 text-xs">{([["Company",member.company],["Country",member.country],["Industry",member.industry],["Budget",member.budget],["Referral",member.referral]] as [string,string|null][]).filter(([,v])=>v).map(([l,v])=><div key={l}><span className="text-[#3a5570] font-mono text-[9px]">{l}: </span><span className="text-white">{v}</span></div>)}</div>
-      <div><p className={labelCls}>Business Description</p><p className="text-xs text-[#8aa0b8] leading-relaxed bg-[#030810] border border-[#0d1b35] rounded-sm p-3">{member.businessDescription}</p></div>
-      <div><p className={labelCls}>Graham Goals</p><p className="text-xs text-[#8aa0b8] leading-relaxed bg-[#030810] border border-[#0d1b35] rounded-sm p-3">{member.grahamGoals}</p></div>
+      <div className="flex items-start justify-between"><div><h3 className="text-base font-serif font-bold text-[#1e1b4b] mb-0.5">{member.fullName}</h3><p className="text-xs font-mono text-[#5a587a]">{member.email} · {member.phone??"-"}</p></div><Badge status={member.status}/></div>
+      <div className="grid grid-cols-2 gap-2 text-xs">{([["Company",member.company],["Country",member.country],["Industry",member.industry],["Budget",member.budget],["Referral",member.referral]] as [string,string|null][]).filter(([,v])=>v).map(([l,v])=><div key={l}><span className="text-[#5a587a] font-mono text-[9px]">{l}: </span><span className="text-[#1e1b4b]">{v}</span></div>)}</div>
+      <div><p className={labelCls}>Business Description</p><p className="text-xs text-[#5a587a] leading-relaxed bg-white/60 border border-purple-200/40 rounded-sm p-3">{member.businessDescription}</p></div>
+      <div><p className={labelCls}>Graham Goals</p><p className="text-xs text-[#5a587a] leading-relaxed bg-white/60 border border-purple-200/40 rounded-sm p-3">{member.grahamGoals}</p></div>
       <div><label className={labelCls}>Admin Notes</label><textarea rows={2} value={notes} onChange={e=>setNotes(e.target.value)} className={inputCls+" resize-none"}/></div>
 
-      <div className="border border-[#0d1b35] rounded-sm p-4 space-y-3">
-        <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">QUOTATION</p>
+      <div className="border border-purple-200/40 rounded-sm p-4 space-y-3">
+        <p className="text-[9px] font-mono text-[#a855f7] tracking-widest">QUOTATION</p>
         <div className="grid grid-cols-2 gap-3">
           <div><label className={labelCls}>Amount (USD/month)</label><input value={quoteAmt} onChange={e=>setQuoteAmt(e.target.value)} className={inputCls} placeholder="e.g. 15000"/></div>
           <div><label className={labelCls}>Notes</label><input value={quoteNotes} onChange={e=>setQuoteNotes(e.target.value)} className={inputCls}/></div>
@@ -379,8 +379,8 @@ function MemberDetail({ member, onPatch, saving, onPostActivity }:{member:Member
         <button disabled={saving} onClick={()=>onPatch(member.id,{status:"quoted",quotationAmount:quoteAmt,quotationNotes:quoteNotes,adminNotes:notes})} className={btnPrimary}>SEND QUOTATION →</button>
       </div>
 
-      <div className="border border-[#0d1b35] rounded-sm p-4 space-y-3">
-        <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">ACTIVATION</p>
+      <div className="border border-purple-200/40 rounded-sm p-4 space-y-3">
+        <p className="text-[9px] font-mono text-[#a855f7] tracking-widest">ACTIVATION</p>
         <div className="grid grid-cols-3 gap-3">
           <div><label className={labelCls}>Bloom Member ID</label><input value={bloomId} onChange={e=>setBloomId(e.target.value)} className={inputCls} placeholder="BLM-001"/></div>
           <div><label className={labelCls}>Secret Password</label><input value={secret} onChange={e=>setSecret(e.target.value)} className={inputCls}/></div>
@@ -393,8 +393,8 @@ function MemberDetail({ member, onPatch, saving, onPostActivity }:{member:Member
         {showBrief && <ActivationBriefModal member={{...member,bloomMemberId:bloomId,assignedGrahamId:grahamId}} grahamId={grahamId} onClose={()=>setShowBrief(false)} />}
       </div>
 
-      <div className="border border-[#0d1b35] rounded-sm p-4 space-y-3">
-        <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">POST GRAHAM ACTIVITY</p>
+      <div className="border border-purple-200/40 rounded-sm p-4 space-y-3">
+        <p className="text-[9px] font-mono text-[#a855f7] tracking-widest">POST GRAHAM ACTIVITY</p>
         <div><label className={labelCls}>Activity Title</label><input value={actTitle} onChange={e=>setActTitle(e.target.value)} className={inputCls} placeholder="e.g. Monthly Financial Report Generated"/></div>
         <div><label className={labelCls}>Description</label><input value={actDesc} onChange={e=>setActDesc(e.target.value)} className={inputCls}/></div>
         <div><label className={labelCls}>Module</label>
@@ -405,7 +405,7 @@ function MemberDetail({ member, onPatch, saving, onPostActivity }:{member:Member
         <button disabled={saving||!actTitle} onClick={()=>{if(member.email&&member.assignedGrahamId){onPostActivity(member.email,member.assignedGrahamId,{title:actTitle,description:actDesc,module:actModule,type:"task"});setActTitle("");setActDesc("");}}} className={btnSec}>POST ACTIVITY</button>
       </div>
 
-      <div className="flex gap-2 flex-wrap pt-2 border-t border-[#0d1b35]">
+      <div className="flex gap-2 flex-wrap pt-2 border-t border-purple-200/40">
         {["pending","reviewing","rejected"].map(s=><button key={s} disabled={saving} onClick={()=>onPatch(member.id,{status:s,adminNotes:notes})} className={btnSec}>{s.toUpperCase()}</button>)}
       </div>
     </div>
@@ -419,13 +419,13 @@ function StaffDetail({ req, onPatch, saving }:{req:StaffRequest;onPatch:(id:numb
   function toggleTab(t:string){setTabs(ts=>ts.includes(t)?ts.filter(x=>x!==t):[...ts,t]);}
   return (
     <div className={`${panelCls} p-6 space-y-5`}>
-      <div className="flex items-start justify-between"><div><h3 className="text-base font-serif font-bold text-white mb-0.5">{req.fullName}</h3><p className="text-xs font-mono text-[#3a5570]">{req.email} · {req.role}</p></div><Badge status={req.status}/></div>
-      <div><p className={labelCls}>Reason</p><p className="text-xs text-[#8aa0b8] bg-[#030810] border border-[#0d1b35] rounded-sm p-3">{req.reason}</p></div>
+      <div className="flex items-start justify-between"><div><h3 className="text-base font-serif font-bold text-[#1e1b4b] mb-0.5">{req.fullName}</h3><p className="text-xs font-mono text-[#5a587a]">{req.email} · {req.role}</p></div><Badge status={req.status}/></div>
+      <div><p className={labelCls}>Reason</p><p className="text-xs text-[#5a587a] bg-white/60 border border-purple-200/40 rounded-sm p-3">{req.reason}</p></div>
       <div><p className={labelCls}>Permitted Tabs</p>
-        <div className="flex flex-wrap gap-2 mt-2">{ALL_TABS.map(t=><button key={t} onClick={()=>toggleTab(t)} className={`px-3 py-1.5 text-[10px] font-mono rounded-sm border transition-colors ${tabs.includes(t)?"bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#D4AF37]":"bg-[#030810] border-[#0d1b35] text-[#2a4060] hover:text-white"}`}>{t}</button>)}</div>
+        <div className="flex flex-wrap gap-2 mt-2">{ALL_TABS.map(t=><button key={t} onClick={()=>toggleTab(t)} className={`px-3 py-1.5 text-[10px] font-mono rounded-sm border transition-colors ${tabs.includes(t)?"bg-purple-50 border-purple-400/50 text-[#a855f7]":"bg-white/60 border-purple-200/40 text-[#9898b8] hover:text-[#1e1b4b]"}`}>{t}</button>)}</div>
       </div>
       <div><label className={labelCls}>Admin Notes</label><textarea rows={2} value={notes} onChange={e=>setNotes(e.target.value)} className={inputCls+" resize-none"}/></div>
-      <div className="flex gap-2 pt-2 border-t border-[#0d1b35]">
+      <div className="flex gap-2 pt-2 border-t border-purple-200/40">
         <button disabled={saving} onClick={()=>onPatch(req.id,{status:"denied",adminNotes:notes})} className={btnSec}>DENY</button>
         <button disabled={saving} onClick={()=>onPatch(req.id,{status:"approved",permittedTabs:tabs,adminNotes:notes})} className={btnPrimary}>APPROVE ACCESS →</button>
       </div>
@@ -435,7 +435,7 @@ function StaffDetail({ req, onPatch, saving }:{req:StaffRequest;onPatch:(id:numb
 
 function RevenueTab({ revenue, onLoad }:{revenue:RevenueData|null;onLoad:()=>void}) {
   useEffect(()=>{if(!revenue)onLoad();},[]);
-  if (!revenue) return <div className="flex items-center justify-center py-20"><span className="text-[#D4AF37] font-mono text-xs animate-pulse">LOADING REVENUE DATA...</span></div>;
+  if (!revenue) return <div className="flex items-center justify-center py-20"><span className="text-[#a855f7] font-mono text-xs animate-pulse">LOADING REVENUE DATA...</span></div>;
   const { summary, statusBreakdown, referrals, industries, monthlyTrend, healthBands } = revenue;
   const tooltipStyle={backgroundColor:"#040c1a",border:"1px solid #0d1b35",borderRadius:"2px",fontSize:"11px",fontFamily:"monospace"};
   return (
@@ -446,18 +446,18 @@ function RevenueTab({ revenue, onLoad }:{revenue:RevenueData|null;onLoad:()=>voi
           {l:"ARR",v:`$${summary.arr.toLocaleString()}`,s:"Annual Run Rate",c:GOLD},
           {l:"ACTIVE MEMBERS",v:summary.activeMembers,s:`${summary.totalApplications} total applications`,c:"#00ff88"},
           {l:"PIPELINE VALUE",v:`$${summary.pipelineValue.toLocaleString()}`,s:`${summary.pipelineCount} prospects`,c:"#06b6d4"},
-        ].map(s=><div key={s.l} className={`${panelCls} p-4`}><p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-2">{s.l}</p><p className="font-mono font-bold text-2xl" style={{color:s.c}}>{s.v}</p><p className="text-[9px] font-mono text-[#2a4060] mt-1">{s.s}</p></div>)}
+        ].map(s=><div key={s.l} className={`${panelCls} p-4`}><p className="text-[9px] font-mono text-[#5a587a] tracking-widest mb-2">{s.l}</p><p className="font-mono font-bold text-2xl" style={{color:s.c}}>{s.v}</p><p className="text-[9px] font-mono text-[#9898b8] mt-1">{s.s}</p></div>)}
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {[
           {l:"TOTAL COLLECTED",v:`$${summary.totalRevenue.toLocaleString()}`,c:"#22c55e"},
           {l:"AVG DEAL SIZE",v:`$${summary.avgDealSize.toLocaleString()}/mo`,c:"#8b5cf6"},
           {l:"TOTAL APPLICATIONS",v:summary.totalApplications,c:GOLD},
-        ].map(s=><div key={s.l} className={`${panelCls} p-4`}><p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-2">{s.l}</p><p className="font-mono font-bold text-xl" style={{color:s.c}}>{s.v}</p></div>)}
+        ].map(s=><div key={s.l} className={`${panelCls} p-4`}><p className="text-[9px] font-mono text-[#5a587a] tracking-widest mb-2">{s.l}</p><p className="font-mono font-bold text-xl" style={{color:s.c}}>{s.v}</p></div>)}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className={`${panelCls} p-5`}>
-          <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">MONTHLY APPLICATION TREND</p>
+          <p className="text-[9px] font-mono text-[#a855f7] tracking-widest mb-4">MONTHLY APPLICATION TREND</p>
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={monthlyTrend} barGap={2}>
               <XAxis dataKey="label" tick={{fontSize:9,fontFamily:"monospace",fill:"#3a5570"}} axisLine={false} tickLine={false}/>
@@ -469,36 +469,36 @@ function RevenueTab({ revenue, onLoad }:{revenue:RevenueData|null;onLoad:()=>voi
           </ResponsiveContainer>
         </div>
         <div className={`${panelCls} p-5`}>
-          <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">PIPELINE STATUS BREAKDOWN</p>
+          <p className="text-[9px] font-mono text-[#a855f7] tracking-widest mb-4">PIPELINE STATUS BREAKDOWN</p>
           <div className="space-y-2">
             {statusBreakdown.filter(s=>s.count>0).map(s=>(
               <div key={s.status} className="flex items-center gap-3">
-                <span className="text-[9px] font-mono text-[#3a5570] w-20 capitalize">{s.status}</span>
+                <span className="text-[9px] font-mono text-[#5a587a] w-20 capitalize">{s.status}</span>
                 <div className="flex-1 h-1.5 bg-[#0d1b35] rounded-full overflow-hidden">
                   <div className="h-full rounded-full bg-[#D4AF37]" style={{width:`${Math.max((s.count/summary.totalApplications)*100,2)}%`}}/>
                 </div>
-                <span className="text-[9px] font-mono text-white w-6 text-right">{s.count}</span>
+                <span className="text-[9px] font-mono text-[#1e1b4b] w-6 text-right">{s.count}</span>
               </div>
             ))}
           </div>
         </div>
         <div className={`${panelCls} p-5`}>
-          <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">TOP REFERRAL SOURCES</p>
-          {referrals.length===0 ? <p className="text-[#2a4060] text-xs font-mono">No referral data yet</p> : (
+          <p className="text-[9px] font-mono text-[#a855f7] tracking-widest mb-4">TOP REFERRAL SOURCES</p>
+          {referrals.length===0 ? <p className="text-[#9898b8] text-xs font-mono">No referral data yet</p> : (
             <div className="space-y-2">
               {referrals.slice(0,8).map((r,i)=>(
                 <div key={r.source} className="flex items-center gap-3">
                   <span className="text-[9px] font-mono" style={{color:PIE_COLORS[i%PIE_COLORS.length]}}>{String(i+1).padStart(2,"0")}</span>
-                  <span className="text-xs text-white flex-1 truncate">{r.source}</span>
-                  <span className="text-[9px] font-mono text-[#D4AF37]">{r.count}</span>
+                  <span className="text-xs text-[#1e1b4b] flex-1 truncate">{r.source}</span>
+                  <span className="text-[9px] font-mono text-[#a855f7]">{r.count}</span>
                 </div>
               ))}
             </div>
           )}
         </div>
         <div className={`${panelCls} p-5`}>
-          <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">INDUSTRIES</p>
-          {industries.length===0 ? <p className="text-[#2a4060] text-xs font-mono">No data</p> : (
+          <p className="text-[9px] font-mono text-[#a855f7] tracking-widest mb-4">INDUSTRIES</p>
+          {industries.length===0 ? <p className="text-[#9898b8] text-xs font-mono">No data</p> : (
             <ResponsiveContainer width="100%" height={160}>
               <PieChart>
                 <Pie data={industries} dataKey="count" nameKey="industry" cx="50%" cy="50%" outerRadius={60} innerRadius={30}>
@@ -511,11 +511,11 @@ function RevenueTab({ revenue, onLoad }:{revenue:RevenueData|null;onLoad:()=>voi
         </div>
       </div>
       <div className={`${panelCls} p-5`}>
-        <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">CLIENT HEALTH DISTRIBUTION</p>
+        <p className="text-[9px] font-mono text-[#a855f7] tracking-widest mb-4">CLIENT HEALTH DISTRIBUTION</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {healthBands.map((b,i)=>{
             const colors=["#00ff88","#D4AF37","#f97316","#ef4444"];
-            return <div key={b.label} className="text-center"><p className="font-mono font-bold text-3xl" style={{color:colors[i]}}>{b.count}</p><p className="text-[9px] font-mono text-[#3a5570] mt-1 leading-relaxed">{b.label}</p></div>;
+            return <div key={b.label} className="text-center"><p className="font-mono font-bold text-3xl" style={{color:colors[i]}}>{b.count}</p><p className="text-[9px] font-mono text-[#5a587a] mt-1 leading-relaxed">{b.label}</p></div>;
           })}
         </div>
       </div>
@@ -524,22 +524,22 @@ function RevenueTab({ revenue, onLoad }:{revenue:RevenueData|null;onLoad:()=>voi
 }
 
 function VaultTab({ clients, onPatch, saving, selected, setSelected }:{clients:VaultClient[];onPatch:(id:number,b:object)=>void;saving:boolean;selected:VaultClient|null;setSelected:(v:VaultClient|null)=>void}) {
-  if (clients.length===0) return <div className="flex items-center justify-center py-20"><span className="text-[#D4AF37] font-mono text-xs animate-pulse">LOADING VAULT...</span></div>;
+  if (clients.length===0) return <div className="flex items-center justify-center py-20"><span className="text-[#a855f7] font-mono text-xs animate-pulse">LOADING VAULT...</span></div>;
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <div className="space-y-2">
-        <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-3">🔐 PRINCIPALS ONLY · {clients.length} RECORDS</p>
+        <p className="text-[9px] font-mono text-[#a855f7] tracking-widest mb-3">🔐 PRINCIPALS ONLY · {clients.length} RECORDS</p>
         {clients.map(c=>(
-          <div key={c.member.id} onClick={()=>setSelected(c)} className={`${panelCls} p-4 cursor-pointer hover:border-[#D4AF37]/20 transition-colors ${selected?.member.id===c.member.id?"border-[#D4AF37]/30 bg-[#D4AF37]/5":""}`}>
-            <div className="flex items-start justify-between mb-1"><div><p className="text-xs font-semibold text-white">{c.member.fullName}</p><p className="text-[10px] font-mono text-[#3a5570]">{c.member.email}</p></div><Badge status={c.member.status}/></div>
+          <div key={c.member.id} onClick={()=>setSelected(c)} className={`${panelCls} p-4 cursor-pointer hover:border-[#D4AF37]/20 transition-colors ${selected?.member.id===c.member.id?"border-purple-300/40 bg-[#D4AF37]/5":""}`}>
+            <div className="flex items-start justify-between mb-1"><div><p className="text-xs font-semibold text-[#1e1b4b]">{c.member.fullName}</p><p className="text-[10px] font-mono text-[#5a587a]">{c.member.email}</p></div><Badge status={c.member.status}/></div>
             <div className="flex items-center gap-3 mt-1">
               {c.vault ? (
                 <>
                   <span className="text-[9px] font-mono" style={{color:c.vault.healthScore>=70?"#00ff88":c.vault.healthScore>=40?"#D4AF37":"#ef4444"}}>♥ {c.vault.healthScore}</span>
-                  {c.vault.monthlyValueUsd>0&&<span className="text-[9px] font-mono text-[#D4AF37]">${c.vault.monthlyValueUsd.toLocaleString()}/mo</span>}
-                  <span className={`text-[9px] font-mono ${c.vault.riskLevel==="high"?"text-red-400":c.vault.riskLevel==="medium"?"text-amber-400":"text-[#3a5570]"}`}>{c.vault.riskLevel}</span>
+                  {c.vault.monthlyValueUsd>0&&<span className="text-[9px] font-mono text-[#a855f7]">${c.vault.monthlyValueUsd.toLocaleString()}/mo</span>}
+                  <span className={`text-[9px] font-mono ${c.vault.riskLevel==="high"?"text-red-400":c.vault.riskLevel==="medium"?"text-amber-400":"text-[#5a587a]"}`}>{c.vault.riskLevel}</span>
                 </>
-              ) : <span className="text-[9px] font-mono text-[#2a4060]">no vault record</span>}
+              ) : <span className="text-[9px] font-mono text-[#9898b8]">no vault record</span>}
             </div>
           </div>
         ))}
@@ -565,10 +565,10 @@ function VaultDetail({ client, onPatch, saving }:{client:VaultClient;onPatch:(id
   return (
     <div className={`${panelCls} p-6 space-y-5 overflow-y-auto max-h-[80vh]`}>
       <div className="flex items-start justify-between">
-        <div><h3 className="text-base font-serif font-bold text-white">{client.member.fullName}</h3><p className="text-xs font-mono text-[#3a5570]">{client.member.email} · {client.member.bloomMemberId||"no ID"}</p></div>
-        <span className="px-2 py-1 border border-[#D4AF37]/30 rounded-sm text-[9px] font-mono text-[#D4AF37]">🔐 VAULT</span>
+        <div><h3 className="text-base font-serif font-bold text-[#1e1b4b]">{client.member.fullName}</h3><p className="text-xs font-mono text-[#5a587a]">{client.member.email} · {client.member.bloomMemberId||"no ID"}</p></div>
+        <span className="px-2 py-1 border border-purple-300/40 rounded-sm text-[9px] font-mono text-[#a855f7]">🔐 VAULT</span>
       </div>
-      <div className="grid grid-cols-2 gap-3 text-xs">{([["Graham",client.member.assignedGrahamId],["Company",client.member.company],["Country",client.member.country],["Joined",new Date(client.member.createdAt).toLocaleDateString()]] as [string,string|null][]).map(([l,v])=><div key={l}><span className="text-[#3a5570] font-mono text-[9px]">{l}: </span><span className="text-white">{v||"—"}</span></div>)}</div>
+      <div className="grid grid-cols-2 gap-3 text-xs">{([["Graham",client.member.assignedGrahamId],["Company",client.member.company],["Country",client.member.country],["Joined",new Date(client.member.createdAt).toLocaleDateString()]] as [string,string|null][]).map(([l,v])=><div key={l}><span className="text-[#5a587a] font-mono text-[9px]">{l}: </span><span className="text-[#1e1b4b]">{v||"—"}</span></div>)}</div>
       <div className="grid grid-cols-3 gap-3">
         <div><label className={labelCls}>Health Score (0-100)</label><input type="number" min={0} max={100} value={health} onChange={e=>setHealth(e.target.value)} className={inputCls}/></div>
         <div><label className={labelCls}>Monthly Value (USD)</label><input value={monthly} onChange={e=>setMonthly(e.target.value)} className={inputCls} placeholder="0"/></div>
@@ -625,13 +625,13 @@ function TasksTab({ tasks, onPatch, saving, apiFetch, onReload }:{tasks:ClientTa
     onPatch(task.id, { adminNotes: note });
   }
 
-  if (tasks.length===0) return <div className={`${panelCls} p-16 text-center`}><p className="text-[#2a4060] text-xs font-mono">No client tasks yet. Tasks submitted via the client portal will appear here.</p></div>;
+  if (tasks.length===0) return <div className={`${panelCls} p-16 text-center`}><p className="text-[#9898b8] text-xs font-mono">No client tasks yet. Tasks submitted via the client portal will appear here.</p></div>;
 
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between mb-2">
-        <p className="text-[9px] font-mono text-[#3a5570] tracking-widest">{tasks.length} CLIENT TASKS</p>
-        <p className="text-[9px] font-mono text-[#D4AF37]">{tasks.filter(t=>t.status==="pending").length} PENDING REVIEW</p>
+        <p className="text-[9px] font-mono text-[#5a587a] tracking-widest">{tasks.length} CLIENT TASKS</p>
+        <p className="text-[9px] font-mono text-[#a855f7]">{tasks.filter(t=>t.status==="pending").length} PENDING REVIEW</p>
       </div>
       {tasks.map(t=>(
         <div key={t.id} className={`${panelCls} p-4`}>
@@ -639,24 +639,24 @@ function TasksTab({ tasks, onPatch, saving, apiFetch, onReload }:{tasks:ClientTa
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <span className={`text-[9px] font-mono font-bold uppercase ${STATUS_TC[t.status]}`}>{t.status.replace("_"," ")}</span>
-                <span className="text-[9px] font-mono text-[#D4AF37] capitalize">{t.priority}</span>
-                <span className="text-[9px] font-mono text-[#3a5570] capitalize">{t.module}</span>
+                <span className="text-[9px] font-mono text-[#a855f7] capitalize">{t.priority}</span>
+                <span className="text-[9px] font-mono text-[#5a587a] capitalize">{t.module}</span>
               </div>
-              <p className="text-sm font-semibold text-white mb-0.5">{t.title}</p>
-              {t.description&&<p className="text-[10px] text-[#3a5570] line-clamp-2">{t.description}</p>}
-              <p className="text-[9px] font-mono text-[#2a4060] mt-1">{t.clientEmail} · {new Date(t.createdAt).toLocaleDateString()}</p>
+              <p className="text-sm font-semibold text-[#1e1b4b] mb-0.5">{t.title}</p>
+              {t.description&&<p className="text-[10px] text-[#5a587a] line-clamp-2">{t.description}</p>}
+              <p className="text-[9px] font-mono text-[#9898b8] mt-1">{t.clientEmail} · {new Date(t.createdAt).toLocaleDateString()}</p>
             </div>
             <div className="flex flex-col gap-1.5 shrink-0">
               {t.status==="pending"&&<button disabled={saving} onClick={()=>onPatch(t.id,{status:"in_progress"})} className="px-3 py-1.5 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[9px] font-mono rounded-sm hover:bg-blue-500/20 transition-colors">IN PROGRESS</button>}
               {t.status!=="completed"&&<button disabled={saving} onClick={()=>onPatch(t.id,{status:"completed"})} className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-mono rounded-sm hover:bg-emerald-500/20 transition-colors">COMPLETE</button>}
-              <button onClick={()=>toggleExpand(t.id)} className="px-3 py-1.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[9px] font-mono rounded-sm hover:bg-[#D4AF37]/20 transition-colors">
+              <button onClick={()=>toggleExpand(t.id)} className="px-3 py-1.5 bg-purple-50 border border-purple-300/40 text-[#a855f7] text-[9px] font-mono rounded-sm hover:bg-[#D4AF37]/20 transition-colors">
                 {expanded===t.id ? "▲ CLOSE" : "▼ THREAD"}
               </button>
             </div>
           </div>
 
           {expanded===t.id && (
-            <div className="mt-3 pt-3 border-t border-[#0d1b35] space-y-3">
+            <div className="mt-3 pt-3 border-t border-purple-200/40 space-y-3">
               <div>
                 <label className={labelCls}>Admin Note for Client</label>
                 <div className="flex gap-2">
@@ -666,19 +666,19 @@ function TasksTab({ tasks, onPatch, saving, apiFetch, onReload }:{tasks:ClientTa
                     className={inputCls+" flex-1"}
                     placeholder="Leave a note visible to the client..."
                   />
-                  <button onClick={()=>saveNote(t)} disabled={saving} className="px-3 py-1 bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-[9px] font-mono rounded-sm">SAVE</button>
+                  <button onClick={()=>saveNote(t)} disabled={saving} className="px-3 py-1 bg-purple-50 border border-purple-300/40 text-[#a855f7] text-[9px] font-mono rounded-sm">SAVE</button>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <p className={labelCls}>Comment Thread ({(comments[t.id]??[]).length})</p>
                 {(comments[t.id]??[]).map(c=>(
-                  <div key={c.id} className={`${c.authorType==="admin"?"bg-[#D4AF37]/5 border border-[#D4AF37]/15":"bg-[#030810] border border-[#0d1b35]"} rounded-sm p-2.5`}>
+                  <div key={c.id} className={`${c.authorType==="admin"?"bg-[#D4AF37]/5 border border-purple-200/30":"bg-white/60 border border-purple-200/40"} rounded-sm p-2.5`}>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-[9px] font-mono font-bold ${c.authorType==="admin"?"text-[#D4AF37]":"text-[#06b6d4]"}`}>{c.authorName}</span>
-                      <span className="text-[8px] font-mono text-[#2a4060] ml-auto">{new Date(c.createdAt).toLocaleString()}</span>
+                      <span className={`text-[9px] font-mono font-bold ${c.authorType==="admin"?"text-[#a855f7]":"text-[#06b6d4]"}`}>{c.authorName}</span>
+                      <span className="text-[8px] font-mono text-[#9898b8] ml-auto">{new Date(c.createdAt).toLocaleString()}</span>
                     </div>
-                    <p className="text-[10px] text-[#8aa0b8] leading-relaxed">{c.content}</p>
+                    <p className="text-[10px] text-[#5a587a] leading-relaxed">{c.content}</p>
                   </div>
                 ))}
                 <div className="flex gap-2">
@@ -704,7 +704,7 @@ function GrahamsTab({ board, summary, onReload }:{board:GrahamBoard[];summary:Gr
   const [filter, setFilter] = useState("all");
   useEffect(()=>{if(board.length===0)onReload();},[]);
 
-  if (board.length===0 && !summary) return <div className="flex items-center justify-center py-20"><span className="text-[#D4AF37] font-mono text-xs animate-pulse">LOADING GRAHAM STATUS BOARD...</span></div>;
+  if (board.length===0 && !summary) return <div className="flex items-center justify-center py-20"><span className="text-[#a855f7] font-mono text-xs animate-pulse">LOADING GRAHAM STATUS BOARD...</span></div>;
 
   const filtered = filter==="all" ? board : board.filter(b=>b.agentStatus===filter);
 
@@ -720,7 +720,7 @@ function GrahamsTab({ board, summary, onReload }:{board:GrahamBoard[];summary:Gr
             {l:"UNASSIGNED",v:summary.unassigned,c:"#2a4060"},
           ].map(s=>(
             <div key={s.l} className={`${panelCls} p-4`}>
-              <p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-2">{s.l}</p>
+              <p className="text-[9px] font-mono text-[#5a587a] tracking-widest mb-2">{s.l}</p>
               <p className="font-mono font-bold text-2xl" style={{color:s.c}}>{s.v}</p>
             </div>
           ))}
@@ -729,37 +729,37 @@ function GrahamsTab({ board, summary, onReload }:{board:GrahamBoard[];summary:Gr
 
       <div className="flex items-center gap-2">
         {["all","active","configuring","standby","unassigned"].map(f=>(
-          <button key={f} onClick={()=>setFilter(f)} className={`px-3 py-1.5 text-[9px] font-mono border rounded-sm transition-colors capitalize ${filter===f?"bg-[#D4AF37]/10 border-[#D4AF37]/40 text-[#D4AF37]":"bg-[#040c1a] border-[#0d1b35] text-[#3a5570] hover:text-white"}`}>{f}</button>
+          <button key={f} onClick={()=>setFilter(f)} className={`px-3 py-1.5 text-[9px] font-mono border rounded-sm transition-colors capitalize ${filter===f?"bg-purple-50 border-purple-400/50 text-[#a855f7]":"bg-white/70 border-purple-200/40 text-[#5a587a] hover:text-[#1e1b4b]"}`}>{f}</button>
         ))}
       </div>
 
       <div className="space-y-2">
-        {filtered.length===0 && <div className={`${panelCls} p-10 text-center`}><p className="text-[#2a4060] text-xs font-mono">No Grahams in this state</p></div>}
+        {filtered.length===0 && <div className={`${panelCls} p-10 text-center`}><p className="text-[#9898b8] text-xs font-mono">No Grahams in this state</p></div>}
         {filtered.map(b=>(
           <div key={b.memberId} className={`${panelCls} p-4`}>
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-sm flex items-center justify-center shrink-0">
-                <span className="text-[#D4AF37] font-mono font-bold text-xs">{b.grahamCode ?? "—"}</span>
+              <div className="w-12 h-12 bg-purple-50 border border-purple-300/40 rounded-sm flex items-center justify-center shrink-0">
+                <span className="text-[#a855f7] font-mono font-bold text-xs">{b.grahamCode ?? "—"}</span>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-1">
-                  <p className="text-sm font-semibold text-white">{b.memberName}</p>
+                  <p className="text-sm font-semibold text-[#1e1b4b]">{b.memberName}</p>
                   <div className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full" style={{background:AGENT_STATUS_COLORS[b.agentStatus]??"#2a4060"}} />
                     <span className="text-[9px] font-mono font-bold uppercase" style={{color:AGENT_STATUS_COLORS[b.agentStatus]??"#2a4060"}}>{b.agentStatus}</span>
                   </div>
                 </div>
-                <p className="text-[10px] font-mono text-[#3a5570] mb-1">{b.memberEmail}{b.company?` · ${b.company}`:""}</p>
-                {b.agentObjective && <p className="text-[10px] text-[#8aa0b8] leading-relaxed line-clamp-1">{b.agentObjective}</p>}
+                <p className="text-[10px] font-mono text-[#5a587a] mb-1">{b.memberEmail}{b.company?` · ${b.company}`:""}</p>
+                {b.agentObjective && <p className="text-[10px] text-[#5a587a] leading-relaxed line-clamp-1">{b.agentObjective}</p>}
                 {b.agentModules.length>0 && (
                   <div className="flex flex-wrap gap-1 mt-1.5">
-                    {b.agentModules.map(m=><span key={m} className="px-1.5 py-0.5 bg-[#D4AF37]/10 border border-[#D4AF37]/20 text-[8px] font-mono text-[#D4AF37] rounded-sm capitalize">{m}</span>)}
+                    {b.agentModules.map(m=><span key={m} className="px-1.5 py-0.5 bg-purple-50 border border-[#D4AF37]/20 text-[8px] font-mono text-[#a855f7] rounded-sm capitalize">{m}</span>)}
                   </div>
                 )}
               </div>
               <div className="text-right shrink-0">
-                {b.bloomMemberId && <p className="text-[9px] font-mono text-[#D4AF37]">{b.bloomMemberId}</p>}
-                {b.deployedAt && <p className="text-[8px] font-mono text-[#2a4060] mt-0.5">Deployed {new Date(b.deployedAt).toLocaleDateString()}</p>}
+                {b.bloomMemberId && <p className="text-[9px] font-mono text-[#a855f7]">{b.bloomMemberId}</p>}
+                {b.deployedAt && <p className="text-[8px] font-mono text-[#9898b8] mt-0.5">Deployed {new Date(b.deployedAt).toLocaleDateString()}</p>}
               </div>
             </div>
           </div>
@@ -772,16 +772,16 @@ function GrahamsTab({ board, summary, onReload }:{board:GrahamBoard[];summary:Gr
 function AuditTab({ logs, onLoad }:{logs:AuditLog[];onLoad:()=>void}) {
   useEffect(()=>{if(logs.length===0)onLoad();},[]);
   const ACTION_COLORS: Record<string,string>={vault_update:"#D4AF37",data_export:"#ef4444",member_activate:"#00ff88",staff_approve:"#06b6d4"};
-  if (logs.length===0) return <div className={`${panelCls} p-16 text-center`}><p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-3">IMMUTABLE LOG</p><p className="text-[#2a4060] text-xs font-mono">No audit events recorded yet. All admin actions are logged here.</p></div>;
+  if (logs.length===0) return <div className={`${panelCls} p-16 text-center`}><p className="text-[9px] font-mono text-[#5a587a] tracking-widest mb-3">IMMUTABLE LOG</p><p className="text-[#9898b8] text-xs font-mono">No audit events recorded yet. All admin actions are logged here.</p></div>;
   return (
     <div className="space-y-2">
-      <p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-3">{logs.length} AUDIT EVENTS · IMMUTABLE LOG</p>
+      <p className="text-[9px] font-mono text-[#5a587a] tracking-widest mb-3">{logs.length} AUDIT EVENTS · IMMUTABLE LOG</p>
       {logs.map(l=>(
         <div key={l.id} className={`${panelCls} p-3 flex items-start gap-4`}>
-          <span className="text-[9px] font-mono text-[#2a4060] shrink-0 w-16">{new Date(l.createdAt).toLocaleTimeString()}</span>
+          <span className="text-[9px] font-mono text-[#9898b8] shrink-0 w-16">{new Date(l.createdAt).toLocaleTimeString()}</span>
           <span className="text-[9px] font-mono font-bold uppercase shrink-0 w-28" style={{color:ACTION_COLORS[l.action]??"#3a5570"}}>{l.action.replace(/_/g," ")}</span>
-          <span className="text-[9px] font-mono text-[#3a5570] shrink-0 w-32 capitalize">{l.targetType.replace(/_/g," ")}{l.targetId?` #${l.targetId}`:""}</span>
-          <span className="text-[9px] font-mono text-[#2a4060] flex-1 truncate">{l.adminEmail}</span>
+          <span className="text-[9px] font-mono text-[#5a587a] shrink-0 w-32 capitalize">{l.targetType.replace(/_/g," ")}{l.targetId?` #${l.targetId}`:""}</span>
+          <span className="text-[9px] font-mono text-[#9898b8] flex-1 truncate">{l.adminEmail}</span>
         </div>
       ))}
     </div>

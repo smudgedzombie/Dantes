@@ -7,13 +7,13 @@ const MODULE_ICONS: Record<string, string> = {
   events: "✦", export_b2b: "◇", hr: "▸", logistics: "▹",
 };
 const MODULE_COLORS: Record<string, string> = {
-  financial: "#D4AF37", marketing: "#ec4899", operations: "#06b6d4",
-  compliance: "#8b5cf6", events: "#f97316", export_b2b: "#22c55e",
+  financial: "#a855f7", marketing: "#ec4899", operations: "#22d3ee",
+  compliance: "#8b5cf6", events: "#fb923c", export_b2b: "#22c55e",
   hr: "#64748b", logistics: "#14b8a6",
 };
 const STATUS_DOT: Record<string, string> = {
-  completed: "#00ff88", in_progress: "#D4AF37", pending: "#3a5570",
-  failed: "#ef4444", milestone: "#D4AF37", report: "#06b6d4", alert: "#ef4444",
+  completed: "#00c45a", in_progress: "#22d3ee", pending: "#9898b8",
+  failed: "#ef4444", milestone: "#a855f7", report: "#22d3ee", alert: "#ef4444",
 };
 
 type Overview = {
@@ -26,20 +26,30 @@ type Overview = {
 type Activity = { id: number; type: string; module: string; title: string; description: string | null; status: string; createdAt: string };
 type Metrics = { tasksTotal: number; tasksCompleted: number; activitiesLogged: number; modulesActive: number; estimatedHoursSaved: number; totalPaidUsd: number; grahamCode: string | null };
 
+const P = {
+  bg: "#f5f0ff",
+  heading: "#1e1b4b",
+  body: "#5a587a",
+  muted: "#9898b8",
+  purple: "#a855f7",
+  card: "rgba(255,255,255,0.68)",
+  cardBorder: "rgba(168,85,247,0.18)",
+};
+
 function HealthRing({ score }: { score: number }) {
   const r = 28; const c = 2 * Math.PI * r;
   const fill = (score / 100) * c;
-  const color = score >= 80 ? "#00ff88" : score >= 60 ? "#D4AF37" : score >= 40 ? "#f97316" : "#ef4444";
+  const color = score >= 80 ? "#00c45a" : score >= 60 ? "#a855f7" : score >= 40 ? "#fb923c" : "#ef4444";
   return (
     <div className="relative w-20 h-20 flex items-center justify-center">
       <svg className="absolute inset-0 -rotate-90" width="80" height="80">
-        <circle cx="40" cy="40" r={r} fill="none" stroke="#0d1b35" strokeWidth="5" />
+        <circle cx="40" cy="40" r={r} fill="none" stroke="rgba(168,85,247,0.12)" strokeWidth="5" />
         <circle cx="40" cy="40" r={r} fill="none" stroke={color} strokeWidth="5"
           strokeDasharray={`${fill} ${c}`} strokeLinecap="round" style={{ transition: "stroke-dasharray 1s ease" }} />
       </svg>
       <div className="text-center">
         <span className="font-mono font-bold text-lg" style={{ color }}>{score}</span>
-        <p className="text-[8px] font-mono text-[#3a5570] leading-none mt-0.5">HEALTH</p>
+        <p className="text-[8px] font-mono leading-none mt-0.5" style={{ color: P.muted }}>HEALTH</p>
       </div>
     </div>
   );
@@ -60,8 +70,8 @@ function OnboardingTracker({ status }: { status: string }) {
   if (status === "active") return null;
 
   return (
-    <div className="bg-[#040c1a] border border-[#0d1b35] rounded-sm p-5">
-      <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest mb-4">ONBOARDING PROGRESS</p>
+    <div className="rounded-2xl p-5" style={{ background: P.card, border: `1px solid ${P.cardBorder}` }}>
+      <p className="text-[9px] font-mono tracking-widest mb-4" style={{ color: P.purple }}>ONBOARDING PROGRESS</p>
       <div className="flex items-start gap-2">
         {ONBOARDING_STAGES.map((s, i) => {
           const done = i < displayIdx;
@@ -69,14 +79,20 @@ function OnboardingTracker({ status }: { status: string }) {
           return (
             <div key={s.key} className="flex-1 flex flex-col items-center">
               <div className="flex items-center w-full mb-2">
-                <div className={`w-6 h-6 rounded-sm flex items-center justify-center shrink-0 text-[9px] font-mono font-bold transition-all ${done ? "bg-[#00ff88]/20 border border-[#00ff88]/40 text-[#00ff88]" : active ? "bg-[#D4AF37] text-[#030810]" : "bg-[#0a1628] border border-[#0d1b35] text-[#2a4060]"}`}>
+                <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-[9px] font-mono font-bold transition-all"
+                  style={done
+                    ? { background: "rgba(0,196,90,0.15)", border: "1px solid rgba(0,196,90,0.35)", color: "#00c45a" }
+                    : active
+                    ? { background: "linear-gradient(135deg,#a855f7,#ec4899)", color: "#fff" }
+                    : { background: "rgba(168,85,247,0.06)", border: "1px solid rgba(168,85,247,0.15)", color: P.muted }
+                  }>
                   {done ? "✓" : `0${i + 1}`}
                 </div>
-                {i < 3 && <div className={`flex-1 h-px mx-1 ${done ? "bg-[#00ff88]/30" : "bg-[#0d1b35]"}`} />}
+                {i < 3 && <div className="flex-1 h-px mx-1" style={{ background: done ? "linear-gradient(90deg,#00c45a50,#a855f720)" : "rgba(168,85,247,0.12)" }} />}
               </div>
               <div className="text-center w-full">
-                <p className={`text-[8px] font-mono font-bold leading-tight ${active ? "text-[#D4AF37]" : done ? "text-[#00ff88]" : "text-[#2a4060]"}`}>{s.label}</p>
-                <p className="text-[7px] font-mono text-[#2a4060] leading-tight mt-0.5 hidden sm:block">{s.desc}</p>
+                <p className="text-[8px] font-mono font-bold leading-tight" style={{ color: active ? P.purple : done ? "#00c45a" : P.muted }}>{s.label}</p>
+                <p className="text-[7px] font-mono leading-tight mt-0.5 hidden sm:block" style={{ color: P.muted }}>{s.desc}</p>
               </div>
             </div>
           );
@@ -88,22 +104,22 @@ function OnboardingTracker({ status }: { status: string }) {
 
 function ROIMetrics({ metrics }: { metrics: Metrics }) {
   return (
-    <div className="bg-[#040c1a] border border-[#0d1b35] rounded-sm p-5">
+    <div className="rounded-2xl p-5" style={{ background: P.card, border: `1px solid ${P.cardBorder}` }}>
       <div className="flex items-center justify-between mb-4">
-        <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">GRAHAM IMPACT METRICS</p>
-        {metrics.grahamCode && <span className="text-[9px] font-mono text-[#3a5570]">{metrics.grahamCode}</span>}
+        <p className="text-[9px] font-mono tracking-widest" style={{ color: P.purple }}>GRAHAM IMPACT METRICS</p>
+        {metrics.grahamCode && <span className="text-[9px] font-mono" style={{ color: P.muted }}>{metrics.grahamCode}</span>}
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: "TASKS COMPLETED", value: `${metrics.tasksCompleted}/${metrics.tasksTotal}`, color: "#00ff88", sub: "of submitted tasks" },
-          { label: "ACTIVITIES LOGGED", value: metrics.activitiesLogged, color: "#06b6d4", sub: "Graham executions" },
-          { label: "EST. HOURS SAVED", value: `~${metrics.estimatedHoursSaved}h`, color: "#D4AF37", sub: "this engagement" },
-          { label: "MODULES ACTIVE", value: metrics.modulesActive, color: "#8b5cf6", sub: "capability modules" },
+          { label: "TASKS COMPLETED", value: `${metrics.tasksCompleted}/${metrics.tasksTotal}`, color: "#00c45a", sub: "of submitted tasks" },
+          { label: "ACTIVITIES LOGGED", value: metrics.activitiesLogged, color: "#22d3ee", sub: "Graham executions" },
+          { label: "EST. HOURS SAVED", value: `~${metrics.estimatedHoursSaved}h`, color: P.purple, sub: "this engagement" },
+          { label: "MODULES ACTIVE", value: metrics.modulesActive, color: "#ec4899", sub: "capability modules" },
         ].map(s => (
           <div key={s.label}>
-            <p className="text-[8px] font-mono text-[#3a5570] tracking-widest mb-1">{s.label}</p>
+            <p className="text-[8px] font-mono tracking-widest mb-1" style={{ color: P.muted }}>{s.label}</p>
             <p className="font-mono font-bold text-xl" style={{ color: s.color }}>{s.value}</p>
-            <p className="text-[8px] font-mono text-[#2a4060] mt-0.5">{s.sub}</p>
+            <p className="text-[8px] font-mono mt-0.5" style={{ color: P.muted }}>{s.sub}</p>
           </div>
         ))}
       </div>
@@ -134,21 +150,19 @@ export default function PortalPage() {
     })();
   }, []);
 
-  const panelCls = "bg-[#040c1a] border border-[#0d1b35] rounded-sm";
-
   if (loading) return (
-    <div className="min-h-screen bg-[#030810] flex items-center justify-center">
-      <span className="text-[9px] font-mono text-[#D4AF37] tracking-[0.4em] animate-pulse">LOADING PORTAL...</span>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: P.bg }}>
+      <span className="text-[9px] font-mono tracking-[0.4em] animate-pulse" style={{ color: P.purple }}>LOADING PORTAL...</span>
     </div>
   );
 
   if (error || !overview) return (
-    <div className="min-h-screen bg-[#030810] flex items-center justify-center px-6">
+    <div className="min-h-screen flex items-center justify-center px-6" style={{ background: P.bg }}>
       <div className="text-center max-w-sm">
         <img src="/logo.png" alt="Dantès" className="w-16 h-16 object-contain mx-auto mb-5" />
-        <p className="text-white font-semibold mb-2">Portal Unavailable</p>
-        <p className="text-[#3a5570] text-sm mb-6">{error || "Could not load your portal."}</p>
-        <Link href="/" className="text-[10px] font-mono text-[#D4AF37] hover:text-white transition-colors">← HOME</Link>
+        <p className="font-semibold mb-2" style={{ color: P.heading }}>Portal Unavailable</p>
+        <p className="text-sm mb-6" style={{ color: P.body }}>{error || "Could not load your portal."}</p>
+        <Link href="/" className="text-[10px] font-mono transition-colors" style={{ color: P.purple }}>← HOME</Link>
       </div>
     </div>
   );
@@ -156,31 +170,31 @@ export default function PortalPage() {
   const { member, vault, recentActivities, pendingTasksCount, unpaidInvoicesCount } = overview;
 
   return (
-    <div className="min-h-screen bg-[#030810] text-white">
-      <div className="fixed inset-0 pointer-events-none opacity-20" style={{ backgroundImage: "linear-gradient(rgba(212,175,55,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,0.04) 1px,transparent 1px)", backgroundSize: "60px 60px" }} />
+    <div className="min-h-screen" style={{ background: P.bg }}>
+      <div className="fixed inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 60% at 10% 0%,rgba(168,85,247,0.07),transparent),radial-gradient(ellipse 60% 60% at 90% 100%,rgba(34,211,238,0.06),transparent)" }} />
 
       {/* Header */}
-      <header className="relative z-10 border-b border-[#0d1b35] px-6 py-4 flex items-center justify-between">
+      <header className="relative z-10 border-b px-4 sm:px-6 py-4 flex items-center justify-between" style={{ background: "rgba(255,255,255,0.82)", backdropFilter: "blur(12px)", borderColor: "rgba(168,85,247,0.15)" }}>
         <div className="flex items-center gap-4">
           <img src="/logo.png" alt="Dantès" className="w-9 h-9 object-contain" />
           <div>
-            <p className="text-[9px] font-mono text-[#D4AF37] tracking-[0.3em]">BLOOM SOCIETY PORTAL</p>
-            <p className="text-white font-serif font-bold text-sm">{member.fullName}</p>
+            <p className="text-[9px] font-mono tracking-[0.3em]" style={{ color: P.purple }}>BLOOM SOCIETY PORTAL</p>
+            <p className="font-serif font-bold text-sm" style={{ color: P.heading }}>{member.fullName}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           {member.bloomMemberId && (
-            <span className="text-[9px] font-mono text-[#3a5570] hidden sm:block">{member.bloomMemberId}</span>
+            <span className="text-[9px] font-mono hidden sm:block" style={{ color: P.muted }}>{member.bloomMemberId}</span>
           )}
           <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" />
-            <span className="text-[9px] font-mono text-[#00ff88]">ACTIVE</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[9px] font-mono text-emerald-500">ACTIVE</span>
           </div>
         </div>
       </header>
 
       {/* Nav */}
-      <nav className="relative z-10 border-b border-[#0d1b35] px-6 flex gap-0">
+      <nav className="relative z-10 border-b px-4 sm:px-6 flex gap-0 overflow-x-auto" style={{ background: "rgba(255,255,255,0.7)", backdropFilter: "blur(8px)", borderColor: "rgba(168,85,247,0.12)" }}>
         {[
           { href: "/portal", label: "OVERVIEW" },
           { href: "/portal/tasks", label: `TASKS${pendingTasksCount > 0 ? ` (${pendingTasksCount})` : ""}` },
@@ -189,30 +203,30 @@ export default function PortalPage() {
           { href: "/portal/club", label: "✦ CLUB ROOM" },
         ].map(item => (
           <Link key={item.href} href={item.href}
-            className="px-4 py-3 text-[10px] font-mono text-[#3a5570] hover:text-white border-b-2 border-transparent hover:border-[#D4AF37]/40 transition-all">
+            className="px-4 py-3 text-[10px] font-mono border-b-2 border-transparent transition-all whitespace-nowrap"
+            style={{ color: P.muted }}>
             {item.label}
           </Link>
         ))}
       </nav>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-8 space-y-5">
-        {/* Onboarding tracker - only shown for non-active members */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-5">
         {member.status !== "active" && <OnboardingTracker status={member.status} />}
 
         {/* Graham Status Banner */}
-        <div className={`${panelCls} p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5`}>
-          <div className="w-14 h-14 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-sm flex items-center justify-center shrink-0">
-            <span className="text-[#D4AF37] font-mono font-black text-sm">{member.assignedGrahamId ?? "GRM"}</span>
+        <div className="rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5" style={{ background: P.card, border: `1px solid ${P.cardBorder}` }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ background: "rgba(168,85,247,0.1)", border: "1px solid rgba(168,85,247,0.25)" }}>
+            <span className="font-mono font-black text-sm" style={{ color: P.purple }}>{member.assignedGrahamId ?? "GRM"}</span>
           </div>
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-1">
-              <p className="text-white font-serif font-bold text-base">{member.assignedGrahamId ?? "Graham Pending"}</p>
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-sm bg-[#00ff88]/10 border border-[#00ff88]/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" />
-                <span className="text-[9px] font-mono text-[#00ff88]">OPERATIONAL</span>
+            <div className="flex items-center gap-3 mb-1 flex-wrap">
+              <p className="font-serif font-bold text-base" style={{ color: P.heading }}>{member.assignedGrahamId ?? "Graham Pending"}</p>
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg" style={{ background: "rgba(0,196,90,0.1)", border: "1px solid rgba(0,196,90,0.25)" }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[9px] font-mono text-emerald-500">OPERATIONAL</span>
               </div>
             </div>
-            <p className="text-[#3a5570] text-xs font-mono">{member.company ?? member.email} · Bloom Society Member</p>
+            <p className="text-xs font-mono" style={{ color: P.muted }}>{member.company ?? member.email} · Bloom Society Member</p>
           </div>
           {vault && <HealthRing score={vault.healthScore} />}
         </div>
@@ -220,50 +234,48 @@ export default function PortalPage() {
         {/* Stats row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: "ACTIVITIES", value: recentActivities.length + "+", sub: "This period", color: "#D4AF37" },
-            { label: "OPEN TASKS", value: pendingTasksCount, sub: "Awaiting action", color: "#06b6d4" },
-            { label: "INVOICES DUE", value: unpaidInvoicesCount, sub: "Pending payment", color: unpaidInvoicesCount > 0 ? "#f97316" : "#00ff88" },
-            { label: "RISK LEVEL", value: (vault?.riskLevel ?? "normal").toUpperCase(), sub: "Account health", color: vault?.riskLevel === "high" ? "#ef4444" : vault?.riskLevel === "medium" ? "#f97316" : "#00ff88" },
+            { label: "ACTIVITIES", value: recentActivities.length + "+", sub: "This period", color: P.purple },
+            { label: "OPEN TASKS", value: pendingTasksCount, sub: "Awaiting action", color: "#22d3ee" },
+            { label: "INVOICES DUE", value: unpaidInvoicesCount, sub: "Pending payment", color: unpaidInvoicesCount > 0 ? "#fb923c" : "#00c45a" },
+            { label: "RISK LEVEL", value: (vault?.riskLevel ?? "normal").toUpperCase(), sub: "Account health", color: vault?.riskLevel === "high" ? "#ef4444" : vault?.riskLevel === "medium" ? "#fb923c" : "#00c45a" },
           ].map(s => (
-            <div key={s.label} className={`${panelCls} p-4`}>
-              <p className="text-[9px] font-mono text-[#3a5570] tracking-widest mb-2">{s.label}</p>
+            <div key={s.label} className="rounded-2xl p-4" style={{ background: P.card, border: `1px solid ${P.cardBorder}` }}>
+              <p className="text-[9px] font-mono tracking-widest mb-2" style={{ color: P.muted }}>{s.label}</p>
               <p className="font-mono font-bold text-2xl" style={{ color: s.color }}>{s.value}</p>
-              <p className="text-[9px] font-mono text-[#2a4060] mt-1">{s.sub}</p>
+              <p className="text-[9px] font-mono mt-1" style={{ color: P.muted }}>{s.sub}</p>
             </div>
           ))}
         </div>
 
-        {/* ROI Metrics */}
         {metrics && <ROIMetrics metrics={metrics} />}
 
         {/* Activity Feed */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <p className="text-[9px] font-mono text-[#D4AF37] tracking-widest">GRAHAM ACTIVITY FEED</p>
-            <Link href="/portal/tasks" className="text-[9px] font-mono text-[#3a5570] hover:text-[#D4AF37] transition-colors">SUBMIT TASK →</Link>
+            <p className="text-[9px] font-mono tracking-widest" style={{ color: P.purple }}>GRAHAM ACTIVITY FEED</p>
+            <Link href="/portal/tasks" className="text-[9px] font-mono transition-colors" style={{ color: P.muted }}>SUBMIT TASK →</Link>
           </div>
           {recentActivities.length === 0 ? (
-            <div className={`${panelCls} p-10 text-center`}>
-              <p className="text-[#2a4060] font-mono text-xs">No activity yet — your Graham is standing by.</p>
+            <div className="rounded-2xl p-10 text-center" style={{ background: P.card, border: `1px solid ${P.cardBorder}` }}>
+              <p className="font-mono text-xs" style={{ color: P.muted }}>No activity yet — your Graham is standing by.</p>
             </div>
           ) : (
             <div className="space-y-2">
               {recentActivities.map(a => (
-                <div key={a.id} className={`${panelCls} p-4 flex items-start gap-4 hover:border-[#D4AF37]/15 transition-colors`}>
-                  <div className="w-8 h-8 rounded-sm bg-[#030810] border border-[#0d1b35] flex items-center justify-center shrink-0 text-sm"
-                    style={{ color: MODULE_COLORS[a.module] ?? "#D4AF37" }}>
+                <div key={a.id} className="rounded-2xl p-4 flex items-start gap-4 hover:shadow-sm transition-all" style={{ background: P.card, border: `1px solid ${P.cardBorder}` }}>
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-sm" style={{ background: "rgba(168,85,247,0.08)", color: MODULE_COLORS[a.module] ?? P.purple }}>
                     {MODULE_ICONS[a.module] ?? "◎"}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <p className="text-xs font-semibold text-white truncate">{a.title}</p>
-                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: STATUS_DOT[a.status] ?? "#3a5570" }} />
+                      <p className="text-xs font-semibold truncate" style={{ color: P.heading }}>{a.title}</p>
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: STATUS_DOT[a.status] ?? P.muted }} />
                     </div>
-                    {a.description && <p className="text-[10px] text-[#3a5570] leading-relaxed line-clamp-1">{a.description}</p>}
+                    {a.description && <p className="text-[10px] leading-relaxed line-clamp-1" style={{ color: P.body }}>{a.description}</p>}
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-[9px] font-mono text-[#2a4060]">{new Date(a.createdAt).toLocaleDateString()}</p>
-                    <p className="text-[9px] font-mono capitalize" style={{ color: MODULE_COLORS[a.module] ?? "#D4AF37" }}>{a.module}</p>
+                    <p className="text-[9px] font-mono" style={{ color: P.muted }}>{new Date(a.createdAt).toLocaleDateString()}</p>
+                    <p className="text-[9px] font-mono capitalize mt-0.5" style={{ color: MODULE_COLORS[a.module] ?? P.purple }}>{a.module}</p>
                   </div>
                 </div>
               ))}
@@ -279,10 +291,10 @@ export default function PortalPage() {
             { href: "/portal/billing", icon: "◆", label: "Billing & Invoices", desc: "Review payments and pay invoices online" },
           ].map(item => (
             <Link key={item.href} href={item.href}
-              className={`${panelCls} p-5 hover:border-[#D4AF37]/25 transition-all group cursor-pointer block`}>
-              <div className="text-[#D4AF37] text-lg font-mono mb-2">{item.icon}</div>
-              <p className="text-sm font-semibold text-white mb-1">{item.label}</p>
-              <p className="text-[10px] text-[#2a4060] leading-relaxed">{item.desc}</p>
+              className="rounded-2xl p-5 hover:shadow-md transition-all cursor-pointer block group" style={{ background: P.card, border: `1px solid ${P.cardBorder}` }}>
+              <div className="text-lg font-mono mb-2" style={{ color: P.purple }}>{item.icon}</div>
+              <p className="text-sm font-semibold mb-1" style={{ color: P.heading }}>{item.label}</p>
+              <p className="text-[10px] leading-relaxed" style={{ color: P.muted }}>{item.desc}</p>
             </Link>
           ))}
         </div>
