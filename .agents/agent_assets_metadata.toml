@@ -54,3 +54,9 @@ id = "Z_3LuoFPX8GIrR9BE6mFz"
 uri = "file://artifacts/dantes/public/bg-options-all7.jpg"
 type = "image"
 title = "All 7 Background Options — tap to open"
+
+[[outputs]]
+id = "CKyQayQyYT9Q8K15pF734"
+uri = "file://artifacts/dantes/public/light-options-10.jpg"
+type = "image"
+title = "All 10 Light Backgrounds — tap to open"
