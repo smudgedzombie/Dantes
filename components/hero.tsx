@@ -9,7 +9,7 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_-10%,var(--frost-deep),transparent_60%)]"
       />
-      <div className="relative mx-auto w-full max-w-6xl px-6 pb-16 pt-20 md:pb-24 md:pt-28">
+      <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-16 sm:px-6 md:pb-24 md:pt-28">
         <div className="flex items-center gap-3">
           <span className="h-px w-8 bg-primary" />
           <span className="font-mono text-xs uppercase tracking-[0.25em] text-primary">
@@ -27,7 +27,7 @@ export function Hero() {
           complete <Logo size="sm" withGlobal /> range, shipped worldwide.
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center gap-8">
+        <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-6">
           <a
             href="#gallery"
             className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-background transition-transform hover:-translate-y-0.5"
@@ -38,7 +38,7 @@ export function Hero() {
             <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
           </a>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-6 sm:gap-8">
             {[
               ['8', 'Categories'],
               ['55+', 'Products'],

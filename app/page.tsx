@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <div className="border-b border-border/60 bg-frost">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-2">
+        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6">
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
             Pick your backdrop
           </span>
