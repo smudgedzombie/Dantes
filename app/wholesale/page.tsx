@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { MessageCircle, Facebook, Instagram } from 'lucide-react'
+import { MessageCircle, Share2, Camera } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { SectionLabel } from '@/components/site/primitives'
@@ -36,13 +36,13 @@ export default function WholesalePage() {
               note="Add the LINE ID (include the @ symbol)."
             />
             <ChannelCard
-              icon={Facebook}
+              icon={Share2}
               label="Facebook Page"
               value="@stashprothailand"
               note="DM the official Stash-Pro Thailand page for catalog & pricing."
             />
             <ChannelCard
-              icon={Instagram}
+              icon={Camera}
               label="Instagram"
               value="@stashprothailand"
               note="DM our official Instagram account for catalog & pricing."

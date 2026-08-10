@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { MessageCircle, Facebook, MapPin, Building2, Truck } from 'lucide-react'
+import { MessageCircle, Share2, MapPin, Building2, Truck } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { SectionLabel } from '@/components/site/primitives'
@@ -33,7 +33,7 @@ export default function ContactPage() {
             <Detail icon={MapPin} label="Address">
               59/8 Moo 8, Tha Sai, Mueang Samut Sakhon, Samut Sakhon 74000
             </Detail>
-            <Detail icon={Facebook} label="Social media">
+            <Detail icon={Share2} label="Social media">
               Stash-Pro Thailand (Facebook)
             </Detail>
           </div>
