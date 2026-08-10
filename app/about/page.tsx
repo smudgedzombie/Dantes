@@ -37,6 +37,14 @@ export default function AboutPage() {
               demands of a global audience.
             </p>
             <p>
+              That momentum now reaches across Asia-Pacific, carried by the
+              people on the ground who keep it moving &mdash; among them Kushal
+              Osawal steering our Thailand operations, and Steven Patrick Graham
+              guiding business development across Australia and Indonesia. Their
+              work is one part of a wider network quietly extending the brand
+              into new markets.
+            </p>
+            <p>
               At the heart of the company is a powerhouse team &mdash; 95% of
               whom are women &mdash; driving the brand forward with unmatched
               dedication and precision. We&apos;re not just a company; we&apos;re
