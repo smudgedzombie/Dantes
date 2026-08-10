@@ -1,4 +1,5 @@
 import { ArrowDown } from 'lucide-react'
+import { Logo } from '@/components/logo'
 
 export function Hero() {
   return (
@@ -23,7 +24,7 @@ export function Hero() {
         <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
           From windproof lighters and precision grinders to glass ashtrays,
           rolling trays, pre-rolled cones, and sheesha essentials &mdash; the
-          complete Stash Pro Global range, shipped worldwide.
+          complete <Logo size="sm" withGlobal /> range, shipped worldwide.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-8">

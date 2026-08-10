@@ -1,18 +1,15 @@
+import { Logo } from '@/components/logo'
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/70 bg-[var(--frost)]">
       <div className="mx-auto w-full max-w-6xl px-6 py-14">
         <div className="flex flex-col gap-10 md:flex-row md:justify-between">
           <div className="max-w-xs">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                <span className="font-mono text-sm font-bold">S</span>
-              </span>
-              <span className="text-sm font-semibold tracking-tight">Stash Pro Global</span>
-            </div>
+            <Logo size="md" withGlobal />
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Precision storage and carry gear. Sealed, machined, and shipped
-              worldwide.
+              Premium smoking accessories &mdash; lighters, grinders, papers,
+              and storage. Shipped from Samut Sakhon, Thailand, worldwide.
             </p>
           </div>
 
@@ -39,10 +36,10 @@ export function SiteFooter() {
               [
                 'Company',
                 [
-                  ['About', '#gallery'],
-                  ['Wholesale', '#gallery'],
-                  ['Shipping', '#gallery'],
-                  ['Contact', '#gallery'],
+                  ['About', '/about'],
+                  ['Wholesale', '/wholesale'],
+                  ['Shipping', '/contact'],
+                  ['Contact', '/contact'],
                 ],
               ],
             ].map(([title, links]) => (
@@ -68,8 +65,8 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
-            &copy; {new Date().getFullYear()} Stash Pro Global
+          <p className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
+            &copy; {new Date().getFullYear()} <Logo size="sm" withGlobal />
           </p>
           <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
             Sealed &middot; Machined &middot; Worldwide

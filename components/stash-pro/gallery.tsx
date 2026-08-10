@@ -11,9 +11,12 @@ import {
   Wind,
   Package,
   Check,
+  Plus,
 } from 'lucide-react'
 import { STASH_CATEGORIES, STASH_IMAGES } from '@/lib/stash-pro-data'
 import { Panel, SectionLabel } from '@/components/site/primitives'
+import { priceForProduct, formatBaht } from '@/lib/pricing'
+import { useCart } from '@/components/cart/cart-context'
 
 const CATEGORY_ICON: Record<string, typeof Flame> = {
   lighters: Flame,
@@ -28,6 +31,7 @@ const CATEGORY_ICON: Record<string, typeof Flame> = {
 
 export function StashGallery() {
   const [active, setActive] = useState<string>('all')
+  const { add } = useCart()
 
   const visible =
     active === 'all'
@@ -110,6 +114,27 @@ export function StashGallery() {
                         </li>
                       ))}
                     </ul>
+
+                    <div className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-4">
+                      <span className="font-mono text-sm font-semibold tabular-nums">
+                        {formatBaht(priceForProduct(cat.id, p.name))}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          add({
+                            name: p.name,
+                            category: cat.id,
+                            price: priceForProduct(cat.id, p.name),
+                            image: STASH_IMAGES[p.name],
+                          })
+                        }
+                        className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-3.5 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-background transition-transform hover:-translate-y-0.5"
+                      >
+                        <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />
+                        Add
+                      </button>
+                    </div>
                   </Panel>
                 ))}
               </div>
