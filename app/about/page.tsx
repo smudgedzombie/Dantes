@@ -15,7 +15,7 @@ export default function AboutPage() {
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="flex-1">
-        <section className="mx-auto max-w-3xl px-6 py-16 md:py-24">
+        <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 md:py-24">
           <SectionLabel>Our Story</SectionLabel>
           <h1 className="mt-6 text-balance text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
             Built different, driven by passion.

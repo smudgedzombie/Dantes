@@ -75,7 +75,7 @@ export function StashGallery() {
 
               <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {cat.products.map((p) => (
-                  <Panel key={p.name} className="flex flex-col p-5">
+                  <Panel key={p.name} className="flex flex-col p-4 sm:p-5">
                     {/* Real product photography — white backdrop dissolves into the
                         page tint via mix-blend-multiply on the light frost tile. */}
                     <div className="mb-4 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md border border-border/60 bg-card">

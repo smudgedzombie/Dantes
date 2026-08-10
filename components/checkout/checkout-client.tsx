@@ -51,7 +51,7 @@ export function CheckoutClient() {
 
   if (placed) {
     return (
-      <div className="mx-auto max-w-xl px-6 py-24 text-center">
+      <div className="mx-auto max-w-xl px-4 py-24 text-center sm:px-6">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-cyan text-primary-foreground">
           <Check className="h-7 w-7" strokeWidth={2.5} />
         </div>
@@ -81,7 +81,7 @@ export function CheckoutClient() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-xl px-6 py-24 text-center">
+      <div className="mx-auto max-w-xl px-4 py-24 text-center sm:px-6">
         <h1 className="text-3xl font-semibold tracking-tight">Your cart is empty</h1>
         <p className="mt-3 text-muted-foreground">
           Add a few essentials before checking out.
@@ -99,7 +99,7 @@ export function CheckoutClient() {
   return (
     <form
       onSubmit={placeOrder}
-      className="mx-auto grid max-w-6xl gap-10 px-6 py-12 lg:grid-cols-[1fr_380px]"
+      className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_380px]"
     >
       {/* Left: details */}
       <div className="space-y-10">
